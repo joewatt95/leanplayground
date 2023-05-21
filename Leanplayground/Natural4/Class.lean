@@ -135,15 +135,34 @@ macro_rules
     DECIDE $concl IF $hypo
   )
   => `(
+    section
     -- BabyL4-esq declaration of the uninterpreted predicate.
     axiom $concl : $type → Prop
 
     -- Rule definition.
     def $ruleName :=
       ∀ $var : $type, $hypo → $concl $var
+    end
   )
 
-macro "THE" field:ident "OF" record:term : term => `($record.$field)
+-- #eval
+--   "abc's"
+--     |> Lean.mkIdent
+--     |>.raw
+--     |> toString
+--     |>.drop 1
+--     |>.splitOn (sep := "'s")
+--     |>.head!
+--     |> Lean.mkIdent
+
+macro "THE" fieldName:ident "OF" record:term : term => `($record.$fieldName)
+
+macro recordName:ident fieldName:ident : term =>
+  match recordName |>.raw |> toString |>.drop 1 |>.splitOn "'s" with
+    | [recordName, ""] =>
+    -- In this case, recordName is an identifier ending with 's, eg: person's
+      `($(Lean.mkIdent recordName).$fieldName)
+    | _ => `($recordName $fieldName)
 
 set_option trace.Elab.command true
 set_option trace.Elab.step true
@@ -171,7 +190,7 @@ HAS [(Role.Borrower, B), (Role.Lender, L)].toPHashMap IS THE Parties
 
 § testRule
 GIVEN p IS A Party,
-DECIDE isLender IF (THE role OF p) EQUALS Role.Lender
+DECIDE isLender IF p's role EQUALS Role.Lender
 
 -- #print isLender
 -- #print testRule

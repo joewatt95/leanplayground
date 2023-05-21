@@ -1,5 +1,4 @@
 import Mathlib.Data.Set.Lattice
-import Mathlib.Order.CompleteBooleanAlgebra
 import Leanplayground.Choice.Utils
 
 namespace StandardChoice
