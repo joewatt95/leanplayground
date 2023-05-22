@@ -1,6 +1,6 @@
 import Lean.Data.Json
-import Lean.Parser
-import Lean.Parser.Term
+-- import Std.Lean.Parser
+-- import Lean.Parser.Term
 
 -- import Std.Data.Array.Basic
 import Std.Lean.PersistentHashMap
@@ -168,8 +168,9 @@ macro "THE" fieldName:ident "OF" record:term : term => `($record.$fieldName)
 macro recordName:ident fieldName:ident : term =>
   match recordName |>.raw |> toString |>.drop 1 |>.splitOn "'s" with
     | [recordName, ""] =>
+      let recordNameIdent := Lean.mkIdent recordName
     -- In this case, recordName is an identifier ending with 's, eg: person's
-      `($(Lean.mkIdent recordName).$fieldName)
+      `($recordNameIdent.$fieldName)
     | _ => `($recordName $fieldName)
 
 set_option trace.Elab.command true
