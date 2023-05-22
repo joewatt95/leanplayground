@@ -1,9 +1,11 @@
 import Lean.Data.Json
+import Lean.Parser.Term
+import Mathlib.Testing.SlimCheck.Testable
+import Std.Lean.PersistentHashMap
+
 -- import Std.Lean.Parser
--- import Lean.Parser.Term
 
 -- import Std.Data.Array.Basic
-import Std.Lean.PersistentHashMap
 
 macro "derive" "stuff" "for" id:ident : command
 => `(
@@ -130,19 +132,44 @@ instance [Repr α] [Repr β] : Repr (Lean.PHashMap α β) where
 notation "MAP" "FROM" key "TO" val => Lean.PHashMap key val
 notation x "EQUALS" y => x == y
 
+syntax Lean.binderIdent "FROM" term "TO" term : term
+
+syntax "FOR EVERY" many1(ident <|> bracketedBinder) "," term : term
+macro_rules
+  | `(FOR EVERY $binders:ident, $prop) =>
+    `(∀ $binders, $prop)
+  | `(FOR EVERY $binders:bracketedBinder, $prop) =>
+    `(∀ $binders, $prop)
+
+
+syntax "THERE" "IS" "SOME" term "SUCH" "THAT" term : term
+syntax "THERE" "IS" "SOME" Lean.explicitBinders "SUCH" "THAT" term : term
+macro_rules
+  | `(THERE IS SOME $f:binderIdent FROM $α TO $β SUCH THAT $prop) =>
+    `(∃ ($f : $α → $β), $prop)
+  | `(THERE IS SOME $var:explicitBinders SUCH THAT $prop) =>
+    `(∃ $var, $prop)
+
+notation t0 "AND" t1 => t0 ∧ t1
+
+syntax "RELATION" "BETWEEN" term : term
+macro_rules
+  | `(RELATION BETWEEN $t0 AND $t1) => `($t0 → $t1 → Prop)
+
+notation relation "RELATES" t0 "TO" t1 => relation t0 t1
+
 syntax
   "§" ident
   "GIVEN" ident "IS" "A" term ","
-  "DECIDE" ident "IF" term
+  "DECIDE" term "IF" term
   : command
 
 macro_rules
   | `(
     § $ruleName
     GIVEN $var IS A $type,
-    DECIDE $concl IF $hypo
-  )
-  => `(
+    DECIDE $concl:ident IF $hypo
+  ) => `(
     section
     -- BabyL4-esq declaration of the uninterpreted predicate.
     axiom $concl : $type → Prop
@@ -151,6 +178,13 @@ macro_rules
     def $ruleName :=
       ∀ $var : $type, $hypo → $concl $var
     end
+  )
+  | `(
+    § $ruleName
+    GIVEN $var IS A $type,
+    DECIDE $concl:term IF $hypo
+  ) => `(
+    def $ruleName := ∀ $var : $type, $hypo → $concl
   )
 
 -- #eval
@@ -173,14 +207,12 @@ macro recordName:ident fieldName:ident : term =>
       `($recordNameIdent.$fieldName)
     | _ => `($recordName $fieldName)
 
-set_option trace.Elab.command true
-set_option trace.Elab.step true
+-- set_option trace.Elab.command true
+-- set_option trace.Elab.step true
 
 DECLARE Agreement
 
 DECLARE Role IS Borrower PLUS Lender
-
--- #eval [Role.Borrower .. Role.Lender]
 
 DECLARE Party
 HAS role IS A Role
@@ -203,8 +235,24 @@ HAS Lean.PersistentHashMap.ofArray #[(Role.Borrower, B), (Role.Lender, L)] IS TH
 GIVEN p IS A Party,
 DECIDE isLender IF p's role EQUALS Role.Lender
 
--- #print isLender
--- #print testRule
+§ rule
+GIVEN n IS A Int,
+DECIDE n < 0 IF THERE IS SOME m SUCH THAT ((m > 0) AND m + n = 0)
+
+variable {α β : Type}
+
+§ skolemize
+GIVEN R IS A RELATION BETWEEN α AND β,
+DECIDE THERE IS SOME f FROM _ TO _ SUCH THAT FOR EVERY a, R RELATES a TO f a
+IF FOR EVERY a, THERE IS SOME b SUCH THAT R RELATES a TO b
+
+#print skolemize
+
+-- #test badRule
+
+-- instance : SlimCheck.Testable (∀ n : Nat, True) := inferInstance
+
+-- #eval SlimCheck.Testable.check badRule
 
 -- #eval Lean.Macro.expandMacro? `(0 EQUALS 0)
 -- #check Lean.Macro.expandMacro? -- $ Lean.TSyntax.raw
