@@ -1,8 +1,7 @@
 import Aesop
-import Lean.Data.Json
-import Lean.Parser.Term
-import Mathlib.Data.Int.Basic
-import Mathlib.Data.Nat.Basic
+-- import Lean.Data.Json
+-- import Lean.Data.Parsec
+-- import Lean.Parser.Term
 import Mathlib.SetTheory.Cardinal.Cofinality
 import Mathlib.Tactic.SlimCheck
 -- import Mathlib.Testing.SlimCheck.Testable
