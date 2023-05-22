@@ -1,6 +1,8 @@
 import Lean.Data.Json
 import Lean.Parser.Term
-import Mathlib.Testing.SlimCheck.Testable
+import Mathlib.SetTheory.Cardinal.Cofinality
+import Mathlib.Tactic.SlimCheck
+-- import Mathlib.Testing.SlimCheck.Testable
 import Std.Lean.PersistentHashMap
 
 -- import Std.Lean.Parser
@@ -108,6 +110,7 @@ macro_rules
 --       if x != y then return false
 --     return true
 
+section
 variable [BEq α] [Hashable α]
 
 instance [BEq β] : BEq (Lean.PHashMap α β) where
@@ -121,6 +124,7 @@ instance [Hashable β] : Hashable (Lean.PHashMap α β) where
 
 instance [Repr α] [Repr β] : Repr (Lean.PHashMap α β) where
   reprPrec := reprPrec ∘ Lean.PersistentHashMap.toArray
+end
 
 -- instance [Ord (List (α × β))] : Ord (Lean.PHashMap α β) where
 --   compare m0 m1 := compare m0.toList m1.toList
@@ -140,7 +144,6 @@ macro_rules
     `(∀ $binders, $prop)
   | `(FOR EVERY $binders:bracketedBinder, $prop) =>
     `(∀ $binders, $prop)
-
 
 syntax "THERE" "IS" "SOME" term "SUCH" "THAT" term : term
 syntax "THERE" "IS" "SOME" Lean.explicitBinders "SUCH" "THAT" term : term
@@ -170,21 +173,19 @@ macro_rules
     GIVEN $var IS A $type,
     DECIDE $concl:ident IF $hypo
   ) => `(
-    section
     -- BabyL4-esq declaration of the uninterpreted predicate.
     axiom $concl : $type → Prop
 
     -- Rule definition.
-    def $ruleName :=
+    def $ruleName : Prop :=
       ∀ $var : $type, $hypo → $concl $var
-    end
   )
   | `(
     § $ruleName
     GIVEN $var IS A $type,
     DECIDE $concl:term IF $hypo
   ) => `(
-    def $ruleName := ∀ $var : $type, $hypo → $concl
+    def $ruleName : Prop := ∀ $var : $type, $hypo → $concl
   )
 
 -- #eval
@@ -206,6 +207,9 @@ macro recordName:ident fieldName:ident : term =>
     -- In this case, recordName is an identifier ending with 's, eg: person's
       `($recordNameIdent.$fieldName)
     | _ => `($recordName $fieldName)
+
+macro "#TEST" ruleName:ident : command =>
+  `(example : $ruleName := by unfold $ruleName; slim_check)
 
 -- set_option trace.Elab.command true
 -- set_option trace.Elab.step true
@@ -235,9 +239,15 @@ HAS Lean.PersistentHashMap.ofArray #[(Role.Borrower, B), (Role.Lender, L)] IS TH
 GIVEN p IS A Party,
 DECIDE isLender IF p's role EQUALS Role.Lender
 
-§ rule
-GIVEN n IS A Int,
+§ goodRule
+GIVEN n IS A ℤ,
 DECIDE n < 0 IF THERE IS SOME m SUCH THAT ((m > 0) AND m + n = 0)
+
+§ badRule
+GIVEN xs IS A List ℤ,
+DECIDE xs's sum = 0 IF xs.foldl (. * .) 1 = 0
+
+-- #TEST badRule
 
 variable {α β : Type}
 
@@ -247,8 +257,16 @@ DECIDE THERE IS SOME f FROM _ TO _ SUCH THAT FOR EVERY a, R RELATES a TO f a
 IF FOR EVERY a, THERE IS SOME b SUCH THAT R RELATES a TO b
 
 #print skolemize
+#check goodRule
 
--- #test badRule
+open Cardinal
+
+universe u
+
+§ InaccessibleCardinal'
+GIVEN κ IS A Cardinal.{u},
+DECIDE IsInaccessible'
+IF (κ > ℵ₀) AND (Cardinal.IsRegular κ) AND IsStrongLimit κ
 
 -- instance : SlimCheck.Testable (∀ n : Nat, True) := inferInstance
 
