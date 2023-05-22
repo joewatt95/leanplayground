@@ -1,8 +1,12 @@
+import Aesop
 import Lean.Data.Json
 import Lean.Parser.Term
+import Mathlib.Data.Int.Basic
+import Mathlib.Data.Nat.Basic
 import Mathlib.SetTheory.Cardinal.Cofinality
 import Mathlib.Tactic.SlimCheck
 -- import Mathlib.Testing.SlimCheck.Testable
+import Smt
 import Std.Lean.PersistentHashMap
 
 -- import Std.Lean.Parser
@@ -109,7 +113,6 @@ macro_rules
 --     for x in xs, y in ys do
 --       if x != y then return false
 --     return true
-
 section
 variable [BEq α] [Hashable α]
 
@@ -208,9 +211,6 @@ macro recordName:ident fieldName:ident : term =>
       `($recordNameIdent.$fieldName)
     | _ => `($recordName $fieldName)
 
-macro "#TEST" ruleName:ident : command =>
-  `(example : $ruleName := by unfold $ruleName; slim_check)
-
 -- set_option trace.Elab.command true
 -- set_option trace.Elab.step true
 
@@ -239,15 +239,36 @@ HAS Lean.PersistentHashMap.ofArray #[(Role.Borrower, B), (Role.Lender, L)] IS TH
 GIVEN p IS A Party,
 DECIDE isLender IF p's role EQUALS Role.Lender
 
+macro "#TEST" ruleName:ident : command =>
+  `(example : $ruleName := by unfold $ruleName; slim_check)
+
+macro "#SMT" ruleName:ident : command =>
+  `(example : $ruleName := by unfold $ruleName; smt)
+
+macro "#PROOF SEARCH" ruleName:ident : command =>
+  `(example : $ruleName := by unfold $ruleName; aesop)
+
+set_option smt.solver.kind "z3"
+
 § goodRule
-GIVEN n IS A ℤ,
-DECIDE n < 0 IF THERE IS SOME m SUCH THAT ((m > 0) AND m + n = 0)
+GIVEN n IS A Int,
+DECIDE n < 0 IF THERE IS SOME m SUCH THAT ((0 < m) AND m + n = 0)
 
-§ badRule
+-- #SMT goodRule
+
+§ badRule1
+GIVEN n IS A Int,
+DECIDE 0 < n IF True
+
+-- #SMT badRule1
+
+§ badRule2
 GIVEN xs IS A List ℤ,
-DECIDE xs's sum = 0 IF xs.foldl (. * .) 1 = 0
+DECIDE xs's sum EQUALS 0 IF xs.foldl (. * .) 1 EQUALS 0
 
--- #TEST badRule
+-- #print badRule2
+
+-- #TEST badRule2
 
 variable {α β : Type}
 
