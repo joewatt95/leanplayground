@@ -1,9 +1,9 @@
 import Lean.Data.Json
-import Lean.Data.PersistentHashMap
 import Lean.Parser
 import Lean.Parser.Term
 
-import Std.Data.Array.Basic
+-- import Std.Data.Array.Basic
+import Std.Lean.PersistentHashMap
 
 macro "derive" "stuff" "for" id:ident : command
 => `(
@@ -93,6 +93,8 @@ macro_rules
     inductive $name where
       $[| $ids:ident]*
     derive stuff for $name
+
+    deriving instance Ord for $name
   )
 
 -- instance : ToStream (Lean.PArray T) (List T) where
@@ -107,17 +109,23 @@ macro_rules
 variable [BEq α] [Hashable α]
 
 instance [BEq β] : BEq (Lean.PHashMap α β) where
-  beq m0 m1 := m0.toList == m1.toList
+  beq m0 m1 := m0.toArray == m1.toArray
+
+-- instance [DecidableEq α] [DecidableEq β] : DecidableEq (Lean.PHashMap α β) :=
+--   λ m0 m1 => decEq m0.toArray m1.toArray 
 
 instance [Hashable β] : Hashable (Lean.PHashMap α β) where
-  hash := hash ∘ Lean.PersistentHashMap.toList
+  hash := hash ∘ Lean.PersistentHashMap.toArray
 
 instance [Repr α] [Repr β] : Repr (Lean.PHashMap α β) where
-  reprPrec := reprPrec ∘ Lean.PersistentHashMap.toList
+  reprPrec := reprPrec ∘ Lean.PersistentHashMap.toArray
 
-def List.toPHashMap (xs : List (α × β)) : Lean.PHashMap α β :=
-  xs.foldl (init := Lean.PersistentHashMap.empty) <|
-    λ hashMap (k, v) => hashMap.insert k v
+-- instance [Ord (List (α × β))] : Ord (Lean.PHashMap α β) where
+--   compare m0 m1 := compare m0.toList m1.toList
+
+-- def List.toPHashMap (xs : List (α × β)) : Lean.PHashMap α β :=
+--   xs.foldl (init := Lean.PersistentHashMap.empty) <|
+--     λ hashMap (k, v) => hashMap.insert k v
 
 notation "MAP" "FROM" key "TO" val => Lean.PHashMap key val
 notation x "EQUALS" y => x == y
@@ -171,6 +179,8 @@ DECLARE Agreement
 
 DECLARE Role IS Borrower PLUS Lender
 
+-- #eval [Role.Borrower .. Role.Lender]
+
 DECLARE Party
 HAS role IS A Role
 
@@ -184,7 +194,7 @@ DEFINE L IS A Party
 HAS Role.Lender IS THE role
 
 DEFINE SimpleLoan IS A Loan
-HAS [(Role.Borrower, B), (Role.Lender, L)].toPHashMap IS THE Parties
+HAS Lean.PersistentHashMap.ofArray #[(Role.Borrower, B), (Role.Lender, L)] IS THE Parties
 
 -- #eval SimpleLoan
 
