@@ -239,25 +239,28 @@ HAS Lean.PersistentHashMap.ofArray #[(Role.Borrower, B), (Role.Lender, L)] IS TH
 GIVEN p IS A Party,
 DECIDE isLender IF p's role EQUALS Role.Lender
 
+macro "#APPLY TACTIC" ruleName:ident tactic:tactic : command =>
+  `(example : $ruleName := by unfold $ruleName; $tactic)
+
 macro "#TEST" ruleName:ident : command =>
-  `(example : $ruleName := by unfold $ruleName; slim_check)
+  `(#APPLY TACTIC $ruleName slim_check)
 
 macro "#SMT" ruleName:ident : command =>
-  `(example : $ruleName := by unfold $ruleName; smt)
+  `(#APPLY TACTIC $ruleName smt)
 
 macro "#PROOF SEARCH" ruleName:ident : command =>
-  `(example : $ruleName := by unfold $ruleName; aesop)
+  `(#APPLY TACTIC $ruleName aesop)
 
 set_option smt.solver.kind "z3"
 
 § goodRule
-GIVEN n IS A Int,
+GIVEN n IS A ℤ,
 DECIDE n < 0 IF THERE IS SOME m SUCH THAT ((0 < m) AND m + n = 0)
 
 -- #SMT goodRule
 
 § badRule1
-GIVEN n IS A Int,
+GIVEN n IS A ℤ,
 DECIDE 0 < n IF True
 
 -- #SMT badRule1
