@@ -205,8 +205,8 @@ macro "THE" fieldName:ident "OF" record:term : term => `($record.$fieldName)
 macro recordName:ident fieldName:ident : term =>
   match recordName |>.raw |> toString |>.drop 1 |>.splitOn "'s" with
     | [recordName, ""] =>
-      let recordNameIdent := Lean.mkIdent recordName
     -- In this case, recordName is an identifier ending with 's, eg: person's
+      let recordNameIdent := Lean.mkIdent recordName
       `($recordNameIdent.$fieldName)
     | _ => `($recordName $fieldName)
 
@@ -254,7 +254,7 @@ set_option smt.solver.kind "z3"
 
 § goodRule
 GIVEN n IS A ℤ,
-DECIDE n < 0 IF THERE IS SOME m SUCH THAT ((0 < m) AND m + n = 0)
+DECIDE n < 0 IF THERE IS SOME m SUCH THAT (0 < m) AND m + n = 0
 
 -- #SMT goodRule
 
@@ -272,6 +272,7 @@ DECIDE xs's sum EQUALS 0 IF xs.foldl (. * .) 1 EQUALS 0
 
 -- #TEST badRule2
 
+section
 variable {α β : Type}
 
 § skolemize
@@ -279,8 +280,8 @@ GIVEN R IS A RELATION BETWEEN α AND β,
 DECIDE THERE IS SOME f FROM _ TO _ SUCH THAT FOR EVERY a, R RELATES a TO f a
 IF FOR EVERY a, THERE IS SOME b SUCH THAT R RELATES a TO b
 
-#print skolemize
-#check goodRule
+-- #print skolemize
+end
 
 open Cardinal
 
