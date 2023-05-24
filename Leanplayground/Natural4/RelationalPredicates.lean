@@ -6,6 +6,7 @@ import Mathlib.SetTheory.Cardinal.Cofinality
 import Mathlib.Tactic.SlimCheck
 -- import Mathlib.Testing.SlimCheck.Testable
 import Smt
+import Std.Data.HashMap.Basic
 import Std.Lean.PersistentHashMap
 
 -- import Std.Lean.Parser
@@ -120,14 +121,23 @@ variable [BEq α] [Hashable α]
 instance [BEq β] : BEq (Lean.PHashMap α β) where
   beq m0 m1 := m0.toArray == m1.toArray
 
+instance [BEq β] : BEq (Std.HashMap α β) where
+  beq m0 m1 := m0.toArray == m1.toArray
+
 -- instance [DecidableEq α] [DecidableEq β] : DecidableEq (Lean.PHashMap α β) :=
 --   λ m0 m1 => decEq m0.toArray m1.toArray 
 
 instance [Hashable β] : Hashable (Lean.PHashMap α β) where
   hash := hash ∘ Lean.PersistentHashMap.toArray
 
+instance [Hashable β] : Hashable (Std.HashMap α β) where
+  hash := hash ∘ Std.HashMap.toArray
+
 instance [Repr α] [Repr β] : Repr (Lean.PHashMap α β) where
   reprPrec := reprPrec ∘ Lean.PersistentHashMap.toArray
+
+instance [Repr α] [Repr β] : Repr (Std.HashMap α β) where
+  reprPrec := reprPrec ∘ Std.HashMap.toArray
 end
 
 -- instance [Ord (List (α × β))] : Ord (Lean.PHashMap α β) where
@@ -137,7 +147,8 @@ end
 --   xs.foldl (init := Lean.PersistentHashMap.empty) <|
 --     λ hashMap (k, v) => hashMap.insert k v
 
-notation "MAP" "FROM" key "TO" val => Lean.PHashMap key val
+notation "MAP" "FROM" key "TO" val => Std.HashMap key val
+-- Lean.PHashMap key val
 notation x "EQUALS" y => x == y
 
 syntax Lean.binderIdent "FROM" term "TO" term : term
@@ -232,7 +243,7 @@ DEFINE L IS A Party
 HAS Role.Lender IS THE role
 
 DEFINE SimpleLoan IS A Loan
-HAS Lean.PersistentHashMap.ofArray #[(Role.Borrower, B), (Role.Lender, L)] IS THE Parties
+HAS Std.HashMap.ofList [(Role.Borrower, B), (Role.Lender, L)] IS THE Parties
 
 -- #eval SimpleLoan
 
