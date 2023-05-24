@@ -12,6 +12,8 @@ import Std.Lean.PersistentHashMap
 
 -- import Std.Data.Array.Basic
 
+namespace RelationalPredicates
+
 macro "derive" "stuff" "for" id:ident : command
 => `(
   deriving instance
@@ -296,6 +298,8 @@ universe u
 GIVEN κ IS A Cardinal.{u},
 DECIDE IsInaccessible'
 IF (κ > ℵ₀) AND (Cardinal.IsRegular κ) AND IsStrongLimit κ
+
+end RelationalPredicates
 
 -- instance : SlimCheck.Testable (∀ n : Nat, True) := inferInstance
 
