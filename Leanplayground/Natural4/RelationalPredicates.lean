@@ -212,11 +212,25 @@ macro "THE" fieldName:ident "OF" record:term : term => `($record.$fieldName)
 
 macro recordName:ident fieldName:ident : term =>
   match recordName |>.raw |> toString |>.drop 1 |>.splitOn "'s" with
-    | [recordName, ""] =>
+  | [recordName, ""] =>
     -- In this case, recordName is an identifier ending with 's, eg: person's
-      let recordNameIdent := Lean.mkIdent recordName
-      `($recordNameIdent.$fieldName)
-    | _ => `($recordName $fieldName)
+    let recordNameIdent := Lean.mkIdent recordName
+    `($recordNameIdent.$fieldName)
+  | _ => `($recordName $fieldName)
+
+macro "#APPLY TACTIC" ruleName:ident tactic:tactic : command =>
+  `(example : $ruleName := by unfold $ruleName; $tactic)
+
+macro "#TEST" ruleName:ident : command =>
+  `(#APPLY TACTIC $ruleName slim_check)
+
+macro "#SMT" ruleName:ident : command =>
+  `(#APPLY TACTIC $ruleName smt)
+
+macro "#PROOF SEARCH" ruleName:ident : command =>
+  `(#APPLY TACTIC $ruleName aesop)
+
+set_option smt.solver.kind "z3"
 
 -- set_option trace.Elab.command true
 -- set_option trace.Elab.step true
@@ -244,21 +258,8 @@ HAS Std.HashMap.ofList [(Role.Borrower, B), (Role.Lender, L)] IS THE Parties
 
 § testRule
 GIVEN p IS A Party,
-DECIDE isLender IF (Party.role OF p) EQUALS Role.Lender
-
-macro "#APPLY TACTIC" ruleName:ident tactic:tactic : command =>
-  `(example : $ruleName := by unfold $ruleName; $tactic)
-
-macro "#TEST" ruleName:ident : command =>
-  `(#APPLY TACTIC $ruleName slim_check)
-
-macro "#SMT" ruleName:ident : command =>
-  `(#APPLY TACTIC $ruleName smt)
-
-macro "#PROOF SEARCH" ruleName:ident : command =>
-  `(#APPLY TACTIC $ruleName aesop)
-
-set_option smt.solver.kind "z3"
+DECIDE isLender IF p's role EQUALS Role.Lender
+-- DECIDE isLender IF (Party.role OF p) EQUALS Role.Lender
 
 § goodRule
 GIVEN n IS A Int,
@@ -274,7 +275,7 @@ DECIDE 0 < n IF True
 
 § badRule2
 GIVEN xs IS A List OF Int,
-DECIDE xs's sum EQUALS 0 IF 0 EQUALS
+DECIDE (List.sum OF xs) EQUALS 0 IF 0 EQUALS
   Id.run do
     let mut result := 1
     for x in xs do
