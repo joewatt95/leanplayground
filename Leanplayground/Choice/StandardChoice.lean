@@ -143,8 +143,9 @@ private lemma forall_exists_of_exists_forall {R : α → β → Prop}
   (h : ∃ f : _ → _, ∀ a, (a, f a) ∈ R) : ∀ a, ∃ b, (a, b) ∈ R :=
   letting f be as in h, -- extract witness via existential elimination
   letting a be arbitrary,
+    we have (a, f a) ∈ R, because h a,
     finally we have ∃ b, (a, b) ∈ R,
-    because it is witnessed by f a and h a
+    because it is witnessed by f a and this
 
 @[simp] theorem forall_exists_iff_exists_forall {R : α → β → Prop} :
   (∀ a, ∃ b, (a, b) ∈ R) ↔ ∃ f : _ → _, ∀ a, (a, f a) ∈ R :=
