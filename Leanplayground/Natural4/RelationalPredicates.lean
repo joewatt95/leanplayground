@@ -12,7 +12,6 @@ import Std.Lean.PersistentHashMap
 -- import Std.Lean.Parser
 
 -- import Std.Data.Array.Basic
-
 namespace RelationalPredicates
 
 macro "derive" "stuff" "for" id:ident : command
@@ -95,10 +94,13 @@ macro_rules
 -- syntax ident : enums
 -- syntax ident "PLUS" enums : enums
 
-syntax "DECLARE" ident "IS" sepBy(ident, "PLUS") : command
+syntax "DECLARE" ident "IS" sepBy1(ident, "PLUS") : command
+
+notation t0 "AND" t1 => t0 ∧ t1
+notation t0 "OR" t1 => t0 ∨ t1
 
 macro_rules
-  | `( DECLARE $name:ident IS $[$ids:ident] PLUS* )
+  | `(DECLARE $name:ident IS $[$ids:ident] PLUS*)
   => `(
     inductive $name where
       $[| $ids:ident]*
@@ -106,6 +108,11 @@ macro_rules
 
     deriving instance Ord for $name
   )
+
+syntax term "OF" sepBy1(term, "AND") : term
+macro_rules
+  | `($fn OF $[$arg:term] AND*) =>
+    `($fn $arg*)
 
 -- instance : ToStream (Lean.PArray T) (List T) where
 --   toStream xs := xs.toList
@@ -168,9 +175,7 @@ macro_rules
   | `(THERE IS SOME $var:explicitBinders SUCH THAT $prop) =>
     `(∃ $var, $prop)
 
-notation t0 "AND" t1 => t0 ∧ t1
-
-syntax "RELATION" "BETWEEN" term : term
+syntax "RELATION" "BETWEEN" sepBy1(term, "AND") : term
 macro_rules
   | `(RELATION BETWEEN $t0 AND $t1) => `($t0 → $t1 → Prop)
 
@@ -202,16 +207,6 @@ macro_rules
   ) => `(
     def $ruleName : Prop := ∀ $var : $type, $hypo → $concl
   )
-
--- #eval
---   "abc's"
---     |> Lean.mkIdent
---     |>.raw
---     |> toString
---     |>.drop 1
---     |>.splitOn (sep := "'s")
---     |>.head!
---     |> Lean.mkIdent
 
 macro "THE" fieldName:ident "OF" record:term : term => `($record.$fieldName)
 
@@ -249,7 +244,7 @@ HAS Std.HashMap.ofList [(Role.Borrower, B), (Role.Lender, L)] IS THE Parties
 
 § testRule
 GIVEN p IS A Party,
-DECIDE isLender IF p's role EQUALS Role.Lender
+DECIDE isLender IF (Party.role OF p) EQUALS Role.Lender
 
 macro "#APPLY TACTIC" ruleName:ident tactic:tactic : command =>
   `(example : $ruleName := by unfold $ruleName; $tactic)
@@ -266,19 +261,19 @@ macro "#PROOF SEARCH" ruleName:ident : command =>
 set_option smt.solver.kind "z3"
 
 § goodRule
-GIVEN n IS A ℤ,
+GIVEN n IS A Int,
 DECIDE n < 0 IF THERE IS SOME m SUCH THAT (0 < m) AND m + n = 0
 
 -- #SMT goodRule
 
 § badRule1
-GIVEN n IS A ℤ,
+GIVEN n IS A Int,
 DECIDE 0 < n IF True
 
 -- #SMT badRule1
 
 § badRule2
-GIVEN xs IS A List ℤ,
+GIVEN xs IS A List OF Int,
 DECIDE xs's sum EQUALS 0 IF 0 EQUALS
   Id.run do
     let mut result := 1
