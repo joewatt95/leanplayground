@@ -275,7 +275,7 @@ DECIDE 0 < n IF True
 
 § badRule2
 GIVEN xs IS A List OF Int,
-DECIDE (List.sum OF xs) EQUALS 0 IF 0 EQUALS
+DECIDE xs's sum EQUALS 0 IF 0 EQUALS
   Id.run do
     let mut result := 1
     for x in xs do
