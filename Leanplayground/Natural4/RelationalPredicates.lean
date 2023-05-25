@@ -26,7 +26,7 @@ macro "derive" "stuff" "for" id:ident : command
   Set this to have a lower priority than the default so that it's automatically
   defeated by other instances, if there are any.
 -/
-@[default_instance 50]
+@[default_instance low]
 instance [Repr α] : ToString α where
   toString := toString ∘ repr
 
