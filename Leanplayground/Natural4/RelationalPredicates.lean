@@ -306,11 +306,8 @@ GIVEN κ IS A Cardinal.{u},
 DECIDE IsInaccessible'
 IF (κ > ℵ₀) AND (Cardinal.IsRegular κ) AND IsStrongLimit κ
 
+-- set_option trace.aesop.ruleSet true
+
+-- example : ¬ (p ∨ q) ↔ ¬ p ∧ ¬ q := by aesop 
+
 end RelationalPredicates
-
--- instance : SlimCheck.Testable (∀ n : Nat, True) := inferInstance
-
--- #eval SlimCheck.Testable.check badRule
-
--- #eval Lean.Macro.expandMacro? `(0 EQUALS 0)
--- #check Lean.Macro.expandMacro? -- $ Lean.TSyntax.raw
