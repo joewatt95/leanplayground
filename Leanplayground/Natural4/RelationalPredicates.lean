@@ -211,7 +211,7 @@ macro_rules
 macro "THE" fieldName:ident "OF" record:term : term => `($record.$fieldName)
 
 macro recordName:ident fieldName:ident : term =>
-  match recordName |>.raw |> toString |>.drop 1 |>.splitOn "'s" with
+  match recordName |> toString |>.drop 1 |>.splitOn "'s" with
   | [recordName, ""] =>
     -- In this case, recordName is an identifier ending with 's, eg: person's
     let recordNameIdent := Lean.mkIdent recordName
