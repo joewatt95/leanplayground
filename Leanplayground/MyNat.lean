@@ -3,13 +3,13 @@ import Mathlib.Data.Nat.Basic
 
 namespace MyNat
 
-inductive Leq : (m n : Nat) → Prop
+inductive Leq : (m n : ℕ) → Prop
 | LeqSelf : Leq m m
 | LeqSucc (m_leq_n : Leq m n) : Leq m (n + 1)
 
 infix:50 "leq" => Leq
 
-lemma zero_leq : ∀{m}, 0 leq m
+lemma zero_leq : ∀ {m}, 0 leq m
 | 0 => Leq.LeqSelf
 | m + 1 =>
   haveI : 0 leq m := zero_leq
@@ -27,5 +27,25 @@ private lemma leq'_of_leq {m} : ∀ {n}, m leq n → m leq' n
     m + (d + 1) = (m + d) + 1 := by rw [←add_assoc]
               _ = _ + 1       := by rw [h]
   show ∃ d, m + d = _ + 1 from ⟨d + 1, this⟩
+
+private lemma h : ∀ {n}, n = 0 ∨ ∃ m, n = m + 1
+| 0 => show _ from Or.inl rfl
+| n + 1 =>
+  suffices ∃ m, n + 1 = m + 1 from Or.inr this
+
+  haveI : n = 0 ∨ ∃ m, n = m + 1 := h
+  match this with
+  | Or.inl (h : n = 0) =>
+    haveI : n + 1 = 0 + 1 := by rw [h]
+    show ∃ m, n + 1 = m + 1 from ⟨0, this⟩
+
+  | Or.inr (⟨m, h⟩ : ∃ _, n = _ + 1) =>
+    haveI : n + 1 = (m + 1) + 1 := by rw [h]
+    show ∃ m', n + 1 = m' + 1 from ⟨m + 1, this⟩
+
+private lemma leq_of_leq' {m} : ∀ {n}, (m leq' n) → m leq n
+| 0, h  =>
+  sorry
+| n + 1, h => sorry
 
 end MyNat
