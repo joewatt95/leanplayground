@@ -39,7 +39,7 @@ private lemma h : ∀ {n}, n = 0 ∨ ∃ m, n = m + 1
     haveI : n + 1 = 0 + 1 := by rw [h]
     show ∃ m, n + 1 = m + 1 from ⟨0, this⟩
 
-  | Or.inr (⟨m, h⟩ : ∃ _, n = _ + 1) =>
+  | Or.inr (⟨m, h⟩ : ∃ _m, n = _m + 1) =>
     haveI : n + 1 = (m + 1) + 1 := by rw [h]
     show ∃ m', n + 1 = m' + 1 from ⟨m + 1, this⟩
 
