@@ -254,7 +254,7 @@ HAS Role.Lender IS THE role
 DEFINE SimpleLoan IS A Loan
 HAS #[(Role.Borrower, B), (Role.Lender, L)] IS THE Parties
 
--- #eval SimpleLoan
+-- #eval Lean.toJson SimpleLoan
 
 § testRule
 GIVEN p IS A Party,
