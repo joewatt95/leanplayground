@@ -1,5 +1,5 @@
 import Aesop
--- import Lean.Data.Json
+import Lean.Data.Json
 -- import Lean.Data.Parsec
 -- import Lean.Parser.Term
 import Mathlib.SetTheory.Cardinal.Cofinality
@@ -17,8 +17,8 @@ namespace RelationalPredicates
 macro "derive" "stuff" "for" id:ident : command
 => `(
   deriving instance
-    BEq, Hashable, Repr
-    -- Lean.FromJson, Lean.ToJson
+    BEq, Hashable, Repr,
+    Lean.FromJson, Lean.ToJson
   for $id
 )
 
@@ -154,7 +154,7 @@ end
 --   xs.foldl (init := Lean.PersistentHashMap.empty) <|
 --     λ hashMap (k, v) => hashMap.insert k v
 
-notation "MAP" "FROM" key "TO" val => Std.HashMap key val
+notation "MAP" "FROM" key "TO" val => Array (key × val)
 -- Lean.PHashMap key val
 notation x "EQUALS" y => x == y
 
@@ -252,7 +252,7 @@ DEFINE L IS A Party
 HAS Role.Lender IS THE role
 
 DEFINE SimpleLoan IS A Loan
-HAS Std.HashMap.ofList [(Role.Borrower, B), (Role.Lender, L)] IS THE Parties
+HAS #[(Role.Borrower, B), (Role.Lender, L)] IS THE Parties
 
 -- #eval SimpleLoan
 
