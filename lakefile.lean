@@ -10,9 +10,6 @@ require mathlib from git
 require smt from git
   "https://github.com/ufmg-smite/lean-smt.git" @ "main"
 
-require proofwidgets from git
-  "https://github.com/0art0/ProofWidgets4"
-
 @[default_target]
 lean_lib «Leanplayground» where
   -- add any library configuration options here
