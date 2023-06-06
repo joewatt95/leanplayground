@@ -55,4 +55,6 @@ private lemma leq_of_leq' {m} : ∀ {n}, (m leq' n) → m leq n
 
 | n + 1, h => sorry
 
+#print Lean.MetaM
+
 end MyNat

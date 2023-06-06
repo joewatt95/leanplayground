@@ -2,9 +2,15 @@
  "packagesDir": "lake-packages",
  "packages":
  [{"git":
+   {"url": "https://github.com/0art0/ProofWidgets4",
+    "subDir?": null,
+    "rev": "938a21aded72259e353808e7be718a59244c67e4",
+    "name": "proofwidgets",
+    "inputRev?": null}},
+  {"git":
    {"url": "https://github.com/leanprover-community/mathlib4.git",
     "subDir?": null,
-    "rev": "e01ef88d9b84762a996d0265d3f9e61f5744c51a",
+    "rev": "c6a63ba1dfaede22b59ceba7f56b95831cde6214",
     "name": "mathlib",
     "inputRev?": null}},
   {"git":
