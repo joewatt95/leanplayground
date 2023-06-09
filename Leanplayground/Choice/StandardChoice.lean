@@ -79,7 +79,7 @@ theorem choice
   (h : ∀ a, σ a is nonempty) : ((a : α) → σ a) is nonempty :=
   define f as
     a ∈ α ↦
-      we have σ a is nonempty, because h a,
+      [this] we have σ a is nonempty, because h a,
       finally we have σ a, because Classical.choice this, 
   finally we have ((a : α) → σ a) is nonempty, because it is witnessed by f
 
@@ -124,9 +124,9 @@ private lemma exists_forall_of_forall_exists {R : α → β → Prop}
 
   define σ as a ∈ α ↦ {b ∈ β | (a, b) ∈ R},
 
-  we have σ a is nonempty for every a,
+  [this] we have σ a is nonempty for every a,
   because letting a be arbitrary,
-    we have ∃ b, (a, b) ∈ R, because h a,
+    [this] we have ∃ b, (a, b) ∈ R, because h a,
     finally we have {b | (a, b) ∈ R} is nonempty,
     because Utils.nonempty_subtype_iff_exists.mpr this,
 
@@ -143,7 +143,7 @@ private lemma forall_exists_of_exists_forall {R : α → β → Prop}
   (h : ∃ f : _ → _, ∀ a, (a, f a) ∈ R) : ∀ a, ∃ b, (a, b) ∈ R :=
   letting f be as in h, -- extract witness via existential elimination
   letting a be arbitrary,
-    we have (a, f a) ∈ R, because h a,
+    [this] we have (a, f a) ∈ R, because h a,
     finally we have ∃ b, (a, b) ∈ R,
     because it is witnessed by f a and this
 
@@ -156,7 +156,7 @@ private lemma forall_exists_of_exists_forall {R : α → β → Prop}
 theorem distrib {S : α → β → Set U} :
   (⋂ a, ⋃ b, S a b) = ⋃ f : _ → _, ⋂ a, S a (f a) :=
 
-  we have ∀ x, x ∈ (⋂ a, ⋃ b, S a b) ↔ x ∈ ⋃ f : _ → _, ⋂ a, S a (f a),
+  [this] we have ∀ x, x ∈ (⋂ a, ⋃ b, S a b) ↔ x ∈ ⋃ f : _ → _, ⋂ a, S a (f a),
   because letting x be arbitrary, calc
         x ∈ (⋂ a, ⋃ b, S a b)
       ↔ ∀ a, ∃ b, x ∈ S a b               := by simp
