@@ -7,6 +7,9 @@ package «leanplayground» where
 require mathlib from git
   "https://github.com/leanprover-community/mathlib4.git"
 
+require proofwidgets from git
+  "https://github.com/EdAyers/ProofWidgets4" @ "v0.0.11"
+
 require smt from git
   "https://github.com/ufmg-smite/lean-smt.git" @ "main"
 
