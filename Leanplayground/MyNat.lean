@@ -17,15 +17,13 @@ lemma zero_leq : ∀ {m}, 0 leq m
 
 macro m:term "leq'" n:term : term => `(∃ d : ℕ, $m + d = $n)
 
-private lemma leq'_of_leq {m} : ∀ {n}, m leq n → m leq' n
+private lemma leq'_of_leq : ∀ {n}, m leq n → m leq' n
 | _, (Leq.LeqSelf : m leq m) =>
   show ∃ d, m + d = m from ⟨0, rfl⟩
 | .(_ + 1), (Leq.LeqSucc m_leq_n) =>
   haveI : m leq' _ := leq'_of_leq m_leq_n
   let ⟨d, h⟩ := this
-  haveI : _ := calc
-    m + (d + 1) = (m + d) + 1 := by rw [←add_assoc]
-              _ = _ + 1       := by rw [h]
+  haveI : m + (d + 1) = _ + 1 := by rw [←add_assoc, h]
   show ∃ d, m + d = _ + 1 from ⟨d + 1, this⟩
 
 private lemma eq_zero_or_succ : ∀ {n}, n = 0 ∨ ∃ m, n = m + 1
@@ -43,18 +41,19 @@ private lemma eq_zero_or_succ : ∀ {n}, n = 0 ∨ ∃ m, n = m + 1
     haveI : n + 1 = (m + 1) + 1 := by rw [h]
     show ∃ m', n + 1 = m' + 1 from ⟨m + 1, this⟩
 
-private lemma leq_of_leq' {m} : ∀ {n}, (m leq' n) → m leq n
-| 0, h  =>
-  haveI : m = 0 ∨ ∃ d, m = d + 1 := eq_zero_or_succ
-  match this with
-  | Or.inl m_eq_0 =>
-    haveI : 0 leq 0 := Leq.LeqSelf
-    show m leq 0 by simp [m_eq_0, this]
-  | Or.inr ⟨d, m_eq_d_succ⟩ =>
-    sorry
+private lemma leq_of_leq' : ∀ {n}, (∃ d, m + d = n) → m leq n
+| n, ⟨0, h⟩ =>
+  haveI : m = n := by simp at h; exact h
+  show m leq n by rw [this]; exact Leq.LeqSelf
 
-| n + 1, h => sorry
+| n + 1, ⟨d + 1, h⟩ =>
+  haveI : (m + d) + 1 = n + 1 := by rw [add_assoc, h]
+  haveI : ∃ d, m + d = n := ⟨d, by simp at this; exact this⟩
+  haveI : m leq n := leq_of_leq' this
+  show m leq n + 1 from Leq.LeqSucc this
 
-#print Lean.MetaM
+@[simp]
+theorem leq_iff_leq' : (m leq n) ↔ m leq' n :=
+  ⟨leq'_of_leq, leq_of_leq'⟩ 
 
 end MyNat
