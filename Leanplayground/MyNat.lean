@@ -54,13 +54,37 @@ private lemma leq_of_leq' : ∀ {n}, (∃ d, m + d = n) → m leq n
 
 @[simp]
 theorem leq_iff_leq' : (m leq n) ↔ m leq' n :=
-  ⟨leq'_of_leq, leq_of_leq'⟩ 
+  ⟨leq'_of_leq, leq_of_leq'⟩
 
-theorem leq_trans : (x leq y) → (y leq z) → x leq z
+private lemma Leq.reflexive : x leq x := Leq.LeqSelf
+
+private lemma Leq.transitive : (x leq y) → (y leq z) → x leq z
 | h1, h2 =>
   have ⟨d1, h1⟩ : ∃ d1, x + d1 = y := by simp [leq_iff_leq'] at h1; exact h1
   have ⟨d2, h2⟩ : ∃ d2, y + d2 = z := by simp [leq_iff_leq'] at h2; exact h2
   haveI : ∃ d, x + d = z := ⟨d1 + d2, by rw [←add_assoc, h1, h2]⟩
   show x leq z by simp [leq_iff_leq'] at *; exact this
+
+private lemma Leq.antisymmetric : x leq y → y leq x → x = y
+| x_leq_y, y_leq_x =>
+  have ⟨d1, h1⟩ : ∃ d1, x + d1 = y :=
+    by simp [leq_iff_leq'] at x_leq_y; exact x_leq_y
+  have ⟨d2, h2⟩ : ∃ d2, y + d2 = x :=
+    by simp [leq_iff_leq'] at y_leq_x; exact y_leq_x
+  haveI : x + (d1 + d2) = x + 0 := by rw [←h1, add_assoc] at h2; exact h2
+  haveI d1_plus_d2_eq_zero : d1 + d2 = 0 := Nat.add_left_cancel this
+  haveI : d1 = 0 :=
+    haveI : d1 = 0 ∨ ∃ d, d1 = d + 1 := eq_zero_or_succ
+    match this with
+    | Or.inl d1_eq_zero => d1_eq_zero
+    | Or.inr ⟨d, d1_eq_d_succ⟩ =>
+      haveI : (d + d2).succ = 0 := by
+        rw [d1_eq_d_succ] at d1_plus_d2_eq_zero
+        sorry
+      sorry
+  sorry
+
+instance : Trans Leq Leq Leq where
+  trans := Leq.transitive
 
 end MyNat
