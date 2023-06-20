@@ -8,9 +8,15 @@
     "name": "proofwidgets",
     "inputRev?": "v0.0.11"}},
   {"git":
+   {"url": "https://github.com/siddhartha-gadgil/LeanAide",
+    "subDir?": null,
+    "rev": "22f764fc0f074efbf000f3fc23e22be92351d521",
+    "name": "LeanCodePrompts",
+    "inputRev?": "main"}},
+  {"git":
    {"url": "https://github.com/leanprover-community/mathlib4.git",
     "subDir?": null,
-    "rev": "a11e3f3d2b579691e9f454a6299ca2bd3691f8de",
+    "rev": "e6dcb5445cacb4f329ab8faa078f746368bc5d3b",
     "name": "mathlib",
     "inputRev?": null}},
   {"git":

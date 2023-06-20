@@ -13,6 +13,9 @@ require proofwidgets from git
 require smt from git
   "https://github.com/ufmg-smite/lean-smt.git" @ "main"
 
+require LeanCodePrompts from git
+  "https://github.com/siddhartha-gadgil/LeanAide" @ "main"
+
 @[default_target]
 lean_lib «Leanplayground» where
   -- add any library configuration options here
