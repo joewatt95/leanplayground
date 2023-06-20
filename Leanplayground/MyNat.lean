@@ -1,5 +1,6 @@
 import Mathlib.Algebra.Group.Defs
 import Mathlib.Data.Nat.Basic
+import Mathlib.Tactic
 
 namespace MyNat
 
@@ -62,7 +63,7 @@ private lemma Leq.transitive : (x leq y) → (y leq z) → x leq z
 | h1, h2 =>
   have ⟨d1, h1⟩ : ∃ d1, x + d1 = y := by simp [leq_iff_leq'] at h1; exact h1
   have ⟨d2, h2⟩ : ∃ d2, y + d2 = z := by simp [leq_iff_leq'] at h2; exact h2
-  haveI : ∃ d, x + d = z := ⟨d1 + d2, by rw [←add_assoc, h1, h2]⟩
+  haveI : ∃ d, x + d = z := ⟨d1 + d2, by ring_nf; rw [h1, h2]⟩
   show x leq z by simp [leq_iff_leq'] at *; exact this
 
 private lemma Leq.antisymmetric : x leq y → y leq x → x = y
@@ -78,11 +79,10 @@ private lemma Leq.antisymmetric : x leq y → y leq x → x = y
     match this with
     | Or.inl d1_eq_zero => d1_eq_zero
     | Or.inr ⟨d, d1_eq_d_succ⟩ =>
-      haveI : (d + d2).succ = 0 := by
-        rw [d1_eq_d_succ] at d1_plus_d2_eq_zero
-        sorry
-      sorry
-  sorry
+      suffices ⊥ from False.elim this
+      haveI : d + d2 + 1 = 0 := by ring_nf; simp [d1_eq_d_succ] at d1_plus_d2_eq_zero
+      show ⊥ from Nat.succ_ne_zero _ this
+  show x = y by simp [this] at h1; exact h1
 
 instance : Trans Leq Leq Leq where
   trans := Leq.transitive

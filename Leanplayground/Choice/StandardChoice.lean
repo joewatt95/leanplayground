@@ -156,15 +156,13 @@ private lemma forall_exists_of_exists_forall {R : α → β → Prop}
 theorem distrib {S : α → β → Set U} :
   (⋂ a, ⋃ b, S a b) = ⋃ f : _ → _, ⋂ a, S a (f a) :=
 
-  [this] we have ∀ x, x ∈ (⋂ a, ⋃ b, S a b) ↔ x ∈ ⋃ f : _ → _, ⋂ a, S a (f a),
-  because letting x be arbitrary, calc
+  haveI {x} := calc
         x ∈ (⋂ a, ⋃ b, S a b)
-      ↔ ∀ a, ∃ b, x ∈ S a b               := by simp
-    _ ↔ ∃ f : _ → _, ∀ a, x ∈ S a (f a)   := forall_exists_iff_exists_forall
-    _ ↔ x ∈ ⋃ f : α → β, ⋂ a, S a (f a)  := by simp,
+      ↔ ∀ a, ∃ b, x ∈ S a b              := by simp
+    _ ↔ ∃ f : _ → _, ∀ a, x ∈ S a (f a)  := forall_exists_iff_exists_forall
+    _ ↔ x ∈ ⋃ f : α → β, ⋂ a, S a (f a)  := by simp
 
-  finally we have (⋂ a, ⋃ b, S a b) = ⋃ f : _ → _, ⋂ a, S a (f a),
-  because Set.ext_iff.mpr this
+  show _ from Set.ext_iff.mpr @this
 
 -- #print distrib
 
