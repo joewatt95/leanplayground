@@ -35,7 +35,7 @@ syntax ident "IS" "A" term : fieldDecl
 
 syntax
   "DECLARE" ident ("IS" "A" ident)?
-  ("HAS" fieldDecl,+),*
+  ("HAS" sepBy1(fieldDecl, "HAS"))?
   : command
 
 macro_rules
@@ -49,22 +49,29 @@ macro_rules
     derive stuff for $className
   )
 
-  | `(DECLARE $className HAS $fieldName:ident IS A $fieldType:term)
+  | `(DECLARE $className HAS $[$fieldName:ident IS A $fieldType:term] HAS*)
   => `(
       structure $className where
-        { $fieldName : $fieldType }
+        $[{ $fieldName : $fieldType }]*
       derive stuff for $className
   )
 
-  | `(
-      DECLARE $className IS A $superClassName
-      HAS $fieldName:ident IS A $fieldType
-    )
+  | `(DECLARE $className IS A $superClassName HAS $[$fieldName:ident IS A $fieldType:term] HAS*)
   => `(
-    structure $className extends $superClassName where
-      { $fieldName : $fieldType }
-    derive stuff for $className
+      structure $className extends $superClassName where
+        $[{ $fieldName : $fieldType }]*
+      derive stuff for $className
   )
+
+  -- | `(
+  --     DECLARE $className IS A $superClassName
+  --     HAS $fieldName:ident IS A $fieldType
+  --   )
+  -- => `(
+  --   structure $className extends $superClassName where
+  --     { $fieldName : $fieldType }
+  --   derive stuff for $className
+  -- )
 
 declare_syntax_cat fieldDef
 syntax term "IS" "THE" ident : fieldDef
@@ -74,7 +81,7 @@ syntax term "IS" "THE" ident : fieldDef
 -- set_option trace.Elab.command true in
 syntax
   "DEFINE" ident "IS" "A" ident
-  ("HAS" fieldDef,+),*
+  ("HAS" sepBy1(fieldDef, "HAS"))?
   : command
 
 macro_rules
@@ -82,10 +89,10 @@ macro_rules
   => `(
     def $id : $className where
   )
-  | `(DEFINE $id IS A $className HAS $fieldVal:term IS THE $fieldName:ident)
+  | `(DEFINE $id IS A $className HAS $[$fieldVal:term IS THE $fieldName:ident] HAS*)
   => `(
     def $id : $className where
-      $fieldName := $fieldVal
+      $[$fieldName := $fieldVal]*
   )
 
 -- open Lean.Parser.Command
@@ -244,6 +251,7 @@ HAS role IS A Role
 
 DECLARE Loan IS A Agreement
 HAS Parties IS A MAP FROM Role TO Party
+HAS Principal IS A Nat
 
 DEFINE B IS A Party
 HAS Role.Borrower IS THE role
@@ -253,6 +261,7 @@ HAS Role.Lender IS THE role
 
 DEFINE SimpleLoan IS A Loan
 HAS #[(Role.Borrower, B), (Role.Lender, L)] IS THE Parties
+HAS 1000 IS THE Principal
 
 -- #eval Lean.toJson SimpleLoan
 
