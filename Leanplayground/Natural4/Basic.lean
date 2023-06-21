@@ -12,7 +12,7 @@ import Std.Lean.PersistentHashMap
 -- import Std.Lean.Parser
 
 -- import Std.Data.Array.Basic
-namespace RelationalPredicates
+namespace Basic
 
 macro "derive" "stuff" "for" id:ident : command
 => `(
@@ -319,4 +319,4 @@ IF (κ > ℵ₀) AND (Cardinal.IsRegular κ) AND IsStrongLimit κ
 
 -- example : ¬ (p ∨ q) ↔ ¬ p ∧ ¬ q := by aesop 
 
-end RelationalPredicates
+end Basic

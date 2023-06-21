@@ -14,23 +14,21 @@ lemma zero_leq : ∀ {m}, 0 leq m
 | 0 => Leq.Self
 | m + 1 =>
   haveI : 0 leq m := zero_leq
-  show 0 leq m.succ from this.Succ
+  show 0 leq m + 1 from this.Succ
 
 macro m:term "leq'" n:term : term => `(∃ d : ℕ, $m + d = $n)
 
 private lemma eq_zero_or_succ : ∀ {n}, n = 0 ∨ ∃ m, n = m + 1
-| 0 => show _ from Or.inl rfl
+| 0 => Or.inl rfl
 | n + 1 =>
   suffices ∃ m, n + 1 = m + 1 from Or.inr this
 
   match (eq_zero_or_succ : n = 0 ∨ ∃ m, n = m + 1) with
-  | Or.inl (h : n = 0) =>
-    haveI : n + 1 = 0 + 1 := by rw [h]
-    show ∃ m, n + 1 = m + 1 from ⟨0, this⟩
+  | Or.inl n_eq_zero =>
+    show ∃ m, n + 1 = m + 1 from ⟨0, by rw [n_eq_zero]⟩
 
-  | Or.inr (⟨m, h⟩ : ∃ _m, n = _m + 1) =>
-    haveI : n + 1 = (m + 1) + 1 := by rw [h]
-    show ∃ m', n + 1 = m' + 1 from ⟨m + 1, this⟩
+  | Or.inr ⟨m, n_eq_m_succ⟩ =>
+    show ∃ m, n + 1 = m + 1 from ⟨m + 1, by rw [n_eq_m_succ]⟩
 
 private lemma leq'_of_leq : ∀ {n}, m leq n → m leq' n
 | _, (Leq.Self : m leq m) =>
@@ -38,7 +36,7 @@ private lemma leq'_of_leq : ∀ {n}, m leq n → m leq' n
 | .(_ + 1), (Leq.Succ m_leq_n) =>
   haveI : m leq' _ := leq'_of_leq m_leq_n
   let ⟨d, h⟩ := this
-  haveI : m + (d + 1) = _ + 1 := by rw [←add_assoc, h]
+  haveI : m + (d + 1) = _ + 1 := by rw [←h]; ring
   show ∃ d, m + d = _ + 1 from ⟨d + 1, this⟩
 
 private lemma leq_of_leq' : ∀ {n}, (∃ d, m + d = n) → m leq n
@@ -48,7 +46,7 @@ private lemma leq_of_leq' : ∀ {n}, (∃ d, m + d = n) → m leq n
 
 | n + 1, ⟨d + 1, h⟩ =>
   haveI : (m + d) + 1 = n + 1 := by rw [add_assoc, h]
-  haveI : ∃ d, m + d = n := ⟨d, by simp at this; exact this⟩
+  haveI : ∃ d, m + d = n := ⟨d, by simp at this; assumption⟩
   haveI : m leq n := leq_of_leq' this
   show m leq n + 1 from this.Succ
 
@@ -67,13 +65,16 @@ private lemma Leq.transitive : (x leq y) → (y leq z) → x leq z
   haveI : ∃ d, x + d = z := ⟨d1 + d2, by ring_nf; rw [h1, h2]⟩
   show x leq z by rw [←leq_iff_leq'] at this; assumption
 
+instance : Trans Leq Leq Leq where
+  trans := Leq.transitive
+
 private lemma Leq.antisymmetric : x leq y → y leq x → x = y
 | x_leq_y, y_leq_x =>
   have ⟨d1, h1⟩ : ∃ d1, x + d1 = y :=
     by simp [leq_iff_leq'] at x_leq_y; assumption
   have ⟨d2, h2⟩ : ∃ d2, y + d2 = x :=
     by simp [leq_iff_leq'] at y_leq_x; assumption
-  haveI : x + (d1 + d2) = x := by rw [←h1] at h2; ring_nf; exact h2
+  haveI : x + (d1 + d2) = x := by rw [←h1] at h2; ring_nf; assumption
   haveI : d1 + d2 = 0 := Nat.add_left_cancel this
   haveI : d1 = 0 :=
     match (eq_zero_or_succ : d1 = 0 ∨ ∃ d, d1 = d + 1) with
@@ -84,7 +85,33 @@ private lemma Leq.antisymmetric : x leq y → y leq x → x = y
       show ⊥ from Nat.succ_ne_zero _ this
   show x = y by rw [this] at h1; exact h1
 
-instance : Trans Leq Leq Leq where
-  trans := Leq.transitive
+private lemma leq_plus : ∀ {d}, x leq x + d
+| 0 => Leq.Self
+| d + 1 => calc
+  x leq x + d     := by exact leq_plus
+  _ leq x + d + 1 := by simp only [leq_iff_leq', add_right_inj, exists_eq]
+
+private lemma leq_plus_of_leq : ∀ {x y z}, x leq y → x + z leq y + z
+| _, _, 0, x_leq_y => x_leq_y
+| x, y, z + 1, x_leq_y =>
+  haveI : x + z leq y + z := leq_plus_of_leq x_leq_y
+  have ⟨d, h⟩ : ∃ d, x + z + d = y + z :=
+    by simp [leq_iff_leq'] at this; assumption
+  calc
+    x + z + 1
+  _ leq x + z + d + 1 := by ring_nf; exact leq_plus
+  _ leq y + z + 1 := by rw [h]; exact Leq.Self
+
+private lemma leq_total : ∀ {x y}, x leq y ∨ y leq x
+| 0, _ => Or.inl zero_leq
+| _, 0 => Or.inr zero_leq
+| x + 1, y + 1 =>
+  match (leq_total : x leq y ∨ y leq x) with
+  | Or.inl x_leq_y =>
+    haveI : x + 1 leq y + 1 := leq_plus_of_leq x_leq_y
+    Or.inl this
+  | Or.inr y_leq_x =>
+    haveI : y + 1 leq x + 1 := leq_plus_of_leq y_leq_x
+    Or.inr this
 
 end MyNat
