@@ -1,4 +1,3 @@
-import Aesop
 import Lean.Data.Json
 -- import Lean.Data.Parsec
 -- import Lean.Parser.Term
@@ -188,31 +187,38 @@ macro_rules
 
 notation relation "RELATES" t0 "TO" t1 => relation t0 t1
 
+-- Horn claues.
 syntax
   "§" ident
-  "GIVEN" ident "IS" "A" term ","
+  ("GIVEN" sepBy1(ident "IS" "A" term, ","))?
   "DECIDE" term "IF" term
   : command
 
 macro_rules
   | `(
     § $ruleName
-    GIVEN $var IS A $type,
     DECIDE $concl:ident IF $hypo
   ) => `(
-    -- BabyL4-esq declaration of the uninterpreted predicate.
-    axiom $concl : $type → Prop
-
-    -- Rule definition.
-    def $ruleName : Prop :=
-      ∀ $var : $type, $hypo → $concl $var
+    def $ruleName : Prop := $hypo → $concl
   )
   | `(
     § $ruleName
-    GIVEN $var IS A $type,
+    GIVEN $[$var0:ident IS A $type0],*
+    DECIDE $concl:ident OF $[$var:ident] AND* IF $hypo
+  ) => `(
+    -- Extract signature of the uninterpreted predicate.
+    axiom $concl $[($var0 : $type0)]* : Prop
+
+    -- Rule definition.
+    def $ruleName : Prop :=
+      ∀ $[($var0 : $type0)]*, $hypo → $concl OF $[$var] AND*
+  )
+  | `(
+    § $ruleName
+    GIVEN $[$var IS A $type],*
     DECIDE $concl:term IF $hypo
   ) => `(
-    def $ruleName : Prop := ∀ $var : $type, $hypo → $concl
+    def $ruleName : Prop := ∀ $[($var : $type)]*, $hypo → $concl
   )
 
 macro "THE" fieldName:ident "OF" record:term : term => `($record.$fieldName)
@@ -251,7 +257,7 @@ HAS role IS A Role
 
 DECLARE Loan IS A Agreement
 HAS Parties IS A MAP FROM Role TO Party
-HAS Principal IS A Nat
+HAS PrincipalAmt IS A Nat
 
 DEFINE B IS A Party
 HAS Role.Borrower IS THE role
@@ -261,29 +267,31 @@ HAS Role.Lender IS THE role
 
 DEFINE SimpleLoan IS A Loan
 HAS #[(Role.Borrower, B), (Role.Lender, L)] IS THE Parties
-HAS 1000 IS THE Principal
+HAS 1000 IS THE PrincipalAmt
 
 -- #eval Lean.toJson SimpleLoan
 
 § testRule
-GIVEN p IS A Party,
-DECIDE isLender IF p's role EQUALS Role.Lender
+GIVEN p IS A Party
+DECIDE isLender OF p IF p's role EQUALS Role.Lender
 -- DECIDE isLender IF (Party.role OF p) EQUALS Role.Lender
 
 § goodRule
-GIVEN n IS A Int,
+GIVEN n IS A Int
 DECIDE n < 0 IF THERE IS SOME m SUCH THAT (0 < m) AND m + n = 0
 
 -- #SMT goodRule
 
 § badRule1
-GIVEN n IS A Int,
-DECIDE 0 < n IF True
+GIVEN m IS A Int, n IS A Int
+DECIDE m < n IF True
+
+#print badRule1
 
 -- #SMT badRule1
 
 § badRule2
-GIVEN xs IS A List OF Int,
+GIVEN xs IS A List OF Int
 DECIDE xs's sum EQUALS 0 IF 0 EQUALS
   Id.run do
     let mut result := 1
@@ -299,7 +307,7 @@ section
 variable {α β : Type}
 
 § skolemize
-GIVEN R IS A RELATION BETWEEN α AND β,
+GIVEN R IS A RELATION BETWEEN α AND β
 DECIDE THERE IS SOME f FROM _ TO _ SUCH THAT FOR EVERY a, R RELATES a TO f a
 IF FOR EVERY a, THERE IS SOME b SUCH THAT R RELATES a TO b
 
@@ -311,8 +319,8 @@ open Cardinal
 universe u
 
 § InaccessibleCardinal'
-GIVEN κ IS A Cardinal.{u},
-DECIDE IsInaccessible'
+GIVEN κ IS A Cardinal.{u}
+DECIDE IsInaccessible' OF κ
 IF (κ > ℵ₀) AND (Cardinal.IsRegular κ) AND IsStrongLimit κ
 
 -- set_option trace.aesop.ruleSet true
