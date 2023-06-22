@@ -1,6 +1,6 @@
 import Mathlib.Algebra.Group.Defs
 import Mathlib.Data.Nat.Basic
-import Mathlib.Tactic.Ring.Basic
+import Mathlib.Tactic.Ring
 
 namespace MyNat
 

@@ -1,3 +1,4 @@
+import Aesop
 import Lean.Data.Json
 -- import Lean.Data.Parsec
 -- import Lean.Parser.Term
@@ -286,7 +287,7 @@ DECIDE n < 0 IF THERE IS SOME m SUCH THAT (0 < m) AND m + n = 0
 GIVEN m IS A Int, n IS A Int
 DECIDE m < n IF True
 
-#print badRule1
+-- #print badRule1
 
 -- #SMT badRule1
 
