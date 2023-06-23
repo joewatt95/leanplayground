@@ -91,16 +91,29 @@ private lemma leq_plus : ∀ {d}, x leq x + d
   x leq x + d     := by exact leq_plus
   _ leq x + d + 1 := by simp only [leq_iff_leq', add_right_inj, exists_eq]
 
-private lemma leq_plus_of_leq : ∀ {x y z}, x leq y → x + z leq y + z
-| _, _, 0, x_leq_y => x_leq_y
+private lemma leq_plus_of_leq : ∀ {a b c d}, a leq b → c leq d → a + c leq b + d
+| a, b, c, d, a_leq_b, c_leq_d =>
+  sorry
+
+private lemma leq_plus_of_leq' : a leq b → a + c leq b + c :=
+  (leq_plus_of_leq . Leq.Self)
+
+-- private lemma leq_plus_of_leq : ∀ {x y z}, x leq y → x + z leq y + z
+-- | _, _, 0, x_leq_y => x_leq_y
+-- | x, y, z + 1, x_leq_y =>
+--   haveI : x + z leq y + z := leq_plus_of_leq x_leq_y
+--   have ⟨d, h⟩ : ∃ d, x + z + d = y + z :=
+--     by simp [leq_iff_leq'] at this; assumption
+--   calc
+--     x + z + 1
+--   _ leq x + z + d + 1 := by ring_nf; exact leq_plus
+--   _ leq y + z + 1 := by rw [h]; exact Leq.Self
+
+private lemma leq_times_of_leq : ∀ {x y z}, x leq y → x * z leq y * z
+| _, _, 0, _ => Leq.Self
 | x, y, z + 1, x_leq_y =>
-  haveI : x + z leq y + z := leq_plus_of_leq x_leq_y
-  have ⟨d, h⟩ : ∃ d, x + z + d = y + z :=
-    by simp [leq_iff_leq'] at this; assumption
-  calc
-    x + z + 1
-  _ leq x + z + d + 1 := by ring_nf; exact leq_plus
-  _ leq y + z + 1 := by rw [h]; exact Leq.Self
+  haveI : x * z leq y * z := leq_times_of_leq x_leq_y
+  sorry
 
 private lemma leq_total : ∀ {x y}, x leq y ∨ y leq x
 | 0, _ => Or.inl zero_leq
@@ -108,10 +121,10 @@ private lemma leq_total : ∀ {x y}, x leq y ∨ y leq x
 | x + 1, y + 1 =>
   match (leq_total : x leq y ∨ y leq x) with
   | Or.inl x_leq_y =>
-    haveI : x + 1 leq y + 1 := leq_plus_of_leq x_leq_y
+    haveI : x + 1 leq y + 1 := leq_plus_of_leq' x_leq_y
     Or.inl this
   | Or.inr y_leq_x =>
-    haveI : y + 1 leq x + 1 := leq_plus_of_leq y_leq_x
+    haveI : y + 1 leq x + 1 := leq_plus_of_leq' y_leq_x
     Or.inr this
 
 end MyNat

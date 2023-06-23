@@ -12,7 +12,7 @@ import Std.Lean.PersistentHashMap
 -- import Std.Lean.Parser
 
 -- import Std.Data.Array.Basic
-namespace Basic
+namespace Statics
 
 macro "derive" "stuff" "for" id:ident : command
 => `(
@@ -39,22 +39,22 @@ syntax
   : command
 
 macro_rules
-  | `(DECLARE $className)
-  => `(
-    structure $className
-    derive stuff for $className
-  )
-  | `(DECLARE $className IS A $superClassName) => `(
-    structure $className extends $superClassName
-    derive stuff for $className
-  )
+| `(DECLARE $className)
+=> `(
+  structure $className
+  derive stuff for $className
+)
+| `(DECLARE $className IS A $superClassName) => `(
+  structure $className extends $superClassName
+  derive stuff for $className
+)
 
-  | `(DECLARE $className HAS $[$fieldName:ident IS A $fieldType:term] HAS*)
-  => `(
-      structure $className where
-        $[{ $fieldName : $fieldType }]*
-      derive stuff for $className
-  )
+| `(DECLARE $className HAS $[$fieldName:ident IS A $fieldType:term] HAS*)
+=> `(
+    structure $className where
+      $[{ $fieldName : $fieldType }]*
+    derive stuff for $className
+)
 
   | `(DECLARE $className IS A $superClassName HAS $[$fieldName:ident IS A $fieldType:term] HAS*)
   => `(
@@ -246,8 +246,8 @@ macro "#PROOF SEARCH" ruleName:ident : command =>
 
 set_option smt.solver.kind "z3"
 
--- set_option trace.Elab.command true
--- set_option trace.Elab.step true
+set_option trace.Elab.command true
+set_option trace.Elab.step true
 
 DECLARE Agreement
 
@@ -324,8 +324,7 @@ GIVEN κ IS A Cardinal.{u}
 DECIDE IsInaccessible' OF κ
 IF (κ > ℵ₀) AND (Cardinal.IsRegular κ) AND IsStrongLimit κ
 
--- set_option trace.aesop.ruleSet true
+-- set_option trace.aesop.ruleSet true in
+-- example : ¬ (p ∨ q) ↔ ¬ p ∧ ¬ q := by aesop
 
--- example : ¬ (p ∨ q) ↔ ¬ p ∧ ¬ q := by aesop 
-
-end Basic
+end Statics
