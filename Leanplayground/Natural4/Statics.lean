@@ -212,7 +212,7 @@ macro_rules
 
     -- Rule definition.
     def $ruleName : Prop :=
-      ∀ $[($var0 : $type0)]*, $hypo → $concl OF $[$var] AND*
+      ∀ $[($var0 : $type0)]*, $hypo → ($concl OF $[$var] AND*)
   )
   | `(
     § $ruleName
@@ -255,6 +255,7 @@ DECLARE Role IS Borrower PLUS Lender
 
 DECLARE Party
 HAS role IS A Role
+HAS bankBalance IS A Int
 
 DECLARE Loan IS A Agreement
 HAS Parties IS A MAP FROM Role TO Party
@@ -262,9 +263,11 @@ HAS PrincipalAmt IS A Nat
 
 DEFINE B IS A Party
 HAS Role.Borrower IS THE role
+HAS 100 IS THE bankBalance
 
 DEFINE L IS A Party
 HAS Role.Lender IS THE role
+HAS 0 IS THE bankBalance
 
 DEFINE SimpleLoan IS A Loan
 HAS #[(Role.Borrower, B), (Role.Lender, L)] IS THE Parties
@@ -272,9 +275,11 @@ HAS 1000 IS THE PrincipalAmt
 
 -- #eval Lean.toJson SimpleLoan
 
-§ testRule
-GIVEN p IS A Party
-DECIDE isLender OF p IF p's role EQUALS Role.Lender
+-- TODO: Fix this.
+-- § testRule
+-- GIVEN p1 IS A Party, n IS A Int, p2 IS A Party
+-- DECIDE (canTransfer OF p1 AND n AND p2) IF p1's bankBalance > 0
+
 -- DECIDE isLender IF (Party.role OF p) EQUALS Role.Lender
 
 § goodRule
