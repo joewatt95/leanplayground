@@ -36,18 +36,21 @@ syntax
 macro_rules
 | `(RULE $norm:ident PARTY $party:term MUST DO $action BY $deadline)
 => `(
-    def $norm : Norm where
+    noncomputable def $norm : @Norm Time Agent Action where
       agents := return $party
       action := $action
       deontic := (Deontic.O)
       deadline := $deadline
   )
+  
+variable
+  {Borrower : Agent}
+  {pay : Action}
+  {deadline : Time}
 
-variable {Borrower : Agent} {pay : Action} {deadline : Deadline}
-
--- RULE Test
--- PARTY Borrower
--- MUST DO pay BY deadline 
+RULE Test
+PARTY Borrower
+MUST DO pay BY deadline 
 
 structure Event where
 
