@@ -246,8 +246,8 @@ macro "#PROOF SEARCH" ruleName:ident : command =>
 
 set_option smt.solver.kind "z3"
 
-set_option trace.Elab.command true
-set_option trace.Elab.step true
+-- set_option trace.Elab.command true
+-- set_option trace.Elab.step true
 
 DECLARE Agreement
 
@@ -278,7 +278,7 @@ HAS 1000 IS THE PrincipalAmt
 -- TODO: Fix this.
 -- § testRule
 -- GIVEN p1 IS A Party, n IS A Int, p2 IS A Party
--- DECIDE (canTransfer OF p1 AND n AND p2) IF p1's bankBalance > 0
+-- DECIDE canTransfer OF p1 AND n AND p2 IF p1's bankBalance > 0
 
 -- DECIDE isLender IF (Party.role OF p) EQUALS Role.Lender
 
