@@ -11,16 +11,14 @@ variable
  {Agent : Type}
  {Action : Type}
 
-inductive Deontic where
-| O | P | F
-deriving Repr, Hashable, Lean.FromJson, Lean.ToJson
+DECLARE Deontic IS MUST PLUS MAY PLUS SHANT
 
-structure Norm where
-  {deontic : Deontic}
-  {deadline : Time}
-  {agents : Set Agent}
-  {action : Action}
-  {cond : Prop}
+DECLARE Norm
+HAS deontic IS A Deontic
+HAS deadline IS A Time
+HAS agents IS A Set OF Agent
+HAS action IS A Action
+HAS cond IS A Prop
 
 declare_syntax_cat deontic
 syntax "MUST" : deontic
@@ -41,7 +39,7 @@ macro_rules
     noncomputable def $norm : @Norm Time Agent Action where
       agents := return $party
       action := $action
-      deontic := (Deontic.O)
+      deontic := (Deontic.MUST)
       deadline := $deadline
       cond := $cond
   )

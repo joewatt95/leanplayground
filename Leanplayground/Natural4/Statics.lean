@@ -42,25 +42,25 @@ macro_rules
 | `(DECLARE $className)
 => `(
   structure $className
-  derive stuff for $className
+  -- derive stuff for $className
 )
 | `(DECLARE $className IS A $superClassName) => `(
   structure $className extends $superClassName
-  derive stuff for $className
+  -- derive stuff for $className
 )
 
 | `(DECLARE $className HAS $[$fieldName:ident IS A $fieldType:term] HAS*)
 => `(
     structure $className where
       $[{ $fieldName : $fieldType }]*
-    derive stuff for $className
+    -- derive stuff for $className
 )
 
   | `(DECLARE $className IS A $superClassName HAS $[$fieldName:ident IS A $fieldType:term] HAS*)
   => `(
       structure $className extends $superClassName where
         $[{ $fieldName : $fieldType }]*
-      derive stuff for $className
+      -- derive stuff for $className
   )
 
   -- | `(
