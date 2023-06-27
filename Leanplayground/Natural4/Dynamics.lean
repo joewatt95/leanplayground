@@ -36,13 +36,20 @@ syntax
 macro_rules
 | `(RULE $norm:ident PARTY $party:term IF $cond MUST DO $action BY $deadline)
 => `(
-    noncomputable def $norm : @Norm Time Agent Action where
-      agents := return $party
-      action := $action
-      deontic := (Deontic.MUST)
-      deadline := $deadline
-      cond := $cond
-  )
+  DEFINE $norm IS A (@Norm Time Agent Action)
+  HAS (return $party) IS THE agents
+  HAS ($action) IS THE action
+  HAS (Deontic.MUST) IS THE deontic
+  HAS ($deadline) IS THE deadline
+  HAS ($cond) IS THE cond 
+)
+  --   noncomputable def $norm : @Norm Time Agent Action where
+  --     agents := return $party
+  --     action := $action
+  --     deontic := (Deontic.MUST)
+  --     deadline := $deadline
+  --     cond := $cond
+  -- )
   
 variable
   {Borrower Lender : Agent}

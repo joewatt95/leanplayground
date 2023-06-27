@@ -80,7 +80,7 @@ syntax term "IS" "THE" ident : fieldDef
 
 -- set_option trace.Elab.command true in
 syntax
-  "DEFINE" ident "IS" "A" ident
+  "DEFINE" ident "IS" "A" term
   ("HAS" sepBy1(fieldDef, "HAS"))?
   : command
 
