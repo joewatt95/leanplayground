@@ -6,10 +6,10 @@ import Leanplayground.Natural4.Statics
 namespace Dynamics
 
 variable
- {Time : Type} [LE Time] [OrderBot Time]
+ {Time : Type u} [LE Time] [OrderBot Time]
  {Duration : Set Time} [BoundedOrder Duration]
- {Agent : Type}
- {Action : Type}
+ {Agent : Type v}
+ {Action : Type w}
 
 DECLARE Deontic IS MUST PLUS MAY PLUS SHANT
 
