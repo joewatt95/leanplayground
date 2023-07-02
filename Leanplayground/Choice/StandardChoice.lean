@@ -134,7 +134,7 @@ private lemma exists_forall_of_forall_exists {R : α → β → Prop}
   we obtain f such that f a ∈ σ a for every a,
   -- we obtain f : α → ⋃ σ a such that
 
-  [h] we have ((a, f a) ∈ R) for every a, because a ↦ f a |>.prop, 
+  [h] we have ((a, f a) ∈ R) for every a, because a ↦ f a |>.prop,
 
   finally we have ∃ f : _ → _, ∀ a, (a, f a) ∈ R,
   because it is witnessed by a ↦ f a |>.val and h
