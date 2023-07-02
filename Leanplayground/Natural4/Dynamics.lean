@@ -6,6 +6,7 @@ import Leanplayground.Natural4.Statics
 namespace Dynamics
 
 variable
+  -- TODO: Add a typeclass constraint forcing ≤ to be decidable.
  {Time : Type u} [LE Time] [OrderBot Time]
  {Duration : Set Time} [BoundedOrder Duration]
  {Agent : Type v}
@@ -39,12 +40,12 @@ macro_rules
 
 | `(§ $norm:ident PARTY $party:term IF $cond MUST $action BY $deadline)
 => `(
-  DEFINE $norm IS A (@Norm Time Agent Action)
-  HAS return $party IS THE agents
+  DEFINE $norm IS A @Norm Time Agent Action
+  HAS pure ($party) IS THE agents
   HAS ($action) IS THE action
-  HAS (Deontic.MUST) IS THE deontic
+  HAS Deontic.MUST IS THE deontic
   HAS ($deadline) IS THE deadline
-  HAS ($cond) IS THE cond 
+  HAS ($cond) IS THE cond
 )
   --   noncomputable def $norm : @Norm Time Agent Action where
   --     agents := return $party
@@ -55,23 +56,64 @@ macro_rules
   -- )
   
 variable
-  {Borrower Lender : Agent}
+  {borrower lender : Agent}
   {pay : Action}
   {deadline : Time}
 
 § Test
-PARTY Borrower
+PARTY borrower
 IF ∃ x, (x EQUALS 0) AND x EQUALS x
 MUST DO pay BY deadline 
 
-§ Test1
-PARTY Lender
+§ Test'
+PARTY lender
 IF True
-MUST DO pay BY deadline
+MUST pay BY deadline
 
 -- #print Test
 
-structure Event where
+DECLARE Event
+-- Preconds that need to hold for the event to be able to fire.
+HAS preconds IS A Set OF Prop
+-- Postconds is a set of positive and negative fact literals that tell us what
+-- holds after the event fires.
+-- Positive literals indicate facts that hold.
+-- Negative literals indicate facts that no longer hold.
+HAS postconds IS A Set OF Prop
+
+DECLARE ActionEvent IS A Event
+HAS agent IS A Agent
+HAS action IS A Action
+
+macro
+  "EVENT"
+  "{" preconds:term "}"
+  eventName:ident
+  "{" postconds:term "}"
+  : command
+=> `(
+  DEFINE $eventName IS A Event
+  HAS ($preconds) IS THE preconds
+  HAS ($postconds) IS THE postconds
+)
+
+macro
+  "EVENT"
+  "{" preconds:term "}"
+  eventName:ident "(" agent:term "DOES" action:term ")"
+  "{" postconds:term "}"
+  : command
+=> `(
+  DEFINE $eventName IS A @ActionEvent Agent Action
+  HAS ($preconds) IS THE preconds
+  HAS ($postconds) IS THE postconds
+  HAS ($agent) IS THE agent
+  HAS ($action) IS THE action
+)
+
+EVENT { pure True } testEvent { pure True }
+
+EVENT { pure True } testActionEvent (borrower DOES pay) { pure True }
 
 -- structure State where
 --   {}
