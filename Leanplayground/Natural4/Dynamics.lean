@@ -26,7 +26,7 @@ syntax "MAY" : deontic
 syntax "SHANT" : deontic
 
 syntax
-  "RULE" ident
+  "§" ident
   "PARTY" term
   "IF" term
   deontic ("DO")?
@@ -34,10 +34,10 @@ syntax
   : command
 
 macro_rules
-| `(RULE $norm:ident PARTY $party:term IF $cond MUST DO $action BY $deadline)
+| `(§ $norm:ident PARTY $party:term IF $cond MUST DO $action BY $deadline)
 => `(
   DEFINE $norm IS A (@Norm Time Agent Action)
-  HAS (return $party) IS THE agents
+  HAS return $party IS THE agents
   HAS ($action) IS THE action
   HAS (Deontic.MUST) IS THE deontic
   HAS ($deadline) IS THE deadline
@@ -56,12 +56,12 @@ variable
   {pay : Action}
   {deadline : Time}
 
-RULE Test
+§ Test
 PARTY Borrower
 IF ∃ x, (x EQUALS 0) AND x EQUALS x
 MUST DO pay BY deadline 
 
-RULE Test1
+§ Test1
 PARTY Lender
 IF True
 MUST DO pay BY deadline
