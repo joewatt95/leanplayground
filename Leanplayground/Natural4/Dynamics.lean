@@ -35,6 +35,9 @@ syntax
 
 macro_rules
 | `(§ $norm:ident PARTY $party:term IF $cond MUST DO $action BY $deadline)
+=>`(§ $norm:ident PARTY $party:term IF $cond MUST $action BY $deadline)
+
+| `(§ $norm:ident PARTY $party:term IF $cond MUST $action BY $deadline)
 => `(
   DEFINE $norm IS A (@Norm Time Agent Action)
   HAS return $party IS THE agents
