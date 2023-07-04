@@ -30,12 +30,9 @@ macro "derive" "stuff" "for" id:ident : command
 instance [Repr α] : ToString α where
   toString := toString ∘ repr
 
-declare_syntax_cat fieldDecl
-syntax ident "IS" "A" term : fieldDecl
-
 syntax
   "DECLARE" ident ("IS" "A" ident)?
-  ("HAS" sepBy1(fieldDecl, "HAS"))?
+  ("HAS" many1Indent(ident "IS" "A" term ppLine))?
   : command
 
 macro_rules
@@ -49,14 +46,14 @@ macro_rules
   -- derive stuff for $className
 )
 
-| `(DECLARE $className HAS $[$fieldName:ident IS A $fieldType:term] HAS*)
+| `(DECLARE $className HAS $[$fieldName:ident IS A $fieldType:term]*)
 => `(
     structure $className where
       $[{ $fieldName : $fieldType }]*
     -- derive stuff for $className
 )
 
-  | `(DECLARE $className IS A $superClassName HAS $[$fieldName:ident IS A $fieldType:term] HAS*)
+  | `(DECLARE $className IS A $superClassName HAS $[$fieldName:ident IS A $fieldType:term]*)
   => `(
       structure $className extends $superClassName where
         $[{ $fieldName : $fieldType }]*
@@ -73,15 +70,13 @@ macro_rules
   --   derive stuff for $className
   -- )
 
-declare_syntax_cat fieldDef
-syntax term "IS" "THE" ident : fieldDef
-
 -- syntax term "IS" "THE" Lean.Parser.Term.structInstLVal : fieldDef
 
 -- set_option trace.Elab.command true in
+
 syntax
   "DEFINE" ident "IS" "A" term
-  ("HAS" sepBy1(fieldDef, "HAS"))?
+  ("HAS" many1Indent(term "IS" "THE" ident ppLine))?
   : command
 
 macro_rules
@@ -89,7 +84,7 @@ macro_rules
   => `(
     def $id : $className where
   )
-  | `(DEFINE $id IS A $className HAS $[$fieldVal:term IS THE $fieldName:ident] HAS*)
+  | `(DEFINE $id IS A $className HAS $[$fieldVal:term IS THE $fieldName:ident]*)
   => `(
     def $id : $className where
       $[$fieldName := $fieldVal]*
@@ -227,13 +222,13 @@ macro_rules
 
 macro "THE" fieldName:ident "OF" record:term : term => `($record.$fieldName)
 
-macro recordName:ident fieldName:ident : term =>
-  match recordName |> toString |>.drop 1 |>.splitOn "'s" with
-  | [recordName, ""] =>
-    -- In this case, recordName is an identifier ending with 's, eg: person's
-    let recordNameIdent := Lean.mkIdent recordName
-    `($recordNameIdent.$fieldName)
-  | _ => `($recordName $fieldName)
+-- macro recordName:ident fieldName:ident : term =>
+--   match recordName |> toString |>.drop 1 |>.splitOn "'s" with
+--   | [recordName, ""] =>
+--     -- In this case, recordName is an identifier ending with 's, eg: person's
+--     let recordNameIdent := Lean.mkIdent recordName
+--     `($recordNameIdent.$fieldName)
+--   | _ => `($recordName $fieldName)
 
 macro "#APPLY TACTIC" ruleName:ident tactic:tactic : command =>
   `(example : $ruleName := by unfold $ruleName; $tactic)
@@ -258,23 +253,23 @@ DECLARE Role IS Borrower PLUS Lender
 
 DECLARE Party
 HAS role IS A Role
-HAS bankBalance IS A Int
+    bankBalance IS A Int
 
 DECLARE Loan IS A Agreement
 HAS Parties IS A MAP FROM Role TO Party
-HAS PrincipalAmt IS A Nat
+    PrincipalAmt IS A Nat
 
 DEFINE B IS A Party
 HAS Role.Borrower IS THE role
-HAS 100 IS THE bankBalance
+    100 IS THE bankBalance
 
 DEFINE L IS A Party
 HAS Role.Lender IS THE role
-HAS 0 IS THE bankBalance
+    0 IS THE bankBalance
 
 DEFINE SimpleLoan IS A Loan
 HAS #[(Role.Borrower, B), (Role.Lender, L)] IS THE Parties
-HAS 1000 IS THE PrincipalAmt
+    1000 IS THE PrincipalAmt
 
 -- #eval Lean.toJson SimpleLoan
 
@@ -301,7 +296,7 @@ DECIDE m < n IF True
 
 § badRule2
 GIVEN xs IS A List OF Int
-DECIDE xs's sum EQUALS 0 IF 0 EQUALS
+DECIDE xs.sum EQUALS 0 IF 0 EQUALS
   Id.run do
     let mut result := 1
     for x in xs do

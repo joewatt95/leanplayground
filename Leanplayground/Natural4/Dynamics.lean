@@ -16,10 +16,10 @@ DECLARE Deontic IS MUST PLUS MAY PLUS SHANT
 
 DECLARE Norm
 HAS deontic IS A Deontic
-HAS deadline IS A Time
-HAS agents IS A Set OF Agent
-HAS action IS A Action
-HAS cond IS A Prop
+    deadline IS A Time
+    agents IS A Set OF Agent
+    action IS A Action
+    cond IS A Prop
 
 declare_syntax_cat deontic
 syntax "MUST" : deontic
@@ -42,10 +42,10 @@ macro_rules
 => `(
   DEFINE $norm IS A @Norm Time Agent Action
   HAS pure ($party) IS THE agents
-  HAS ($action) IS THE action
-  HAS Deontic.MUST IS THE deontic
-  HAS ($deadline) IS THE deadline
-  HAS ($cond) IS THE cond
+      ($action) IS THE action
+      Deontic.MUST IS THE deontic
+      ($deadline) IS THE deadline
+      ($cond) IS THE cond
 )
   --   noncomputable def $norm : @Norm Time Agent Action where
   --     agents := return $party
@@ -79,11 +79,11 @@ HAS preconds IS A Set OF Prop
 -- holds after the event fires.
 -- Positive literals indicate facts that hold.
 -- Negative literals indicate facts that no longer hold.
-HAS postconds IS A Set OF Prop
+    postconds IS A Set OF Prop
 
 DECLARE ActionEvent IS A Event
 HAS agent IS A Agent
-HAS action IS A Action
+    action IS A Action
 
 macro
   "EVENT"
@@ -94,7 +94,7 @@ macro
 => `(
   DEFINE $eventName IS A Event
   HAS ($preconds) IS THE preconds
-  HAS ($postconds) IS THE postconds
+      ($postconds) IS THE postconds
 )
 
 macro
@@ -106,9 +106,9 @@ macro
 => `(
   DEFINE $eventName IS A @ActionEvent Agent Action
   HAS ($preconds) IS THE preconds
-  HAS ($postconds) IS THE postconds
-  HAS ($agent) IS THE agent
-  HAS ($action) IS THE action
+      ($postconds) IS THE postconds
+      ($agent) IS THE agent
+      ($action) IS THE action
 )
 
 EVENT { pure True } testEvent { pure True }
