@@ -76,7 +76,7 @@ macro_rules
 
 syntax
   "DEFINE" ident "IS" "A" term
-  ("HAS" many1Indent(term "IS" "THE" ident ppLine))?
+  ("HAS" many1Indent(term "IS" "THE" term ppLine))?
   : command
 
 macro_rules
