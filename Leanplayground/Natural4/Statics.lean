@@ -103,8 +103,11 @@ macro_rules
 
 syntax "DECLARE" ident "IS" sepBy1(ident, "PLUS") : command
 
-notation t0 "AND" t1 => t0 ∧ t1
-notation t0 "OR" t1 => t0 ∨ t1
+-- notation t0 "AND" t1 => t0 ∧ t1
+-- notation t0 "OR" t1 => t0 ∨ t1
+
+infixr:65 "AND" => And
+infixr:65 "OR" => Or
 
 macro_rules
   | `(DECLARE $name:ident IS $[$ids:ident] PLUS*)
@@ -118,8 +121,7 @@ macro_rules
 
 syntax term "OF" sepBy1(term, "AND") : term
 macro_rules
-  | `($fn OF $[$arg:term] AND*) =>
-    `($fn $arg*)
+  | `($fn OF $[$arg:term] AND*) => `($fn $arg*)
 
 -- instance : ToStream (Lean.PArray T) (List T) where
 --   toStream xs := xs.toList
@@ -152,6 +154,7 @@ instance [Repr α] [Repr β] : Repr (Lean.PHashMap α β) where
 
 instance [Repr α] [Repr β] : Repr (Std.HashMap α β) where
   reprPrec := reprPrec ∘ Std.HashMap.toArray
+
 end
 
 -- instance [Ord (List (α × β))] : Ord (Lean.PHashMap α β) where
@@ -284,7 +287,7 @@ HAS 1000 IS THE PrincipalAmt
 
 § goodRule
 GIVEN n IS A Int
-DECIDE n < 0 IF THERE IS SOME m SUCH THAT (0 < m) AND m + n = 0
+DECIDE n < 0 IF THERE IS SOME m SUCH THAT (0 < m) AND (m + n = 0)
 
 -- #SMT goodRule
 
