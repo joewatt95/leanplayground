@@ -96,7 +96,7 @@ macro_rules
 -- syntax ident : enums
 -- syntax ident "PLUS" enums : enums
 
-syntax "DECLARE" ident "IS" sepBy1(ident, "PLUS") : command
+syntax "DECLARE" ident "IS" sepBy1(ident, "OR") : command
 
 -- notation t0 "AND" t1 => t0 ∧ t1
 -- notation t0 "OR" t1 => t0 ∨ t1
@@ -105,7 +105,7 @@ infixr:65 "AND" => And
 infixr:65 "OR" => Or
 
 macro_rules
-  | `(DECLARE $name:ident IS $[$ids:ident] PLUS*)
+  | `(DECLARE $name:ident IS $[$ids:ident] OR*)
   => `(
     inductive $name where
       $[| $ids:ident]*
@@ -249,7 +249,7 @@ set_option smt.solver.kind "z3"
 
 DECLARE Agreement
 
-DECLARE Role IS Borrower PLUS Lender
+DECLARE Role IS Borrower OR Lender
 
 DECLARE Party
 HAS role IS A Role
