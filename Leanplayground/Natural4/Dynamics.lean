@@ -12,7 +12,7 @@ variable
  {Agent : Type v}
  {Action : Type w}
 
-DECLARE Deontic IS MUST PLUS MAY PLUS SHANT
+DECLARE Deontic IS MUST OR MAY OR SHANT
 
 DECLARE Norm
 HAS deontic IS A Deontic
