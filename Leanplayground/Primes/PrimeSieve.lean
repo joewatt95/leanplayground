@@ -19,31 +19,31 @@ We need to use partial here to get Lean to stop complaining about the inability
 to prove termination.
 -/
 private partial def merge : LazyList α → LazyList α → LazyList α
-  | LazyList.nil, xs
-  | xs, LazyList.nil => xs
-  | xs@(x L:: xs'), ys@(y L:: ys') =>
-    open Ordering in
-    match x <=>? y with
-    | lt => x L:: xs'.get <:merge:> ys
-    | eq => x L:: xs'.get <:merge:> ys'.get
-    | gt => y L:: xs <:merge:> ys'.get
+| LazyList.nil, xs
+| xs, LazyList.nil => xs
+| xs@(x L:: xs'), ys@(y L:: ys') =>
+  open Ordering in
+  match x <=>? y with
+  | lt => x L:: xs'.get <:merge:> ys
+  | eq => x L:: xs'.get <:merge:> ys'.get
+  | gt => y L:: xs <:merge:> ys'.get
 
 private partial def union : LazyList (LazyList α) → LazyList α
-  | (x L:: xs) L:: ys => ys.get
-    |> pairwise merge
-    |> union
-    |> (xs.get <:merge:> .)
-    |> (x L:: .)
-  | _ => default
+| (x L:: xs) L:: ys => ys.get
+  |> pairwise merge
+  |> union
+  |> (xs.get <:merge:> .)
+  |> (x L:: .)
+| _ => default
 
 private def minus : LazyList α → LazyList α → LazyList α
-  | x L:: xs', ys@(y L:: ys') =>
-    open Ordering in
-    match x <=>? y with
-    | lt => x L:: xs'.get <:minus:> ys
-    | eq => xs'.get <:minus:> ys'.get
-    | _ => default
-  | _, _ => default
+| x L:: xs', ys@(y L:: ys') =>
+  open Ordering in
+  match x <=>? y with
+  | lt => x L:: xs'.get <:minus:> ys
+  | eq => xs'.get <:minus:> ys'.get
+  | _ => default
+| _, _ => default
 
 partial def primes : LazyList Nat := 2 L:: oddPrimes ()
   where
