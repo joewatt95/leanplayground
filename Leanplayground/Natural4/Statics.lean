@@ -54,15 +54,15 @@ syntax
   : command
 
 macro_rules
-  | `(DEFINE $id IS A $className)
-  => `(
-    def $id : $className where
-  )
-  | `(DEFINE $id IS A $className HAS $[$fieldVal:term IS THE $fieldName:ident]*)
-  => `(
-    def $id : $className where
-      $[$fieldName := $fieldVal]*
-  )
+| `(DEFINE $id IS A $className)
+=> `(
+  def $id : $className where
+)
+| `(DEFINE $id IS A $className HAS $[$fieldVal:term IS THE $fieldName:ident]*)
+=> `(
+  def $id : $className where
+    $[$fieldName := $fieldVal]*
+)
 
 -- open Lean.Parser.Command
 
@@ -79,18 +79,18 @@ infixr:65 "AND" => And
 infixr:65 "OR" => Or
 
 macro_rules
-  | `(DECLARE $name:ident IS $[$ids:ident] OR*)
-  => `(
-    inductive $name where
-      $[| $ids:ident]*
-    derive stuff for $name
+| `(DECLARE $name:ident IS $[$ids:ident] OR*)
+=> `(
+  inductive $name where
+    $[| $ids:ident]*
+  derive stuff for $name
 
-    deriving instance Ord for $name
-  )
+  deriving instance Ord for $name
+)
 
 syntax term "OF" sepBy1(term, ",") : term
 macro_rules
-  | `($fn OF $[$arg:term],*) => `($fn $arg*)
+| `($fn OF $[$arg:term],*) => `($fn $arg*)
 
 -- instance : ToStream (Lean.PArray T) (List T) where
 --   toStream xs := xs.toList
@@ -141,22 +141,22 @@ syntax Lean.binderIdent "FROM" term "TO" term : term
 
 syntax "FOR EVERY" many1(ident <|> bracketedBinder) "," term : term
 macro_rules
-  | `(FOR EVERY $binders:ident, $prop) =>
-    `(∀ $binders, $prop)
-  | `(FOR EVERY $binders:bracketedBinder, $prop) =>
-    `(∀ $binders, $prop)
+| `(FOR EVERY $binders:ident, $prop) =>
+  `(∀ $binders, $prop)
+| `(FOR EVERY $binders:bracketedBinder, $prop) =>
+  `(∀ $binders, $prop)
 
 syntax "THERE" "IS" "SOME" term "SUCH" "THAT" term : term
 syntax "THERE" "IS" "SOME" Lean.explicitBinders "SUCH" "THAT" term : term
 macro_rules
-  | `(THERE IS SOME $f:binderIdent FROM $α TO $β SUCH THAT $prop) =>
-    `(∃ ($f : $α → $β), $prop)
-  | `(THERE IS SOME $var:explicitBinders SUCH THAT $prop) =>
-    `(∃ $var, $prop)
+| `(THERE IS SOME $f:binderIdent FROM $α TO $β SUCH THAT $prop) =>
+  `(∃ ($f : $α → $β), $prop)
+| `(THERE IS SOME $var:explicitBinders SUCH THAT $prop) =>
+  `(∃ $var, $prop)
 
 syntax "RELATION" "BETWEEN" sepBy1(term, "AND") : term
 macro_rules
-  | `(RELATION BETWEEN $t0 AND $t1) => `($t0 → $t1 → Prop)
+| `(RELATION BETWEEN $t0 AND $t1) => `($t0 → $t1 → Prop)
 
 notation relation "RELATES" t0 "TO" t1 => relation t0 t1
 
@@ -168,31 +168,31 @@ syntax
   : command
 
 macro_rules
-  | `(
-    § $ruleName
-    DECIDE $concl:ident IF $hypo
-  ) => `(
-    def $ruleName : Prop := $hypo → $concl
-  )
-  | `(
-    § $ruleName
-    GIVEN $[$var:ident IS A $type]*
-    DECIDE $concl:ident OF $[$arg],* IF $hypo
-  ) => `(
-    -- Extract signature of the uninterpreted predicate.
-    axiom $concl $[($var : $type)]* : Prop
+| `(
+  § $ruleName
+  DECIDE $concl:ident IF $hypo
+) => `(
+  def $ruleName : Prop := $hypo → $concl
+)
+| `(
+  § $ruleName
+  GIVEN $[$var:ident IS A $type]*
+  DECIDE $concl:ident OF $[$arg],* IF $hypo
+) => `(
+  -- Extract signature of the uninterpreted predicate.
+  axiom $concl $[($var : $type)]* : Prop
 
-    -- Rule definition.
-    def $ruleName : Prop :=
-      ∀ $[($var : $type)]*, $hypo → ($concl OF $[$arg],*)
-  )
-  | `(
-    § $ruleName
-    GIVEN $[$var:ident IS A $type]*
-    DECIDE $concl:term IF $hypo
-  ) => `(
-    def $ruleName : Prop := ∀ $[($var : $type)]*, $hypo → $concl
-  )
+  -- Rule definition.
+  def $ruleName : Prop :=
+    ∀ $[($var : $type)]*, $hypo → ($concl OF $[$arg],*)
+)
+| `(
+  § $ruleName
+  GIVEN $[$var:ident IS A $type]*
+  DECIDE $concl:term IF $hypo
+) => `(
+  def $ruleName : Prop := ∀ $[($var : $type)]*, $hypo → $concl
+)
 
 macro "THE" fieldName:ident "OF" record:term : term => `($record.$fieldName)
 

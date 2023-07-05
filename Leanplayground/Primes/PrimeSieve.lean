@@ -29,11 +29,12 @@ private partial def merge : LazyList α → LazyList α → LazyList α
   | gt => y L:: xs <:merge:> ys'.get
 
 private partial def union : LazyList (LazyList α) → LazyList α
-| (x L:: xs) L:: ys => ys.get
-  |> pairwise merge
-  |> union
-  |> (xs.get <:merge:> .)
-  |> (x L:: .)
+| (x L:: xs) L:: ys =>
+  ys.get
+    |> pairwise merge
+    |> union
+    |> (xs.get <:merge:> .)
+    |> (x L:: .)
 | _ => default
 
 private def minus : LazyList α → LazyList α → LazyList α
