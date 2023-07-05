@@ -59,10 +59,9 @@ partial def primes : LazyList Nat := 2 L:: oddPrimes ()
       |> union
       |> (oddsFrom5 <:minus:> .)
       |> (3 L:: .)
-    oddMultsFromSquare n :=
-      n |> (. ^2) |> iterate (. + 2 * n)
+    oddMultsFromSquare n := n |> (. ^2) |> iterate (. + 2 * n)
     oddsFrom5 := iterate (. + 2) 5
 
--- #eval primes |> take' 10000
+-- #eval primes.take' 100
 
 end PrimeSieve
