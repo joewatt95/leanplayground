@@ -1,25 +1,34 @@
 import Lean.Data.Json
+import Mathlib.Data.Set.Functor
 import Mathlib.Order.BoundedOrder
 import Std.Data.HashMap
 import Leanplayground.Natural4.Statics
 
 namespace Dynamics
 
-variable
-  -- TODO: Add a typeclass constraint forcing ≤ to be decidable.
- {Time : Type u} [LE Time] [OrderBot Time]
- {Duration : Set Time} [BoundedOrder Duration]
- {Agent : Type v}
- {Action : Type w}
+-- variable
+--   -- TODO: Add a typeclass constraint forcing ≤ to be decidable.
+--   {Time : Type} [LE Time] [OrderBot Time]
+--   {Duration : Type} [LE Duration] [Monoid Duration] [BoundedOrder Duration]
 
 DECLARE Deontic IS MUST OR MAY OR SHANT
 
+DECLARE Agent
+
+DECLARE Action
+HAS pre IS A Set OF Prop
+    post IS A Set OF Prop
+
+DECLARE Time
+
+DECLARE Duration
+
 DECLARE Norm
-HAS deontic IS A Deontic
+HAS cond IS A Prop
+    deontic IS A Deontic
     deadline IS A Time
-    agents IS A Set OF Agent
+    agent IS A Agent
     action IS A Action
-    cond IS A Prop
 
 declare_syntax_cat deontic
 syntax "MUST" : deontic
@@ -40,8 +49,8 @@ macro_rules
 
 | `(§ $norm:ident PARTY $party:term IF $cond MUST $action BY $deadline)
 => `(
-  DEFINE $norm IS A @Norm Time Agent Action
-  HAS pure ($party) IS THE agents
+  DEFINE $norm IS A Norm -- Time Agent Action
+  HAS ($party) IS THE agent
       ($action) IS THE action
       Deontic.MUST IS THE deontic
       ($deadline) IS THE deadline
@@ -54,21 +63,6 @@ macro_rules
   --     deadline := $deadline
   --     cond := $cond
   -- )
-  
-variable
-  {borrower lender : Agent}
-  {pay : Action}
-  {deadline : Time}
-
-§ Test
-PARTY borrower
-IF ∃ x, (x EQUALS 0) AND x EQUALS x
-MUST DO pay BY deadline 
-
-§ Test'
-PARTY lender
-IF True
-MUST pay BY deadline
 
 -- #print Test
 
@@ -104,16 +98,12 @@ macro
   "{" postconds:term "}"
   : command
 => `(
-  DEFINE $eventName IS A @ActionEvent Agent Action
+  DEFINE $eventName IS A ActionEvent
   HAS ($preconds) IS THE preconds
       ($postconds) IS THE postconds
       ($agent) IS THE agent
       ($action) IS THE action
 )
-
-EVENT { pure True } testEvent { pure True }
-
-EVENT { pure True } testActionEvent (borrower DOES pay) { pure True }
 
 -- structure State where
 --   {}
