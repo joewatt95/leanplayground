@@ -48,7 +48,7 @@ GIVEN
   n IS A Int
   p2 IS A Party
 DECIDE canTransfer OF p1, n, p2
-IF p1.bankBalance ≥ n
+IF (p1.bankBalance ≥ n) AND (p1 ≠ p2)
 
 DEFINE borrower IS A Dynamics.Agent
 DEFINE lender IS A Dynamics.Agent
