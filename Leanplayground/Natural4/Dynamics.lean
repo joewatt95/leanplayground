@@ -15,20 +15,20 @@ DECLARE Deontic IS MUST OR MAY OR SHANT
 
 DECLARE Agent
 
-DECLARE Action
-HAS pre IS A Set OF Prop
-    post IS A Set OF Prop
+structure Action where
+  pre : Set Prop
+  post : Set Prop
 
 DECLARE Time
 
 DECLARE Duration
 
-DECLARE Norm
-HAS cond IS A Prop
-    deontic IS A Deontic
-    deadline IS A Time
-    agent IS A Agent
-    action IS A Action
+structure Norm where
+  cond : Prop
+  deontic : Deontic
+  deadline : Time
+  agent : Agent
+  action : Action
 
 declare_syntax_cat deontic
 syntax "MUST" : deontic
@@ -66,18 +66,18 @@ macro_rules
 
 -- #print Test
 
-DECLARE Event
+structure Event where
 -- Preconds that need to hold for the event to be able to fire.
-HAS preconds IS A Set OF Prop
+  preconds : Set Prop
 -- Postconds is a set of positive and negative fact literals that tell us what
 -- holds after the event fires.
 -- Positive literals indicate facts that hold.
 -- Negative literals indicate facts that no longer hold.
-    postconds IS A Set OF Prop
+  postconds : Set Prop
 
-DECLARE ActionEvent IS A Event
-HAS agent IS A Agent
-    action IS A Action
+structure ActionEvent extends Event where
+  agent : Agent
+  action : Action
 
 macro
   "EVENT"

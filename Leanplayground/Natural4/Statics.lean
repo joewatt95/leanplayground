@@ -31,39 +31,18 @@ syntax
   : command
 
 macro_rules
-| `(DECLARE $className)
-=> `(
-  structure $className
-  -- derive stuff for $className
+| `(DECLARE $className $[IS A $superClassName]?) => `(
+  structure $className $[extends $superClassName]?
+  derive stuff for $className
 )
-| `(DECLARE $className IS A $superClassName) => `(
-  structure $className extends $superClassName
-  -- derive stuff for $className
-)
-
-| `(DECLARE $className HAS $[$fieldName:ident IS A $fieldType:term]*)
-=> `(
-    structure $className where
+| `(
+  DECLARE $className $[IS A $superClassName]?
+  HAS $[$fieldName:ident IS A $fieldType:term]*
+) => `(
+    structure $className $[extends $superClassName]? where
       $[{ $fieldName : $fieldType }]*
-    -- derive stuff for $className
+    derive stuff for $className
 )
-
-  | `(DECLARE $className IS A $superClassName HAS $[$fieldName:ident IS A $fieldType:term]*)
-  => `(
-      structure $className extends $superClassName where
-        $[{ $fieldName : $fieldType }]*
-      -- derive stuff for $className
-  )
-
-  -- | `(
-  --     DECLARE $className IS A $superClassName
-  --     HAS $fieldName:ident IS A $fieldType
-  --   )
-  -- => `(
-  --   structure $className extends $superClassName where
-  --     { $fieldName : $fieldType }
-  --   derive stuff for $className
-  -- )
 
 -- syntax term "IS" "THE" Lean.Parser.Term.structInstLVal : fieldDef
 
@@ -109,9 +88,9 @@ macro_rules
     deriving instance Ord for $name
   )
 
-syntax term "OF" sepBy1(term, "AND") : term
+syntax term "OF" sepBy1(term, ",") : term
 macro_rules
-  | `($fn OF $[$arg:term] AND*) => `($fn $arg*)
+  | `($fn OF $[$arg:term],*) => `($fn $arg*)
 
 -- instance : ToStream (Lean.PArray T) (List T) where
 --   toStream xs := xs.toList
@@ -184,7 +163,7 @@ notation relation "RELATES" t0 "TO" t1 => relation t0 t1
 -- Horn claues.
 syntax
   "§" ident
-  ("GIVEN" sepBy1(ident "IS" "A" term, ","))?
+  ("GIVEN" manyIndent(ident "IS" "A" term ppLine))?
   "DECIDE" term "IF" term
   : command
 
@@ -197,19 +176,19 @@ macro_rules
   )
   | `(
     § $ruleName
-    GIVEN $[$var0:ident IS A $type0],*
-    DECIDE $concl:ident OF $[$var:ident] AND* IF $hypo
+    GIVEN $[$var:ident IS A $type]*
+    DECIDE $concl:ident OF $[$arg],* IF $hypo
   ) => `(
     -- Extract signature of the uninterpreted predicate.
-    axiom $concl $[($var0 : $type0)]* : Prop
+    axiom $concl $[($var : $type)]* : Prop
 
     -- Rule definition.
     def $ruleName : Prop :=
-      ∀ $[($var0 : $type0)]*, $hypo → ($concl OF $[$var] AND*)
+      ∀ $[($var : $type)]*, $hypo → ($concl OF $[$arg],*)
   )
   | `(
     § $ruleName
-    GIVEN $[$var IS A $type],*
+    GIVEN $[$var:ident IS A $type]*
     DECIDE $concl:term IF $hypo
   ) => `(
     def $ruleName : Prop := ∀ $[($var : $type)]*, $hypo → $concl

@@ -5,6 +5,7 @@ namespace Test
 
 set_option smt.solver.kind "z3"
 
+-- Uncomment the next 2 lines to trace debug macroexpansion.
 -- set_option trace.Elab.command true
 -- set_option trace.Elab.step true
 
@@ -34,17 +35,20 @@ HAS #[(Role.Borrower, B), (Role.Lender, L)] IS THE Parties
 
 -- #eval Lean.toJson SimpleLoan
 
--- TODO: Fix this.
--- § testRule
--- GIVEN p1 IS A Party, n IS A Int, p2 IS A Party
--- DECIDE canTransfer OF p1 AND n AND p2 IF p1's bankBalance > 0
-
 -- DECIDE isLender IF (Party.role OF p) EQUALS Role.Lender
 
 -- § Test
 -- PARTY Agent.borrower
 -- IF ∃ x, (x EQUALS 0) AND x EQUALS x
 -- MUST DO Action.pay BY 0
+
+§ testRule
+GIVEN
+  p1 IS A Party
+  n IS A Int
+  p2 IS A Party
+DECIDE canTransfer OF p1, n, p2
+IF p1.bankBalance ≥ n
 
 DEFINE borrower IS A Dynamics.Agent
 DEFINE lender IS A Dynamics.Agent
@@ -71,7 +75,9 @@ DECIDE n < 0 IF THERE IS SOME m SUCH THAT (0 < m) AND (m + n = 0)
 -- #SMT goodRule
 
 § badRule1
-GIVEN m IS A Int, n IS A Int
+GIVEN
+  m IS A Int
+  n IS A Int
 DECIDE m < n IF True
 
 -- #print badRule1
@@ -107,7 +113,8 @@ open Cardinal
 universe u
 
 § InaccessibleCardinal'
-GIVEN κ IS A Cardinal.{u}
+GIVEN
+  κ IS A Cardinal.{u}
 DECIDE IsInaccessible' OF κ
 IF (κ > ℵ₀) AND (Cardinal.IsRegular κ) AND IsStrongLimit κ
 
