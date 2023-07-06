@@ -39,8 +39,8 @@ the cadr. Fix this.
 -/
 instance : Stream (LazyList α) α where
   next?
-    | x L:: xs => pure ⟨x, xs.get⟩
-    | _ => default
+    | x L:: xs => some ⟨x, xs.get⟩
+    | _ => none
 
 instance : ToStream (LazyList α) (LazyList α)  where
   toStream := id
@@ -64,15 +64,6 @@ def LazyList.take : Nat → LazyList α → List α
 | n + 1, x L:: xs => x :: take n xs.get
 | _, _ => []
 
-/-
-Lean uses some funky combination of StateT + ExceptT to handle imperative
-code.
-StateT is for handling mutable variables and ExceptT is for early return and
-breaking out of for/while loops.
-Note that local mutations performed on data structures are optimized by the
-compiler to become destructive, in-place updates so that the imperative looking
-code really does have the performance of actual imperative code.
--/
 def LazyList.take' : Nat → LazyList α → Array α
 | n, xs => Id.run do
   let mut acc := #[]
@@ -83,21 +74,14 @@ def LazyList.take' : Nat → LazyList α → Array α
 /-
 Return type is polymorphic over a type universe u and a type constructor
 m : Type u → Type.
-
-Note that m need not be an Applicative.
-It just needs to have a Pure type class instance so that we can put the return
-value in a box to be returned.
-We also want m α to be inhabited so we have a default value to return just
-in case the lazy list is empty.
 -/
 def LazyList.nth {α : Type u} {m : Type u → Type} [Pure m] [Inhabited <| m α]
   : Nat → LazyList α → m α
 | n, xs => Id.run do
-  let mut result := default
   for x in xs, index in [0 : n + 1] do
     if index = n then
-      result := pure x
-  return result
+      return pure x
+  return default
 
 -- def LazyList.nth' {m : Type u → Type} [Pure m] [Inhabited <| m α]
 --   : Nat → LazyList α → Nat × m α
@@ -134,13 +118,12 @@ def LazyList.map (f : α → β) : LazyList α → LazyList β
 | x L:: xs => f x L:: map f xs.get
 | _ => LazyList.nil
 
-def LazyList.head? {m : Type u → Type} [Pure m] [Inhabited <| m α] :
-  LazyList α → m α
+def LazyList.head? {m : Type u → Type} [Pure m] [Inhabited <| m α]
+  : LazyList α → m α
 | xs => Id.run do
-  let mut result := default
   for x in xs, _ in [0] do
-    result := pure x
-  return result
+    return pure x
+  return default
 
 @[simp]
 def map2 (op : α → β → γ) : LazyList α → LazyList β → LazyList γ
@@ -271,9 +254,7 @@ def pairwise (f : α → α → β) (xs : LazyList α) : LazyList β :=
 --     exact thm1 _
 
 partial def iterate (f : α → α) (x : α) : LazyList α :=
-  x L:: go <| f x
-  where
-    go := iterate f
+  x L:: iterate f <| f x
 
 -- This says that iterate produces infinite lists.
 theorem thm2 {x : α}
