@@ -286,27 +286,20 @@ theorem thm2 {x : α}
 ∀ n, (iterate f x |>.take n |>.length) = n
 
 | 0 =>
-  have : ∀ xs, xs.take 0 = [] :=
-    λ | L[]
-      | _ L:: _ => rfl
-  have : (iterate f x).take 0 = [] := this <| iterate f x
+  have {xs} : xs.take 0 = [] := rfl
+  have : (iterate f x).take 0 = [] := @this <| iterate f x
   by rw [this]; simp
 
 | n + 1 =>
   have := calc
     (iterate f x |>.take (n + 1))
-    = (x L:: iterate f <| f x).take (n + 1)
-      := congrArg (. |>.take <| n + 1) <| h
-  _ = x :: ((iterate f <| f x) |>.take n)
-      := rfl;
+    = (x L:: iterate f <| f x).take (n + 1) := congrArg (. |>.take <| n + 1) h
+  _ = x :: ((iterate f <| f x) |>.take n)   := rfl;
   calc
     (iterate f x |>.take (n + 1) |>.length)
-    = (x :: ((iterate f <| f x) |>.take n) |>.length)
-      := congrArg List.length this
-  _ = ((iterate f <| f x) |>.take n |>.length) + 1
-      := rfl
-  _ = n + 1
-      := congrArg (. + 1) <| thm2 h _
+    = (x :: ((iterate f <| f x) |>.take n) |>.length) := congrArg List.length this
+  _ = ((iterate f <| f x) |>.take n |>.length) + 1 := rfl
+  _ = n + 1 := congrArg (. + 1) <| thm2 h _
 
 -- #eval iterate (. + 1) 0 |>.map (. + 1) |>.take 5
 -- #eval L[x + 1 | for x in iterate id 0] |>.take 5

@@ -46,20 +46,15 @@ private def minus : LazyList α → LazyList α → LazyList α
   | _ => default
 | _, _ => default
 
-partial def primes : LazyList Nat := 2 L:: oddPrimes ()
+partial def primes : LazyList Nat :=
+  2 L:: oddPrimes ()
   where
-    /-
-    While this looks like it will go into infinite recursion when called, |> and
-    <| are implemented as macros so that the recursion is guarded by the
-    L:: constructor, which is lazy in its second argument. 
-    Hence, as long as we only inspect finitely many elements at a time, the
-    corecursion will be productive.
-    -/
-    oddPrimes _ := oddPrimes ()
-      |> (oddMultsFromSquare <$> .)
-      |> union
-      |> (oddsFrom5 <:minus:> .)
-      |> (3 L:: .)
+    oddPrimes _ :=
+      oddPrimes ()
+        |>.map oddMultsFromSquare
+        |> union
+        |> (oddsFrom5 <:minus:> .)
+        |> (3 L:: .)
     oddMultsFromSquare n := n |> (. ^2) |> iterate (. + 2 * n)
     oddsFrom5 := iterate (. + 2) 5
 
