@@ -1,3 +1,4 @@
+import Lean
 import Leanplayground.Natural4.Commands
 import Leanplayground.Natural4.Dynamics
 
@@ -121,5 +122,32 @@ IF (κ > ℵ₀) AND (Cardinal.IsRegular κ) AND IsStrongLimit κ
 -- set_option trace.aesop.ruleSet true in
 -- example : ¬ (p ∨ q) ↔ ¬ p ∧ ¬ q := by aesop
 
+open Lean in
+open Lean.Meta in
+
+def test : MetaM Unit := do
+  let declsSize := (← read).lctx.decls.size
+  trace[Meta.debug] "Size of decls: {declsSize}"
+
+  let { map₁ := importedConsts, map₂ := localConsts, .. } :=
+    (← getEnv).constants
+
+  for (x, y) in [
+    ("imported", importedConsts.size),
+    ("local", localConsts.size)
+  ] do
+    trace[Meta.debug] "Size of {x} is {y}"
+
+  -- for ⟨name, _⟩ in localConsts do
+  --   trace[Meta.debug] "{name}"
+
+  trace[Meta.debug]
+    let testRule := Name.str (Name.str Name.anonymous "Test") "testRule"
+    match localConsts.find? testRule with
+    | some <| ConstantInfo.defnInfo { value, .. } => s!"{value}"
+    | _ => default
+
+-- set_option trace.Meta.debug true
+-- #eval test
 
 end Test
