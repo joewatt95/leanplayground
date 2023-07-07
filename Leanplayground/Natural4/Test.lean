@@ -1,4 +1,5 @@
 import Lean
+import Leanplayground.Natural4.Attrs
 import Leanplayground.Natural4.Commands
 import Leanplayground.Natural4.Dynamics
 
@@ -49,7 +50,9 @@ GIVEN
   n IS A Int
   p2 IS A Party
 DECIDE canTransfer OF p1, n, p2
-IF (p1.bankBalance ≥ n) AND (p1 ≠ p2)
+IF
+  letI p1NEp2 := p1 ≠ p2
+  (p1.bankBalance ≥ n) AND p1NEp2
 
 DEFINE borrower IS A Dynamics.Agent
 DEFINE lender IS A Dynamics.Agent
@@ -122,32 +125,21 @@ IF (κ > ℵ₀) AND (Cardinal.IsRegular κ) AND IsStrongLimit κ
 -- set_option trace.aesop.ruleSet true in
 -- example : ¬ (p ∨ q) ↔ ¬ p ∧ ¬ q := by aesop
 
-open Lean in
-open Lean.Meta in
-
+open Lean Lean.Meta in
 def test : MetaM Unit := do
   let declsSize := (← read).lctx.decls.size
   trace[Meta.debug] "Size of decls: {declsSize}"
 
-  let { map₁ := importedConsts, map₂ := localConsts, .. } :=
-    (← getEnv).constants
+  let testRule := `Test.testRule
+  match (← getEnv).find? testRule with
+  | some <| ConstantInfo.defnInfo {value, ..} =>
+    try
+      let ty ← inferType value
+      trace[Meta.debug] s!"{ty}"
+    catch _ => return
+  | _ => return
 
-  for (x, y) in [
-    ("imported", importedConsts.size),
-    ("local", localConsts.size)
-  ] do
-    trace[Meta.debug] "Size of {x} is {y}"
-
-  -- for ⟨name, _⟩ in localConsts do
-  --   trace[Meta.debug] "{name}"
-
-  trace[Meta.debug]
-    let testRule := Name.str (Name.str Name.anonymous "Test") "testRule"
-    match localConsts.find? testRule with
-    | some <| ConstantInfo.defnInfo { value, .. } => s!"{value}"
-    | _ => default
-
--- set_option trace.Meta.debug true
--- #eval test
+set_option trace.Meta.debug true
+#eval Attrs.listAll constitutive
 
 end Test

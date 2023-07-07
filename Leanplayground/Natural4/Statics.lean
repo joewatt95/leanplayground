@@ -4,6 +4,8 @@ import Lean.Data.Json
 import Std.Data.HashMap.Basic
 import Std.Lean.PersistentHashMap
 
+import Leanplayground.Natural4.Attrs
+
 -- import Std.Lean.Parser
 
 -- import Std.Data.Array.Basic
@@ -172,6 +174,7 @@ macro_rules
   § $ruleName
   DECIDE $concl:ident IF $hypo
 ) => `(
+  @[constitutive]
   def $ruleName : Prop := $hypo → $concl
 )
 | `(
@@ -183,6 +186,7 @@ macro_rules
   axiom $concl $[($var : $type)]* : Prop
 
   -- Rule definition.
+  @[constitutive]
   def $ruleName : Prop :=
     ∀ $[($var : $type)]*, $hypo → ($concl OF $[$arg],*)
 )
@@ -191,6 +195,7 @@ macro_rules
   GIVEN $[$var:ident IS A $type]*
   DECIDE $concl:term IF $hypo
 ) => `(
+  @[constitutive]
   def $ruleName : Prop := ∀ $[($var : $type)]*, $hypo → $concl
 )
 

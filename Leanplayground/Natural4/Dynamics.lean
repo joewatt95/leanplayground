@@ -49,22 +49,14 @@ macro_rules
 
 | `(§ $norm:ident PARTY $party:term IF $cond MUST $action BY $deadline)
 => `(
-  DEFINE $norm IS A Norm -- Time Agent Action
-  HAS ($party) IS THE agent
-      ($action) IS THE action
-      Deontic.MUST IS THE deontic
-      ($deadline) IS THE deadline
-      ($cond) IS THE cond
+  @[regulative]
+  def $norm : Norm where
+    agent := $party
+    action := $action
+    deontic := Deontic.MUST
+    deadline := $deadline
+    cond := $cond
 )
-  --   noncomputable def $norm : @Norm Time Agent Action where
-  --     agents := return $party
-  --     action := $action
-  --     deontic := (Deontic.MUST)
-  --     deadline := $deadline
-  --     cond := $cond
-  -- )
-
--- #print Test
 
 structure Event where
 -- Preconds that need to hold for the event to be able to fire.
