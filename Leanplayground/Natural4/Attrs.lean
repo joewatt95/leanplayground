@@ -13,13 +13,13 @@ initialize regulative : TagAttribute ←
 
 namespace Attrs
 
-def listAll (attrType : TagAttribute) : MetaM (Std.HashMap Name Expr) := do
+def listAll (attrType : TagAttribute) : MetaM <| Std.HashMap Name Expr := do
   let env ← getEnv
   let mut result := Std.HashMap.empty
   for declName in attrType.ext.getState env do
-    -- Lookup declName in the environment, then compute its full head normal form
+    -- Lookup declName in the environment, then compute (full) head normal form
     -- and pretty print.
-    -- Note that need to fully normalize under binders and constructors when
+    -- Note that we need to fully normalize under binders and constructors when
     -- transpiling to other outputs.
     try
       match env.find? declName with
@@ -32,7 +32,7 @@ def listAll (attrType : TagAttribute) : MetaM (Std.HashMap Name Expr) := do
 
         logInfo m!"
           Found rule: {declName}
-          Defn: {← ppExpr reduced})"
+          Defn: {← ppExpr reduced}"
 
       | _ => throwError "
           Internal error: {declName} is not a constant defn.
