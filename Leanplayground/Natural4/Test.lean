@@ -63,7 +63,7 @@ HAS pure True IS THE pre
 
 DEFINE deadline IS A Dynamics.Time
 
-§ Test'
+§ testRegulative
 PARTY lender
 IF THERE IS SOME xs : List OF Int SUCH THAT xs.sum EQUALS 0
 MUST pay BY deadline
@@ -117,8 +117,7 @@ open Cardinal
 universe u
 
 § InaccessibleCardinal'
-GIVEN
-  κ IS A Cardinal.{u}
+GIVEN κ IS A Cardinal.{u}
 DECIDE IsInaccessible' OF κ
 IF (κ > ℵ₀) AND (Cardinal.IsRegular κ) AND IsStrongLimit κ
 
@@ -139,7 +138,7 @@ def test : MetaM Unit := do
     catch _ => return
   | _ => return
 
-set_option trace.Meta.debug true
-#eval Attrs.listAll constitutive
+-- set_option trace.Meta.debug true
+-- #eval Attrs.listAll constitutive
 
 end Test
