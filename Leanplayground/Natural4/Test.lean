@@ -139,7 +139,7 @@ def test : MetaM Unit := do
     catch _ => return
   | _ => return
 
--- set_option trace.Meta.debug true
--- #eval Attrs.listAll constitutive
+set_option trace.Meta.debug true
+#eval Attrs.listAll constitutive
 
 end Test

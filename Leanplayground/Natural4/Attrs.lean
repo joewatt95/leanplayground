@@ -31,10 +31,12 @@ def listAll (attrType : TagAttribute) : MetaM (Std.HashMap Name Expr) := do
         result := result.insert declName reduced
 
         logInfo m!"
-          Rule name: {declName}
-          Rule body: {← ppExpr reduced})"
+          Found rule: {declName}
+          Defn: {← ppExpr reduced})"
 
-      | _ => throwError "{declName} is not a constant defn."
+      | _ => throwError "
+          Internal error: {declName} is not a constant defn.
+          Double check the macro-expansion for constitutive rules!"
     catch e =>
       logError m!"
         Error occured while listing rules:
