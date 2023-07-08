@@ -35,8 +35,6 @@ DEFINE SimpleLoan IS A Loan
 HAS #[(Role.Borrower, B), (Role.Lender, L)] IS THE Parties
     1000 IS THE PrincipalAmt
 
--- #eval Lean.toJson SimpleLoan
-
 -- DECIDE isLender IF (Party.role OF p) EQUALS Role.Lender
 
 -- § Test

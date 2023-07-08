@@ -33,18 +33,37 @@ syntax
   : command
 
 macro_rules
-| `(DECLARE $className $[IS A $superClassName]?) => `(
-  structure $className $[extends $superClassName]?
-  derive stuff for $className
-)
+| `(DECLARE $className $[IS A $superClassName]?) =>
+  match superClassName with
+  | none => `(
+    structure $className
+    derive stuff for $className
+  )
+  | some superClassName => `(
+    structure $className extends $superClassName
+    derive stuff for $className
+
+    -- This Coe typeclass for implicit coercions allows us to model subtyping.
+    -- instance : Coe $className $superClassName where
+    --   coe x := x.$(Lean.mkIdent s!"to{superClassName |> toString |>.drop 1}")
+  )
 | `(
   DECLARE $className $[IS A $superClassName]?
   HAS $[$fieldName:ident IS A $fieldType:term]*
-) => `(
-    structure $className $[extends $superClassName]? where
+) => match superClassName with
+  | none => `(
+    structure $className where
       $[{ $fieldName : $fieldType }]*
     derive stuff for $className
-)
+  )
+  | some superClassName => `(
+    structure $className extends $superClassName where
+      $[{ $fieldName : $fieldType }]*
+    derive stuff for $className
+
+    -- instance : Coe $className $superClassName where
+    --   coe x := x.$(Lean.mkIdent s!"to{superClassName |> toString |>.drop 1}")
+  )
 
 -- syntax term "IS" "THE" Lean.Parser.Term.structInstLVal : fieldDef
 
