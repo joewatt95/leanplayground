@@ -62,8 +62,7 @@ elab_rules : command
     let fieldExpr ← elabTerm (expectedType? := none) field
     -- liftM is implicited inserted here.
     let fieldTyExpr ← inferType fieldExpr
-    let fieldTyTerm ← delab fieldTyExpr
-    return fieldTyTerm
+    delab fieldTyExpr
 
   trace[Meta.debug] "{fieldTyTerm}"
 
