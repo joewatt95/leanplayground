@@ -22,11 +22,10 @@ private partial def merge : LazyList α → LazyList α → LazyList α
 | LazyList.nil, xs
 | xs, LazyList.nil => xs
 | xs@(x L:: xs'), ys@(y L:: ys') =>
-  open Ordering in
   match x <=>? y with
-  | lt => x L:: xs'.get <:merge:> ys
-  | eq => x L:: xs'.get <:merge:> ys'.get
-  | gt => y L:: xs <:merge:> ys'.get
+  | .lt => x L:: xs'.get <:merge:> ys
+  | .eq => x L:: xs'.get <:merge:> ys'.get
+  | .gt => y L:: xs <:merge:> ys'.get
 
 private partial def union : LazyList (LazyList α) → LazyList α
 | (x L:: xs) L:: ys =>
@@ -39,10 +38,9 @@ private partial def union : LazyList (LazyList α) → LazyList α
 
 private def minus : LazyList α → LazyList α → LazyList α
 | x L:: xs', ys@(y L:: ys') =>
-  open Ordering in
   match x <=>? y with
-  | lt => x L:: xs'.get <:minus:> ys
-  | eq => xs'.get <:minus:> ys'.get
+  | .lt => x L:: xs'.get <:minus:> ys
+  | .eq => xs'.get <:minus:> ys'.get
   | _ => default
 | _, _ => default
 
