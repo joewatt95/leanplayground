@@ -1,13 +1,11 @@
 namespace Logic
 
-variable {P : α → Prop} {Q : α → β → Prop}
+variable {P : Prop} {Q : α → Prop}
 
-example (h : ∀ a b, Q a b → P a) : ∀ a, (∃ b, Q a b) → P a:=
-  λ a ⟨_b, h_Qab⟩ => (h _ _ h_Qab : P a)
+example : (∀ τ, Q τ → P) → (∃ τ, Q τ) → P :=
+  λ h ⟨τ, hQa⟩ => h τ hQa
 
-example (h : ∀ a, (∃ b, Q a b) → P a) : ∀ a b, Q a b → P a :=
-  λ a b h_Qab =>
-    let this : ∃ b, Q a b := ⟨b, h_Qab⟩
-    (h _ this : P a)
+example : ((∃ τ, Q τ) → P) → ∀ τ, Q τ → P :=
+  λ h τ hQa => h ⟨τ, hQa⟩
 
 end Logic
