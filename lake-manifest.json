@@ -10,7 +10,7 @@
   {"git":
    {"url": "https://github.com/siddhartha-gadgil/LeanAide",
     "subDir?": null,
-    "rev": "6f1248aefec132160481124c0d227ab3b3bf58d2",
+    "rev": "6eb881fe06c81f20d9dcd24647a9adf72039ccf1",
     "name": "LeanCodePrompts",
     "inputRev?": "main"}},
   {"git":
@@ -22,7 +22,7 @@
   {"git":
    {"url": "https://github.com/leanprover-community/mathlib4.git",
     "subDir?": null,
-    "rev": "72ea277bd5a9687917fae7bccc45ab6b2586ac3f",
+    "rev": "8b47bca07dbf9998b7069797f406e5d3d6a4a6e3",
     "name": "mathlib",
     "inputRev?": null}},
   {"git":
