@@ -201,7 +201,7 @@ instance : LawfulMonad LazyList where
   -- id <$> x L:: xs = x L:: xs
   id_map :=
     let rec go
-      | LazyList.nil => rfl
+      | L[] => rfl
       | _ L:: xs =>
         have := go xs.get
         by simp [Thunk.get, (. <$> .)] at *; rw [this]
