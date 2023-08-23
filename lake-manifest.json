@@ -10,14 +10,6 @@
     "inputRev?": "v0.0.13",
     "inherited": true}},
   {"git":
-   {"url": "https://github.com/siddhartha-gadgil/LeanAide",
-    "subDir?": null,
-    "rev": "e459d6c5da3c17d8904fd5e6893c072f73ec4a2e",
-    "opts": {},
-    "name": "LeanCodePrompts",
-    "inputRev?": "main",
-    "inherited": false}},
-  {"git":
    {"url": "https://github.com/mhuisi/lean4-cli.git",
     "subDir?": null,
     "rev": "5a858c32963b6b19be0d477a30a1f4b6c120be7e",
@@ -28,7 +20,7 @@
   {"git":
    {"url": "https://github.com/leanprover-community/mathlib4.git",
     "subDir?": null,
-    "rev": "368923da0362e039715c44e27d5a1e8ec02d43c9",
+    "rev": "330b78e284acaa7f35e8ac864f14ee1e54d9490e",
     "opts": {},
     "name": "mathlib",
     "inputRev?": null,
@@ -52,7 +44,7 @@
   {"git":
    {"url": "https://github.com/leanprover/std4",
     "subDir?": null,
-    "rev": "61a6507eff4dd71c01e0c7e194bc569d4719a6d3",
+    "rev": "b5f7bd40d2162fe148e585543f284a5d8cc0ef26",
     "opts": {},
     "name": "std",
     "inputRev?": "main",
@@ -64,12 +56,4 @@
     "opts": {},
     "name": "smt",
     "inputRev?": "main",
-    "inherited": false}},
-  {"git":
-   {"url": "https://github.com/0art0/lean-slides",
-    "subDir?": null,
-    "rev": "aa2180c4a245df955f853e7b8dc42561a4885fed",
-    "opts": {},
-    "name": "«lean-slides»",
-    "inputRev?": "master",
-    "inherited": true}}]}
+    "inherited": false}}]}
