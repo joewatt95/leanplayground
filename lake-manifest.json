@@ -20,7 +20,7 @@
   {"git":
    {"url": "https://github.com/leanprover-community/mathlib4.git",
     "subDir?": null,
-    "rev": "a128cd995f9117c3a933d37b295d7a6b89a348a0",
+    "rev": "01fd4ae9d7d2500add74deb5c5b74db763a38f34",
     "opts": {},
     "name": "mathlib",
     "inputRev?": null,
@@ -52,7 +52,7 @@
   {"git":
    {"url": "https://github.com/ufmg-smite/lean-smt.git",
     "subDir?": null,
-    "rev": "8c13acb649074742d316c57e76123185547428c5",
+    "rev": "8cb2f2287fd891800dc38178c8d4e62b496f52a2",
     "opts": {},
     "name": "smt",
     "inputRev?": "main",
