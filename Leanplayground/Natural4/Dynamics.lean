@@ -6,10 +6,7 @@ import Leanplayground.Natural4.Statics
 
 namespace Dynamics
 
-universe u
-
-variable
-  {Time : Type u} [LinearOrder Time] [BoundedOrder Time]
+variable {Time : Type} -- [LinearOrder Time] [BoundedOrder Time]
 
 DECLARE Deontic IS MUST OR MAY OR SHANT
 

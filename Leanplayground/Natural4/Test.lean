@@ -5,6 +5,11 @@ import Leanplayground.Natural4.Dynamics
 
 namespace Test
 
+variable {Time : Type} [LinearOrder Time] [BoundedOrder Time]
+
+-- variable
+--   {Time : Type} [LinearOrder Time] [BoundedOrder Time]
+--   (deadline : Time)
 -- set_option smt.solver.kind "z3"
 
 -- Uncomment the next 2 lines to trace debug macroexpansion.
@@ -59,12 +64,12 @@ DEFINE pay IS A Dynamics.Action
 HAS {True} IS THE pre
     {True} IS THE post
 
-DEFINE deadline IS A Dynamics.Time
+-- axiom deadline : Time
 
-§ testRegulative
-PARTY lender
-IF THERE IS SOME xs : List OF Int SUCH THAT xs.sum EQUALS 0
-MUST pay BY deadline
+-- § testRegulative
+-- PARTY lender
+-- IF THERE IS SOME xs : List OF Int SUCH THAT xs.sum EQUALS 0
+-- MUST DO pay BY deadline
 
 EVENT { pure True } testEvent { pure True }
 
