@@ -6,10 +6,10 @@ import Leanplayground.Natural4.Statics
 
 namespace Dynamics
 
--- variable
---   -- TODO: Add a typeclass constraint forcing ≤ to be decidable.
---   {Time : Type} [LE Time] [OrderBot Time]
---   {Duration : Type} [LE Duration] [Monoid Duration] [BoundedOrder Duration]
+universe u
+
+variable
+  {Time : Type u} [LinearOrder Time] [BoundedOrder Time]
 
 DECLARE Deontic IS MUST OR MAY OR SHANT
 
@@ -19,7 +19,7 @@ structure Action where
   pre : Set Prop
   post : Set Prop
 
-DECLARE Time
+-- DECLARE Time
 
 DECLARE Duration
 

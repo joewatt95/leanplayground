@@ -162,7 +162,7 @@ theorem distrib {S : α → β → Set U} :
     _ ↔ ∃ f : _ → _, ∀ a, x ∈ S a (f a)  := forall_exists_iff_exists_forall
     _ ↔ x ∈ ⋃ f : α → β, ⋂ a, S a (f a)  := by simp only [Set.mem_iInter, Set.mem_iUnion]
 
-  show _ from Set.ext_iff.mpr this
+  show _ from Set.ext_iff.2 this
 
 -- #print distrib
 

@@ -56,8 +56,8 @@ DEFINE borrower IS A Dynamics.Agent
 DEFINE lender IS A Dynamics.Agent
 
 DEFINE pay IS A Dynamics.Action
-HAS pure True IS THE pre
-    pure True IS THE post
+HAS {True} IS THE pre
+    {True} IS THE post
 
 DEFINE deadline IS A Dynamics.Time
 
