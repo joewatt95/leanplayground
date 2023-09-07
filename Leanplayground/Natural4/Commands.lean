@@ -1,7 +1,6 @@
-import Mathlib.SetTheory.Cardinal.Cofinality
 import Mathlib.Tactic.SlimCheck
 -- import Mathlib.Testing.SlimCheck.Testable
-import Smt
+-- import Smt
 
 namespace Commands
 
@@ -11,8 +10,8 @@ macro "#APPLY TACTIC" ruleName:ident tactic:tactic : command =>
 macro "#TEST" ruleName:ident : command =>
   `(#APPLY TACTIC $ruleName slim_check)
 
-macro "#SMT" ruleName:ident : command =>
-  `(#APPLY TACTIC $ruleName smt)
+-- macro "#SMT" ruleName:ident : command =>
+--   `(#APPLY TACTIC $ruleName smt)
 
 macro "#PROOF SEARCH" ruleName:ident : command =>
   `(#APPLY TACTIC $ruleName aesop)

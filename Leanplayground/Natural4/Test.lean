@@ -5,7 +5,7 @@ import Leanplayground.Natural4.Dynamics
 
 namespace Test
 
-set_option smt.solver.kind "z3"
+-- set_option smt.solver.kind "z3"
 
 -- Uncomment the next 2 lines to trace debug macroexpansion.
 -- set_option trace.Elab.command true
@@ -110,14 +110,14 @@ IF FOR EVERY a, THERE IS SOME b SUCH THAT R RELATES a TO b
 -- #print skolemize
 end
 
-open Cardinal
+-- open Cardinal
 
-universe u
+-- universe u
 
-§ InaccessibleCardinal'
-GIVEN κ IS A Cardinal.{u}
-DECIDE IsInaccessible' OF κ
-IF (κ > ℵ₀) AND (Cardinal.IsRegular κ) AND IsStrongLimit κ
+-- § InaccessibleCardinal'
+-- GIVEN κ IS A Cardinal.{u}
+-- DECIDE IsInaccessible' OF κ
+-- IF (κ > ℵ₀) AND (Cardinal.IsRegular κ) AND IsStrongLimit κ
 
 -- set_option trace.aesop.ruleSet true in
 -- example : ¬ (p ∨ q) ↔ ¬ p ∧ ¬ q := by aesop
