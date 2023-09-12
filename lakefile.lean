@@ -1,7 +1,7 @@
 import Lake
 open Lake DSL
 
-package «leanplayground» where
+package leanplayground where
   -- add any package configuration options here
 
 require mathlib from git
@@ -14,5 +14,5 @@ require smt from git
 --   "https://github.com/siddhartha-gadgil/LeanAide" @ "main"
 
 @[default_target]
-lean_lib «Leanplayground» where
+lean_lib Leanplayground where
   -- add any library configuration options here
