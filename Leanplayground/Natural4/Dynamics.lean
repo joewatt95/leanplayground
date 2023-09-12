@@ -6,26 +6,35 @@ import Leanplayground.Natural4.Statics
 
 namespace Dynamics
 
-variable {Time : Type} -- [LinearOrder Time] [BoundedOrder Time]
+-- variable {Time : Type} -- [LinearOrder Time] [BoundedOrder Time]
 
 DECLARE Deontic IS MUST OR MAY OR SHANT
 
-DECLARE Agent
+DECLARE Party
 
-structure Action where
-  pre : Set Prop
-  post : Set Prop
+-- structure Action where
+--   pre : Set Prop
+--   post : Set Prop
 
 -- DECLARE Time
 
 DECLARE Duration
 
+structure Event where
+-- Preconds that need to hold for the event to be able to fire.
+  preconds : Set Prop
+-- Postconds is a set of positive and negative fact literals that tell us what
+-- holds after the event fires.
+-- Positive literals indicate facts that hold.
+-- Negative literals indicate facts that no longer hold.
+  postconds : Set Prop
+
 structure Norm where
   cond : Prop
   deontic : Deontic
-  deadline : Time
-  agent : Agent
-  action : Action
+  deadline : ℕ
+  agent : Party
+  action : Event
 
 declare_syntax_cat deontic
 syntax "MUST" : deontic
@@ -55,17 +64,8 @@ macro_rules
     cond := $cond
 )
 
-structure Event where
--- Preconds that need to hold for the event to be able to fire.
-  preconds : Set Prop
--- Postconds is a set of positive and negative fact literals that tell us what
--- holds after the event fires.
--- Positive literals indicate facts that hold.
--- Negative literals indicate facts that no longer hold.
-  postconds : Set Prop
-
 structure ActionEvent extends Event where
-  agent : Agent
+  agent : Party
   action : Action
 
 macro

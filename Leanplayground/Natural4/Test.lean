@@ -5,8 +5,6 @@ import Leanplayground.Natural4.Dynamics
 
 namespace Test
 
-variable {Time : Type} [LinearOrder Time] [BoundedOrder Time]
-
 -- variable
 --   {Time : Type} [LinearOrder Time] [BoundedOrder Time]
 --   (deadline : Time)
@@ -20,7 +18,7 @@ DECLARE Agreement
 
 DECLARE Role IS Borrower OR Lender
 
-DECLARE Party
+DECLARE Party IS A Dynamics.Party
 HAS role IS A Role
     bankBalance IS A Int
 
@@ -40,13 +38,6 @@ DEFINE SimpleLoan IS A Loan
 HAS #[(Role.Borrower, B), (Role.Lender, L)] IS THE Parties
     1000 IS THE PrincipalAmt
 
--- DECIDE isLender IF (Party.role OF p) EQUALS Role.Lender
-
--- § Test
--- PARTY Agent.borrower
--- IF ∃ x, (x EQUALS 0) AND x EQUALS x
--- MUST DO Action.pay BY 0
-
 § testRule
 GIVEN
   p1 IS A Party
@@ -57,12 +48,17 @@ IF
   letI p1NEp2 := p1 ≠ p2
   (p1.bankBalance ≥ n) AND p1NEp2
 
-DEFINE borrower IS A Dynamics.Agent
-DEFINE lender IS A Dynamics.Agent
+-- DECIDE isLender IF (Party.role OF p) EQUALS Role.Lender
 
-DEFINE pay IS A Dynamics.Action
-HAS {True} IS THE pre
-    {True} IS THE post
+EVENT { {} } pay { {} }
+
+-- EVENT { {True} } payPayment (B.toParty DOES pay) { {True} }
+
+§ Test
+-- TODO: Automatically insert a coercion here.
+PARTY B.toParty
+IF ∃ x, (x EQUALS 0) AND x EQUALS x
+MUST DO pay BY 10
 
 -- axiom deadline : Time
 
@@ -71,9 +67,9 @@ HAS {True} IS THE pre
 -- IF THERE IS SOME xs : List OF Int SUCH THAT xs.sum EQUALS 0
 -- MUST DO pay BY deadline
 
-EVENT { pure True } testEvent { pure True }
+-- EVENT { pure True } testEvent { pure True }
 
-EVENT { pure True } testActionEvent (borrower DOES pay) { pure True }
+-- EVENT { pure True } testActionEvent (borrower DOES pay) { pure True }
 
 § goodRule
 GIVEN n IS A Int
