@@ -1,10 +1,10 @@
-{"version": 5,
+{"version": 6,
  "packagesDir": "lake-packages",
  "packages":
  [{"git":
    {"url": "https://github.com/leanprover-community/mathlib4.git",
     "subDir?": null,
-    "rev": "0fd376a2a6771146b41dfd81b6726431ebc5f2c4",
+    "rev": "b2f9c24b60fadee88f6172e2e0685850f323e1c7",
     "opts": {},
     "name": "mathlib",
     "inputRev?": null,
@@ -48,4 +48,5 @@
     "opts": {},
     "name": "proofwidgets",
     "inputRev?": "v0.0.16",
-    "inherited": true}}]}
+    "inherited": true}}],
+ "name": "leanplayground"}
