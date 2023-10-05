@@ -111,6 +111,30 @@ IF FOR EVERY a, THERE IS SOME b SUCH THAT R RELATES a TO b
 -- #print skolemize
 end
 
+DECLARE ClaimType
+IS Accident
+OR Illness
+
+DECLARE HighRiskActivities
+
+DECLARE AccidentForm
+
+DECLARE IllnessForm
+
+def WebForm : Type :=
+  Σ claimType : ClaimType,
+    open ClaimType in
+    match claimType with
+    | Accident => AccidentForm
+    | Illness => IllnessForm 
+    -- if _ : claimType == ClaimType.Accident
+    -- then AccidentForm
+    -- else
+    --   haveI : claimType == ClaimType.Illness := by cases claimType; repeat aesop
+    --   IllnessForm
+
+#reduce WebForm
+
 -- open Cardinal
 
 -- universe u
