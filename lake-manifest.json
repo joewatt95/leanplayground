@@ -4,10 +4,18 @@
  [{"git":
    {"url": "https://github.com/leanprover-community/mathlib4.git",
     "subDir?": null,
-    "rev": "3f4910debcdd03d6ca9f9063b698a36fd2e3c211",
+    "rev": "2937b757f71325e24d8b2f6c732cd9a61f590e74",
     "opts": {},
     "name": "mathlib",
     "inputRev?": null,
+    "inherited": false}},
+  {"git":
+   {"url": "https://github.com/ufmg-smite/lean-smt.git",
+    "subDir?": null,
+    "rev": "6ce531a2d4551b099dfdda1b9b2a5e776ecdc233",
+    "opts": {},
+    "name": "smt",
+    "inputRev?": "main",
     "inherited": false}},
   {"git":
    {"url": "https://github.com/leanprover/std4",
