@@ -4,7 +4,7 @@
  [{"git":
    {"url": "https://github.com/leanprover-community/mathlib4.git",
     "subDir?": null,
-    "rev": "751fcc9fb6bfba132ded0ef571d1901cfb844fe6",
+    "rev": "7891de94e3557cd04aebddf2315592c1034a2b22",
     "opts": {},
     "name": "mathlib",
     "inputRev?": null,
@@ -42,19 +42,19 @@
     "inputRev?": "v0.0.18",
     "inherited": true}},
   {"git":
-   {"url": "https://github.com/leanprover/std4",
-    "subDir?": null,
-    "rev": "85a0d4891518518edfccee16cbceac139efa460c",
-    "opts": {},
-    "name": "std",
-    "inputRev?": "main",
-    "inherited": true}},
-  {"git":
    {"url": "https://github.com/JLimperg/aesop",
     "subDir?": null,
     "rev": "0bd8465d8a5cfdd53c1ff0fd57ca5eaa53eb455c",
     "opts": {},
     "name": "aesop",
     "inputRev?": "master",
+    "inherited": true}},
+  {"git":
+   {"url": "https://github.com/leanprover/std4",
+    "subDir?": null,
+    "rev": "a4b2584dd4468489d14e9731ff303ec6d674873f",
+    "opts": {},
+    "name": "std",
+    "inputRev?": "main",
     "inherited": true}}],
  "name": "leanplayground"}
