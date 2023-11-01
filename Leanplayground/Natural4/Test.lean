@@ -3,7 +3,7 @@ import Leanplayground.Natural4.Attrs
 import Leanplayground.Natural4.Commands
 import Leanplayground.Natural4.Dynamics
 
-import Smt
+-- import Smt
 
 namespace Test
 
@@ -128,7 +128,7 @@ def WebForm : Type :=
     open ClaimType in
     match claimType with
     | Accident => AccidentForm
-    | Illness => IllnessForm 
+    | Illness => IllnessForm
     -- if _ : claimType == ClaimType.Accident
     -- then AccidentForm
     -- else
