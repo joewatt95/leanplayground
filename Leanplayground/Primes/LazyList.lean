@@ -14,12 +14,12 @@ that's polymorphic over type universes.
                                                   Γ ⊢ head : α
 Γ ⊢ α : Type u                Γ ⊢ α : Type u      Γ ⊢ tail : LazyList α
 ---------------------         -------------------------------------------------
-Γ ⊢ nil : LazyList α             Γ ⊢ head L:: ↑tail : LazyList α 
+Γ ⊢ nil : LazyList α             Γ ⊢ head L:: ↑tail : LazyList α
 
 Note that Lean utilizes the isomorphism of types/categories (β ≅ Unit → β) in
 order to coerce at compile-time (b : β) to the function (λ _ => b) so that
 we may simply write (cons x lazyList) instead of
-(cons x (Thunk.mk <| λ _ => lazyList)) 
+(cons x (Thunk.mk <| λ _ => lazyList))
 -/
 inductive LazyList : Type u → Type u where
 | nil : LazyList α
@@ -190,7 +190,7 @@ As a macro, this gets expanded first before the type checking is done.
 -- instance : LawfulFunctor LazyList where
 --   -- id <$> x = x
 --   id_map := lawfulFunctorLazyList
---   -- (g ∘ f) <$> x = g <$> f <$> x 
+--   -- (g ∘ f) <$> x = g <$> f <$> x
 --   comp_map _ _ := lawfulFunctorLazyList
 --   -- Not sure what this last law is for.
 --   map_const := show _ by simp [Functor.mapConst, (. <$> .)]

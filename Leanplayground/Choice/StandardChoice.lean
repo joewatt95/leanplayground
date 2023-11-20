@@ -80,7 +80,7 @@ theorem choice
   define f as
     a ∈ α ↦
       [this] we have σ a is nonempty, because h a,
-      finally we have σ a, because Classical.choice this, 
+      finally we have σ a, because Classical.choice this,
   finally we have ((a : α) → σ a) is nonempty, because it is witnessed by f
 
 notation "Axiom of Choice" => choice

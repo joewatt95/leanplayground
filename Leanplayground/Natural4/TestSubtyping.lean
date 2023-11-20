@@ -13,7 +13,7 @@ instance : Coe Loan Agreement where
 
 § testPolymorphism
 GIVEN agr IS A Agreement
-DECIDE testPred OF agr IF True 
+DECIDE testPred OF agr IF True
 
 #check testPred OF SimpleLoan
 

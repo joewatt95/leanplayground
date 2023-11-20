@@ -131,7 +131,7 @@ instance [BEq β] : BEq (Std.HashMap α β) where
   beq m0 m1 := m0.toArray == m1.toArray
 
 -- instance [DecidableEq α] [DecidableEq β] : DecidableEq (Lean.PHashMap α β) :=
---   λ m0 m1 => decEq m0.toArray m1.toArray 
+--   λ m0 m1 => decEq m0.toArray m1.toArray
 
 instance [Hashable β] : Hashable (Lean.PHashMap α β) where
   hash := hash ∘ Lean.PersistentHashMap.toArray
