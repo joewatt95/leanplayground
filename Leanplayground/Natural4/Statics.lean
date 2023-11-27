@@ -156,7 +156,7 @@ end
 
 notation "MAP" "FROM" key "TO" val => Array (key × val)
 -- Lean.PHashMap key val
-notation x "EQUALS" y => x == y
+infix:50 "EQUALS" => (. == .)
 
 syntax Lean.binderIdent "FROM" term "TO" term : term
 

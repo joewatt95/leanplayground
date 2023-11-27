@@ -56,11 +56,11 @@ EVENT { {} } pay { {} }
 
 -- EVENT { {True} } payPayment (B.toParty DOES pay) { {True} }
 
-§ Test
+-- § Test
 -- TODO: Automatically insert a coercion here.
-PARTY B.toParty
-IF ∃ x, (x EQUALS 0) AND x EQUALS x
-MUST DO pay BY 10
+-- PARTY B.toParty
+-- IF ∃ x, (x EQUALS 0) AND x EQUALS x
+-- MUST DO pay BY 10
 
 -- axiom deadline : Time
 
@@ -73,11 +73,20 @@ MUST DO pay BY 10
 
 -- EVENT { pure True } testActionEvent (borrower DOES pay) { pure True }
 
-§ goodRule
+§ goodRule1
 GIVEN n IS A Int
 DECIDE n < 0 IF THERE IS SOME m SUCH THAT (0 < m) AND (m + n = 0)
 
--- #SMT goodRule
+§ goodRule2
+GIVEN xs IS A List OF Int
+DECIDE xs.foldl (. * .) 1 EQUALS Id.run do
+  let mut result := 1
+  for x in xs do
+    result := x * result
+  return result
+IF True
+
+-- #TEST goodRule2
 
 § badRule1
 GIVEN
@@ -85,20 +94,10 @@ GIVEN
   n IS A Int
 DECIDE m < n IF True
 
--- #print badRule1
-
--- #SMT badRule1
-
 § badRule2
 GIVEN xs IS A List OF Int
-DECIDE xs.sum EQUALS 0 IF 0 EQUALS
-  Id.run do
-    let mut result := 1
-    for x in xs do
-      result := x * result
-    return result
-
--- #print badRule2
+DECIDE xs.sum EQUALS xs.foldl (. * .) 0
+IF True
 
 -- #TEST badRule2
 

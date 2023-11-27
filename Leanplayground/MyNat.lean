@@ -127,4 +127,10 @@ private lemma leq_total : ∀ {x y}, x leq y ∨ y leq x
     haveI : y + 1 leq x + 1 := leq_plus_of_leq' y_leq_x
     Or.inr this
 
+instance [OfNat α n] : OfNat (Option α) n where
+  ofNat := some $ OfNat.ofNat n
+
+instance [Neg α] : Neg $ Option α where
+  neg := (Neg.neg <$> .)
+
 end MyNat
