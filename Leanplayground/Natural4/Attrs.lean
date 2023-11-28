@@ -13,30 +13,28 @@ initialize regulative : TagAttribute ←
 
 namespace Attrs
 
-def listAll (attrType : TagAttribute) : MetaM <| Std.HashMap Name Expr := do
+def listAll (tagAttr : TagAttribute) : MetaM <| Std.HashMap Name Expr := do
   let env ← getEnv
-  let mut result := Std.HashMap.empty
-  for declName in attrType.ext.getState env do
+  let mut result := .empty
+  for declName in tagAttr.ext.getState env do
     -- Lookup declName in the environment, then compute (full) head normal form
     -- and pretty print.
     -- Note that we need to fully normalize under binders and constructors when
     -- transpiling to other outputs.
     try
-      match env.find? declName with
-      | some <| ConstantInfo.defnInfo {value, ..} =>
-        let reduced ← reduce value
-
-        -- Amortized constant time because the compiler optimizes copy on write
-        -- away to destructive mutation.
-        result := result.insert declName reduced
-
-        logInfo m!"
-          Found rule: {declName}
-          Defn: {← ppExpr reduced}"
-
-      | _ => throwError "
+      let some <| .defnInfo {value, ..} := env.find? declName
+        | throwError "
           Internal error: {declName} is not a constant defn.
           Double check the macro-expansion for constitutive rules!"
+
+      let reduced ← reduce value
+
+      result := result.insert declName reduced
+
+      logInfo m!"
+        Found rule: {declName}
+        Defn: {← ppExpr reduced}"
+
     catch e =>
       logError m!"
         Error occured while listing rules:
