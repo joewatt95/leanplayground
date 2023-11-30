@@ -7,6 +7,9 @@ package leanplayground where
 require mathlib from git
   "https://github.com/leanprover-community/mathlib4.git"
 
+require verbose from git
+  "https://github.com/PatrickMassot/verbose-lean4"
+
 -- require auto from git
 --   "https://github.com/leanprover-community/lean-auto.git" @ "main"
 
