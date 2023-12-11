@@ -1,6 +1,11 @@
+import LeanCopilot
+
 import Mathlib.Algebra.Group.Defs
+import Mathlib.Data.List.Basic
 import Mathlib.Data.Nat.Basic
-import Mathlib.Tactic.Ring
+import Mathlib.Tactic
+
+import Std.Data.List.Lemmas
 
 namespace MyNat
 
@@ -8,7 +13,7 @@ inductive Leq : (m n : ℕ) → Prop
 | Self : Leq m m
 | Succ (m_leq_n : Leq m n) : Leq m (n + 1)
 
-infix:50 "leq" => Leq
+infix:50 " leq " => Leq
 
 lemma zero_leq : ∀ {m}, 0 leq m
 | 0 => Leq.Self
@@ -19,9 +24,9 @@ lemma zero_leq : ∀ {m}, 0 leq m
 macro m:term "leq'" n:term : term => `(∃ d : ℕ, $m + d = $n)
 
 private lemma eq_zero_or_succ : ∀ {n}, n = 0 ∨ ∃ m, n = m + 1
-| 0 => Or.inl rfl
+| 0 => .inl rfl
 | n + 1 =>
-  suffices ∃ m, n + 1 = m + 1 from Or.inr this
+  suffices ∃ m, n + 1 = m + 1 from .inr this
 
   match (eq_zero_or_succ : n = 0 ∨ ∃ m, n = m + 1) with
   | Or.inl n_eq_zero =>
@@ -78,22 +83,98 @@ private lemma Leq.antisymmetric : x leq y → y leq x → x = y
   haveI : d1 + d2 = 0 := Nat.add_left_cancel this
   haveI : d1 = 0 :=
     match (eq_zero_or_succ : d1 = 0 ∨ ∃ d, d1 = d + 1) with
-    | Or.inl d1_eq_zero => d1_eq_zero
-    | Or.inr ⟨d, d1_eq_d_succ⟩ =>
+    | .inl d1_eq_zero => d1_eq_zero
+    | .inr ⟨d, d1_eq_d_succ⟩ =>
       suffices ⊥ from this.elim
       haveI : d + d2 + 1 = 0 := by ring_nf; simp [d1_eq_d_succ] at this
       show ⊥ from Nat.succ_ne_zero _ this
   show x = y by rw [this] at h1; exact h1
 
-private lemma leq_plus : ∀ {d}, x leq x + d
+private lemma leq_plus : ∀ {b}, a leq a + b
 | 0 => Leq.Self
-| d + 1 => calc
-  x leq x + d     := by exact leq_plus
-  _ leq x + d + 1 := by simp only [leq_iff_leq', add_right_inj, exists_eq]
+| b + 1 => calc
+  a leq a + b     := leq_plus
+  _ leq a + b + 1 := by simp only [leq_iff_leq', add_right_inj, exists_eq]
 
-private lemma leq_plus_of_leq : ∀ {a b c d}, a leq b → c leq d → a + c leq b + d
-| a, b, c, d, a_leq_b, c_leq_d =>
+private lemma eq_zero_of_leq : ∀ {n}, n leq 0 → n = 0
+| 0, _ => rfl
+
+private lemma leq_plus_of_leq : a leq b → c leq d → a + c leq b + d
+| .Self, .Self => .Self
+
+| .Self, .Succ c_leq => calc
+    a + c leq a + _ := by exact leq_plus_of_leq .Self c_leq
+        _ leq a + _ + 1 := .Succ .Self
+
+| .Succ a_leq, .Self => calc
+    a + c leq _ + c := by exact leq_plus_of_leq a_leq .Self
+        _ leq (_ + c) + 1 := .Succ .Self
+        _ = _ + 1 + c := by ring_nf
+
+| .Succ a_leq, .Succ c_leq => calc
+  a + c leq _ + _ := by exact leq_plus_of_leq a_leq c_leq
+      _ leq _ + _ + 2 := leq_plus
+      _ = _ + 1 + _ + 1 := by simp; ring_nf
+
+private lemma h :
+  ∀ {as bs : List α},
+    (∀ (i : Fin as.length), ∃ (j : Fin bs.length), i.val = j) →
+    as.length ≤ bs.length
+
+| [], _, _ | a :: as, [], _ => by aesop
+
+| a :: as, b :: bs, h =>
+  suffices as.length ≤ bs.length from sorry
+  suffices ∀ (i : Fin as.length), ∃ (j : Fin bs.length), i.val = j from sorry
+  λ ⟨i, h_i⟩ ↦
+    haveI : as.length < (a :: as).length := by aesop
+    let i' : Fin (a :: as).length := ⟨i, by linarith⟩
+    haveI := h i'
+    sorry
+    -- ⟨⟨i.pred, sorry⟩, sorry⟩
+
+private lemma leq_sum_of_leq :
+∀ {as bs : List ℕ},
+  (∀ i, ∃ j, i.val = j.val ∧ as.get i ≤ bs.get j) →
+  as.length ≤ bs.length ∧ as.sum ≤ bs.sum
+
+| [], _, _ | a :: as, [], h => by aesop
+
+| a :: as, b :: bs, h =>
+  -- haveI : as.length ≤ bs.length := by aesop
+  haveI : as.length < (a :: as).length := by aesop
+  have : ∀ i, ∃ j, i.val = j.val ∧ as.get i ≤ bs.get j
+    | ⟨i, _⟩ =>
+      let ⟨⟨i, h_i⟩, _, h⟩ := h ⟨i, by linarith⟩
+      match i with
+      | 0 => sorry
+      | i + 1 =>
+        ⟨⟨i.pred, sorry⟩, sorry, sorry⟩
   sorry
+
+  -- haveI : as.length = bs.length := by aesop
+  -- haveI := calc
+  --   as.length + 1 = (a :: as).length := by aesop
+  --               _ = (b :: bs).length := by aesop
+  --               _ = bs.length + 1 := by aesop
+  -- sorry
+
+--   haveI h_len : as.length = bs.length := by aesop
+--   haveI :
+--     ∀ i (_ : i.val < as.length),
+--       as.get i ≤ bs.get ⟨i.val, by linarith⟩ :=
+--     λ i h' ↦
+--       haveI := calc
+--         i.val < as.length := by exact h'
+--         _ < (a :: as).length := by aesop
+--       haveI := h ⟨i.val, by aesop⟩ this
+--       sorry
+--   sorry
+
+-- | a :: as, b :: bs, h =>
+--   suffices as.sum leq bs.sum from sorry
+--   haveI : ∀ i, ∃ j, j.val = i.val ∧ as.get i leq bs.get j := by aesop
+--   sorry
 
 private lemma leq_plus_of_leq' : a leq b → a + c leq b + c :=
   (leq_plus_of_leq . Leq.Self)

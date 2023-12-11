@@ -3,9 +3,16 @@ open Lake DSL
 
 package leanplayground where
   -- add any package configuration options here
+  moreLinkArgs := #[
+    "-L./.lake/packages/LeanCopilot/.lake/build/lib",
+    "-lctranslate2"
+  ]
 
 require mathlib from git
   "https://github.com/leanprover-community/mathlib4.git"
+
+require LeanCopilot from git
+  "https://github.com/lean-dojo/LeanCopilot.git" @ "main"
 
 require verbose from git
   "https://github.com/PatrickMassot/verbose-lean4"
