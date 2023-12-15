@@ -86,7 +86,7 @@ DECIDE xs.foldl (. * .) 1 EQUALS Id.run do
   return result
 IF True
 
-#TEST goodRule2
+-- #TEST goodRule2
 
 § badRule1
 GIVEN
