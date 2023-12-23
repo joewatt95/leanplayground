@@ -108,7 +108,7 @@ private lemma leq_plus_of_leq : a leq b → c leq d → a + c leq b + d
 
 | .Succ a_leq, .Self => calc
     a + c leq _ + c := by exact leq_plus_of_leq a_leq .Self
-        _ leq (_ + c) + 1 := .Succ .Self
+        _ leq _ + c + 1 := .Succ .Self
         _ = _ + 1 + c := by ring_nf
 
 | .Succ a_leq, .Succ c_leq => calc
