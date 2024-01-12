@@ -3,6 +3,8 @@ import Leanplayground.Natural4.Attrs
 import Leanplayground.Natural4.Commands
 import Leanplayground.Natural4.Dynamics
 
+import LeanCopilot
+
 -- import Smt
 
 namespace Test
@@ -29,7 +31,7 @@ HAS Parties IS A MAP FROM Role TO Party
     PrincipalAmt IS A Nat
 
 DEFINE B IS A Party
-HAS Role.Borrower IS THE role
+HAS .Borrower IS THE role
     100 IS THE bankBalance
 
 DEFINE L IS A Party
@@ -78,13 +80,22 @@ GIVEN n IS A Int
 DECIDE n < 0 IF THERE IS SOME m SUCH THAT (0 < m) AND (m + n = 0)
 
 § goodRule2
-GIVEN xs IS A List OF Int
+GIVEN xs IS A Array OF Int
 DECIDE xs.foldl (. * .) 1 EQUALS Id.run do
   let mut result := 1
   for x in xs do
     result := x * result
   return result
 IF True
+
+example : goodRule2 := by
+  unfold goodRule2
+  intro xs
+  induction xs.size with
+  | zero =>
+    sorry
+  | succ len ih =>
+    sorry
 
 -- #TEST goodRule2
 
@@ -124,10 +135,9 @@ DECLARE IllnessForm
 
 def WebForm : Type :=
   Σ claimType : ClaimType,
-    open ClaimType in
     match claimType with
-    | Accident => AccidentForm
-    | Illness => IllnessForm
+    | .Accident => AccidentForm
+    | .Illness => IllnessForm
     -- if _ : claimType == ClaimType.Accident
     -- then AccidentForm
     -- else

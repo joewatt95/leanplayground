@@ -12,7 +12,7 @@ require mathlib from git
   "https://github.com/leanprover-community/mathlib4.git"
 
 require LeanCopilot from git
-  "https://github.com/lean-dojo/LeanCopilot.git" @ "v1.0.1"
+  "https://github.com/lean-dojo/LeanCopilot.git" @ "v1.0.2"
 
 require verbose from git
   "https://github.com/PatrickMassot/verbose-lean4"
