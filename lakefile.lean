@@ -11,6 +11,9 @@ package leanplayground where
 require mathlib from git
   "https://github.com/leanprover-community/mathlib4.git"
 
+require verso from git
+  "https://github.com/leanprover/verso" @ "5a0bd37dc91d1eef510ab43c7f6d4b6d83ff863f"
+
 require LeanCopilot from git
   "https://github.com/lean-dojo/LeanCopilot.git" @ "v1.0.2"
 

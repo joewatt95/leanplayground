@@ -80,7 +80,7 @@ GIVEN n IS A Int
 DECIDE n < 0 IF THERE IS SOME m SUCH THAT (0 < m) AND (m + n = 0)
 
 § goodRule2
-GIVEN xs IS A Array OF Int
+GIVEN xs IS A List OF ℤ
 DECIDE xs.foldl (. * .) 1 EQUALS Id.run do
   let mut result := 1
   for x in xs do
@@ -91,10 +91,11 @@ IF True
 example : goodRule2 := by
   unfold goodRule2
   intro xs
-  induction xs.size with
-  | zero =>
-    sorry
-  | succ len ih =>
+  induction xs with
+  | nil =>
+    aesop
+  | cons x xs ih =>
+    simp [*] at *
     sorry
 
 -- #TEST goodRule2
