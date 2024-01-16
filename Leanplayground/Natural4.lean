@@ -6,14 +6,9 @@ open Verso.Genre.Blog (Post Page label ref lean leanInit leanOutput)
 -- set_option pp.rawOnError true
 set_option maxRecDepth 600
 
-#doc (Post)
+#doc (Page)
   "Syntax, semantics, implementation and end user facing documentation for L4"
 =>
-
-%%%
-authors := ["Joe Watt"]
-date := {year := 2024, month := 1, day := 15}
-%%%
 
 # Overview
 This (work-in-progress) document is a
@@ -73,10 +68,10 @@ macro_rules
 ```
 
 #### Future work on subtyping and other RDF features
-See [this](https://arxiv.org/pdf/2003.03785.pdf) paper, which is part of
-[author](https://zunction.github.io/)'s PHD thesis on embedding knowledge graphs
-into dependent type theories (primarily Coq) and using its proof automation
-facilities to reason about SPARQL.
+See [this](https://arxiv.org/pdf/2003.03785.pdf) paper, which is part of the
+[main author](https://zunction.github.io/)'s PHD thesis on embedding knowledge
+graphs into dependent type theories (primarily Coq) and using its proof
+automation facilities to reason about SPARQL.
 
 A similar technique may work here since this implements L4 as an embedded DSL
 in Lean and Lean's type theory is similar to Coq.
@@ -208,8 +203,10 @@ Namespaces can be declared and nested as follows.
 namespace outer_section
 
   namespace inner_section
+
     DECLARE InnerClass
     HAS var IS A Int
+
   end inner_section
 
 end outer_section
