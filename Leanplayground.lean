@@ -6,7 +6,7 @@ import Verso.Genre.Blog
 
 open Verso Genre Blog Site Syntax in
 def main (options : List String) : IO UInt32 := do
-  let n ← blogMain Theme.default natural4site options
+  let n ← blogMain (relativizeUrls := false) Theme.default natural4site options
   if n > 0 then IO.println s!"Error occured with code: {n}"
   return n
 where

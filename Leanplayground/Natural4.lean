@@ -1,5 +1,8 @@
 import Verso.Genre.Blog
 
+import Auto.Tactic
+import Mathlib.Tactic.SlimCheck
+
 open Verso.Genre
 open Verso.Genre.Blog (Post Page label ref lean leanInit leanOutput)
 
@@ -149,6 +152,31 @@ macro_rules
 )
 ```
 
+### Property-based testing
+
+#### Syntax and semantics
+
+```lean runningEg
+macro "#TEST" ruleName:ident : command =>
+  `(example : $ruleName := by unfold $ruleName; slim_check)
+```
+
+### SMT solver integration
+
+#### Syntax and semantics
+
+```lean runningEg
+set_option auto.smt true
+set_option auto.smt.trust true
+set_option auto.smt.solver.name "z3"
+
+set_option trace.auto.smt.printCommands true
+set_option trace.auto.smt.result true
+
+macro "#SMT" ruleName:ident : command =>
+  `(example : $ruleName := by unfold $ruleName; auto)
+```
+
 # End-user documentation
 
 L4 is a strongly typed language where one can define objects in the style of
@@ -215,8 +243,36 @@ end outer_section
 Note that things declared and defined in namespaces are not visible in the
 outer scope, so that the following is errorneous:
 
-```
+```lean runningEg error := true
 § badRule
 GIVEN x IS A InnerClass
 DECIDE x = x IF True
+```
+
+## Functional programming, OOP dot notation, property-based testing
+
+Here is an example of the `#TEST ⟪ruleName⟫` command for property-based
+testing.
+
+Note in the example below that L4 supports _functional programming_ constructs,
+as well as _object-oriented_ inspired dot notation.
+
+```lean runningEg error := true
+§ badRule
+GIVEN xs IS A List OF Int
+DECIDE xs.sum = xs.foldl (λ x y ↦ x * y) 0
+IF True
+
+#TEST badRule
+```
+
+## SMT solver integration
+
+```lean runningEg error := true
+§ badRule
+GIVEN xs IS A List OF Int
+DECIDE xs.sum = 0
+IF True
+
+#SMT badRule
 ```
