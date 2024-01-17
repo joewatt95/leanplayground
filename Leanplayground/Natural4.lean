@@ -1,10 +1,10 @@
-import Verso.Genre.Blog
-
+import Aesop
 import Auto.Tactic
+import Duper
+import LeanCopilot
 import Mathlib.Tactic.SlimCheck
 
-import Aesop
-import LeanCopilot
+import Verso.Genre.Blog
 
 open Verso.Genre
 open Verso.Genre.Blog (Post Page label ref lean leanInit leanOutput)
@@ -331,8 +331,8 @@ testing.
 ```lean runningEg error := true
 § badRule
 GIVEN xs IS A List OF Int
-DECIDE xs.sum = xs.foldl (. * .) 0
-IF True
+DECIDE xs.sum > 0
+IF xs.all (. ≥ 0)
 
 #TEST badRule
 ```
@@ -342,22 +342,17 @@ IF True
 Here is an example of the `#SMT ⟪ruleName⟫` command for invoking the SMT solver
 to check the satisfiability of a rule.
 
-```lean runningEg error := true
-§ badRule
-GIVEN xs IS A List OF Int
-DECIDE xs.sum = 0
+```lean runningEg
+§ sumListNonNeg
+GIVEN xs IS A List OF Nat
+DECIDE xs.sum ≥ 0
 IF True
 
-#SMT badRule
+#SMT sumListNonNeg
 ```
 
 ## LLM powered backward chaining proof search
 
 ```lean runningEg
-§ sumList'
-GIVEN xs IS A List OF Int
-DECIDE xs.sum = xs.foldl (. + .) 0
-IF True
-
-#PROVE-LLM sumList'
+#PROVE-LLM sumListNonNeg
 ```
