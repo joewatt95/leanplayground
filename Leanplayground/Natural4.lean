@@ -3,6 +3,9 @@ import Verso.Genre.Blog
 import Auto.Tactic
 import Mathlib.Tactic.SlimCheck
 
+import Aesop
+import LeanCopilot
+
 open Verso.Genre
 open Verso.Genre.Blog (Post Page label ref lean leanInit leanOutput)
 
@@ -52,9 +55,11 @@ macro_rules
   match superClassName with
   | none => `(
     structure $className
+    deriving BEq
   )
   | some superClassName => `(
     structure $className extends $superClassName
+    deriving BEq
   )
 | `(
   DECLARE $className $[IS A $superClassName]?
@@ -63,10 +68,12 @@ macro_rules
   | none => `(
     structure $className where
       $[{ $fieldName : $fieldType }]*
+    deriving BEq
   )
   | some superClassName => `(
     structure $className extends $superClassName where
       $[{ $fieldName : $fieldType }]*
+    deriving BEq
   )
 ```
 
@@ -87,7 +94,25 @@ _proof-relevance_ but I (Joe) believe Lean's type theory is _proof-irrelevant_.
 This needs more investigation.
 
 ## Other types
-TODO: enums
+
+### Enum types
+
+#### Syntax
+```lean runningEg
+syntax "DECLARE" ident "IS" sepBy1(ident, "OR") : command
+```
+
+#### Semantics
+
+```lean runningEg
+macro_rules
+| `(DECLARE $name:ident IS $[$ids:ident] OR*)
+=> `(
+  inductive $name where
+    $[| $ids:ident]*
+  deriving BEq, Ord
+)
+```
 
 ## Constitutive Rules
 
@@ -177,10 +202,27 @@ macro "#SMT" ruleName:ident : command =>
   `(example : $ruleName := by unfold $ruleName; auto)
 ```
 
+### Backward chaining proof search and LLM integration
+
+#### Syntax and semantics
+
+```lean runningEg
+macro "#PROVE" ruleName:ident : command =>
+  `(example : $ruleName := by unfold $ruleName; aesop?)
+
+#configure_llm_aesop
+
+macro "#PROVE-LLM" ruleName:ident : command =>
+  `(example : $ruleName := by unfold $ruleName; search_proof)
+
+```
+
 # End-user documentation
 
 L4 is a strongly typed language where one can define objects in the style of
 OOP and write business rules with them.
+
+## Classes / record types
 
 For example, we can first declare a `Person` clas as follows.
 
@@ -222,6 +264,13 @@ TODO:
     - Meta-programming level transformations needed to pattern match on the
       string of the identifier `t's` as in `t's x` to desugar it into `t.x`.
 
+## Enum types
+
+```lean runningEg
+DECLARE Day
+IS Mon OR Tues OR Wed OR Thurs OR Fri OR Sat OR Sun
+```
+
 ## Namespaces and sections
 
 Namespaces can be declared and nested as follows.
@@ -249,24 +298,49 @@ GIVEN x IS A InnerClass
 DECIDE x = x IF True
 ```
 
-## Functional programming, OOP dot notation, property-based testing
+## Functional and imperative programming
+
+L4 supports:
+- _functional programming_ constructs like lambdas, higher-order functions and
+  persistent data structures.
+- _imperative_ programming constructs like mutable variables and loops.
+
+```lean runningEg
+§ sumList
+GIVEN xs IS A Array OF Int
+DECIDE xs.foldl (. + .) 0 = Id.run do
+  let mut result := 0
+  for x in xs do
+    result := result + x
+  return result
+IF True
+```
+
+Note that `(. + .)` is syntactic sugar for `(λ x y ↦ x + y)`.
+
+TODO:
+slim\_check tactic for property-based testing complains about missing instances
+when using it in conjunction with imperative for loops. How to fix?
+
+## Property-based testing
 
 Here is an example of the `#TEST ⟪ruleName⟫` command for property-based
 testing.
 
-Note in the example below that L4 supports _functional programming_ constructs,
-as well as _object-oriented_ inspired dot notation.
 
 ```lean runningEg error := true
 § badRule
 GIVEN xs IS A List OF Int
-DECIDE xs.sum = xs.foldl (λ x y ↦ x * y) 0
+DECIDE xs.sum = xs.foldl (. * .) 0
 IF True
 
 #TEST badRule
 ```
 
 ## SMT solver integration
+
+Here is an example of the `#SMT ⟪ruleName⟫` command for invoking the SMT solver
+to check the satisfiability of a rule.
 
 ```lean runningEg error := true
 § badRule
@@ -275,4 +349,15 @@ DECIDE xs.sum = 0
 IF True
 
 #SMT badRule
+```
+
+## LLM powered backward chaining proof search
+
+```lean runningEg
+§ sumList'
+GIVEN xs IS A List OF Int
+DECIDE xs.sum = xs.foldl (. + .) 0
+IF True
+
+#PROVE-LLM sumList'
 ```
