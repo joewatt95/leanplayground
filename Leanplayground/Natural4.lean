@@ -304,6 +304,15 @@ L4 supports:
 - _functional programming_ constructs like lambdas, higher-order functions and
   persistent data structures.
 - _imperative_ programming constructs like mutable variables and loops.
+  - For the formal semantics, we refer to chapter 5 of
+    [this](https://lean-lang.org/papers/thesis-sebastian.pdf)
+    thesis.
+
+    In short, these are formalised using a tower of `StateT`
+    (for mutable variables) and `ExceptT`
+    (for early `return`, `break` and `continue`).
+    This is why the code below runs the imperative block in the identity monad
+    via `Id.run`.
 
 ```lean runningEg
 § sumList
