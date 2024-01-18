@@ -194,7 +194,7 @@ macro_rules
   DECIDE $concl:ident IF $hypo
 ) => `(
   @[constitutive]
-  def $ruleName : Prop := $hypo → $concl
+  abbrev $ruleName : Prop := $hypo → $concl
 )
 | `(
   § $ruleName
@@ -206,7 +206,7 @@ macro_rules
 
   -- Rule definition.
   @[constitutive]
-  def $ruleName : Prop :=
+  abbrev $ruleName : Prop :=
     ∀ $[($var : $type)]*, $hypo → ($concl OF $[$arg],*)
 )
 | `(
@@ -215,7 +215,7 @@ macro_rules
   DECIDE $concl:term IF $hypo
 ) => `(
   @[constitutive]
-  def $ruleName : Prop := ∀ $[($var : $type)]*, $hypo → $concl
+  abbrev $ruleName : Prop := ∀ $[($var : $type)]*, $hypo → $concl
 )
 
 macro "THE" fieldName:ident "OF" record:term : term => `($record.$fieldName)

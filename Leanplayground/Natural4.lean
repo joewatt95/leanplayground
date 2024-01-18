@@ -1,6 +1,7 @@
 import Aesop
 import Auto.Tactic
 import Duper
+import Lean.Data.Json
 import LeanCopilot
 import Mathlib.Tactic.SlimCheck
 
@@ -10,8 +11,8 @@ open Verso.Genre
 open Verso.Genre.Blog (Post Page label ref lean leanInit leanOutput)
 
 -- set_option pp.rawOnError true
-set_option maxRecDepth 600
 
+set_option maxRecDepth 600 in
 #doc (Page)
   "Syntax, semantics, implementation and end user facing documentation for L4"
 =>
@@ -29,7 +30,7 @@ file that contains:
 
 # Implementation and documentation for syntax and semantics of L4
 
-## L4 classes
+## L4 class declarations
 
 ### Syntax
 
@@ -55,11 +56,11 @@ macro_rules
   match superClassName with
   | none => `(
     structure $className
-    deriving BEq
+    deriving BEq, Hashable, Repr, Lean.FromJson, Lean.ToJson
   )
   | some superClassName => `(
     structure $className extends $superClassName
-    deriving BEq
+    deriving BEq, Hashable, Repr, Lean.FromJson, Lean.ToJson
   )
 | `(
   DECLARE $className $[IS A $superClassName]?
@@ -68,12 +69,12 @@ macro_rules
   | none => `(
     structure $className where
       $[{ $fieldName : $fieldType }]*
-    deriving BEq
+    deriving BEq, Hashable, Repr, Lean.FromJson, Lean.ToJson
   )
   | some superClassName => `(
     structure $className extends $superClassName where
       $[{ $fieldName : $fieldType }]*
-    deriving BEq
+    deriving BEq, Hashable, Repr, Lean.FromJson, Lean.ToJson
   )
 ```
 
@@ -93,6 +94,30 @@ However, the key concern is that their construction leverages Coq's
 _proof-relevance_ but I (Joe) believe Lean's type theory is _proof-irrelevant_.
 This needs more investigation.
 
+## L4 class definitions
+
+### Syntax
+```lean runningEg
+syntax
+  "DEFINE" ident "IS" "A" term
+  ("HAS" many1Indent(term "IS" "THE" term ppLine))?
+  : command
+```
+
+### Semantics and implementation
+```lean runningEg
+macro_rules
+| `(DEFINE $id IS A $className)
+=> `(
+  def $id : $className where
+)
+| `(DEFINE $id IS A $className HAS $[$fieldVal:term IS THE $fieldName:ident]*)
+=> `(
+  def $id : $className where
+    $[$fieldName := $fieldVal]*
+)
+```
+
 ## Other types
 
 ### Enum types
@@ -110,7 +135,7 @@ macro_rules
 => `(
   inductive $name where
     $[| $ids:ident]*
-  deriving BEq, Ord
+  deriving BEq, Ord, Hashable, Repr, Lean.FromJson, Lean.ToJson
 )
 ```
 
@@ -224,6 +249,8 @@ OOP and write business rules with them.
 
 ## Classes / record types
 
+### Declaring classes
+
 For example, we can first declare a `Person` clas as follows.
 
 TODO: Find out why using the word "class" breaks syntax highlighting.
@@ -234,9 +261,18 @@ HAS age IS A Int
     bankBalance IS A Int
 ```
 
+### Defining objects
+
+```lean runningEg
+DEFINE bob IS A Person
+HAS 25 IS THE age
+    1000 IS THE bankBalance
+```
+
 TODO: How to get syntax highlighting working? Maybe need to define custom
 elaborator for L4 code blocks.
 
+## Writing constitutive rules
 Next, we can define the following rule,
 which says that given `Person`s `p1` and `p2`,
 `p1` can only transfer money to `p2` if all of the following hold:
@@ -254,6 +290,8 @@ GIVEN
 DECIDE hasMoreMoneyInBankThan OF p1, p2
 IF (p1.bankBalance ≥ p2.bankBalance)
 AND (p2.bankBalance ≥ 0)
+
+#reduce canTransferMoney
 ```
 
 TODO:
@@ -263,6 +301,7 @@ TODO:
     - Potential ambiguous parsing issues.
     - Meta-programming level transformations needed to pattern match on the
       string of the identifier `t's` as in `t's x` to desugar it into `t.x`.
+
 
 ## Enum types
 
