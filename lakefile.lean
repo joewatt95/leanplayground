@@ -21,7 +21,7 @@ require verbose from git
   "https://github.com/PatrickMassot/verbose-lean4"
 
 require auto from git
-  "https://github.com/leanprover-community/lean-auto" @ "main"
+  "https://github.com/leanprover-community/lean-auto" @ "v0.0.5"
 
 require Duper from git
   "https://github.com/leanprover-community/duper" @ "v0.0.5"
