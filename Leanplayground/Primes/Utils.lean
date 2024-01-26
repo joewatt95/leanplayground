@@ -4,7 +4,6 @@ namespace Utils
 --   reprPrec := sorry
 
 section macros
--- Racket-style hygienic macros.
 
 -- Turn a binary operator into an infix one.
 macro:65 arg1:term "<:" op:term ":>" arg2:term : term =>

@@ -1,18 +1,15 @@
 import Auto.Tactic
 import Duper
 import LeanCopilot
-import Mathlib
-
-
-/-
-This file formalises a theory of dates in the language of Presburger arithmetic.
--/
+import Mathlib.Data.Nat.Basic
+import Mathlib.Tactic
 
 namespace Date
 
-abbrev Date :=
+abbrev Date : Set <| ℕ × ℕ × ℕ :=
   {(year, month, day) | is_valid_date year month day}
 where
+  @[reducible]
   is_valid_date year month day :=
     1 ≤ month ∧ month ≤ 12 ∧
     1 ≤ day ∧ day ≤ 31 ∧
@@ -22,6 +19,7 @@ where
     (month = 2 → day ≤ 29) ∧
     (month = 2 ∧ day = 29 → is_leap_year year)
 
+  @[reducible]
   is_leap_year year := year % 400 = 0 ∨ (year % 4 = 0 ∧ year % 100 ≠ 0)
 
 inductive Period
@@ -52,6 +50,8 @@ macro_rules
 syntax "BEFORE" : before_after
 syntax "AFTER" : before_after
 
+-- instance [Repr α] : ToString α := ⟨reprStr⟩
+
 inductive BeforeAfter
   | Before | After
 deriving BEq, Ord, Hashable, Repr
@@ -79,10 +79,13 @@ macro_rules
 | `(date { $year - $month - $day }) =>
   `((⟨($year, $month, $day), by
       simp[Date.is_valid_date, Date.is_leap_year]
-      repeat (first| duper | omega | auto)⟩
+      repeat (first| decide | duper | omega | auto)⟩
     : Date))
 
-#check 3 DAYS AFTER date { 2024 - 2 - 29 }
+-- #check 3 DAYS AFTER date { 2024 - 2 - 29 }
 -- #check 10 YEARS BEFORE date { 2022 - 2 - 29 }
+
+-- example (year : ℕ): Date.is_valid_date year 1 29 := by
+--   auto
 
 end Date

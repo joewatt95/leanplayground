@@ -1,5 +1,6 @@
 import Leanplayground.Primes.LazyList
 import Leanplayground.Primes.Utils
+import Mathlib.Data.Nat.Basic
 
 open LazyList Utils
 
@@ -44,7 +45,7 @@ private def minus : LazyList α → LazyList α → LazyList α
   | _ => default
 | _, _ => default
 
-partial def primes : LazyList Nat :=
+partial def primes : LazyList ℕ :=
   2 L:: oddPrimes ()
   where
     oddPrimes _ :=

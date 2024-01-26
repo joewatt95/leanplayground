@@ -29,16 +29,16 @@ private lemma eq_zero_or_succ : ∀ {n}, n = 0 ∨ ∃ m, n = m + 1
   suffices ∃ m, n + 1 = m + 1 from .inr this
 
   match (eq_zero_or_succ : n = 0 ∨ ∃ m, n = m + 1) with
-  | Or.inl n_eq_zero =>
+  | .inl n_eq_zero =>
     show ∃ m, n + 1 = m + 1 from ⟨0, by rw [n_eq_zero]⟩
 
-  | Or.inr ⟨m, n_eq_m_succ⟩ =>
+  | .inr ⟨m, n_eq_m_succ⟩ =>
     show ∃ m, n + 1 = m + 1 from ⟨m + 1, by rw [n_eq_m_succ]⟩
 
 private lemma leq'_of_leq : ∀ {n}, m leq n → m leq' n
-| _, (Leq.Self : m leq m) =>
+| _, (.Self : m leq m) =>
   show ∃ d, m + d = m from ⟨0, rfl⟩
-| .(_ + 1), (Leq.Succ m_leq_n) =>
+| .(_ + 1), (.Succ m_leq_n) =>
   haveI : m leq' _ := leq'_of_leq m_leq_n
   let ⟨d, h⟩ := this
   haveI : m + (d + 1) = _ + 1 := by rw [←h]; ring
@@ -91,10 +91,10 @@ private lemma Leq.antisymmetric : x leq y → y leq x → x = y
   show x = y by rw [this] at h1; exact h1
 
 private lemma leq_plus : ∀ {b}, a leq a + b
-| 0 => Leq.Self
+| 0 => .Self
 | b + 1 => calc
   a leq a + b     := leq_plus
-  _ leq a + b + 1 := by simp only [leq_iff_leq', add_right_inj, exists_eq]
+  _ leq a + b + 1 := by simp
 
 private lemma eq_zero_of_leq : ∀ {n}, n leq 0 → n = 0
 | 0, _ => rfl
@@ -118,17 +118,17 @@ private lemma leq_plus_of_leq : a leq b → c leq d → a + c leq b + d
 
 private lemma h :
   ∀ {as bs : List α},
-    (∀ (i : Fin as.length), ∃ (j : Fin bs.length), i.val = j) →
+    (∀ (i : Fin as.length), ∃ j : Fin bs.length, i.val = j) →
     as.length ≤ bs.length
 
 | [], _, _ | a :: as, [], _ => by aesop
 
 | a :: as, b :: bs, h =>
   suffices as.length ≤ bs.length from sorry
-  suffices ∀ (i : Fin as.length), ∃ (j : Fin bs.length), i.val = j from sorry
+  suffices ∀ (i : Fin as.length), ∃ j : Fin bs.length, i.val = j from sorry
   λ ⟨i, h_i⟩ ↦
     haveI : as.length < (a :: as).length := by aesop
-    let i' : Fin (a :: as).length := ⟨i, by linarith⟩
+    let i' : Fin (a :: as).length := ⟨i, by omega⟩
     haveI := h i'
     sorry
     -- ⟨⟨i.pred, sorry⟩, sorry⟩
@@ -177,7 +177,7 @@ private lemma leq_sum_of_leq :
 --   sorry
 
 private lemma leq_plus_of_leq' : a leq b → a + c leq b + c :=
-  (leq_plus_of_leq . Leq.Self)
+  (leq_plus_of_leq . .Self)
 
 -- private lemma leq_plus_of_leq : ∀ {x y z}, x leq y → x + z leq y + z
 -- | _, _, 0, x_leq_y => x_leq_y
@@ -197,16 +197,18 @@ private lemma leq_times_of_leq : ∀ {x y z}, x leq y → x * z leq y * z
   sorry
 
 private lemma leq_total : ∀ {x y}, x leq y ∨ y leq x
-| 0, _ => Or.inl zero_leq
-| _, 0 => Or.inr zero_leq
+| 0, _ => .inl zero_leq
+| _, 0 => .inr zero_leq
+
 | x + 1, y + 1 =>
   match (leq_total : x leq y ∨ y leq x) with
-  | Or.inl x_leq_y =>
+  | .inl x_leq_y =>
     haveI : x + 1 leq y + 1 := leq_plus_of_leq' x_leq_y
-    Or.inl this
-  | Or.inr y_leq_x =>
+    .inl this
+
+  | .inr y_leq_x =>
     haveI : y + 1 leq x + 1 := leq_plus_of_leq' y_leq_x
-    Or.inr this
+    .inr this
 
 instance [OfNat α n] : OfNat (Option α) n where
   ofNat := some $ OfNat.ofNat n
