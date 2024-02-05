@@ -15,16 +15,16 @@ require verso from git
   "https://github.com/leanprover/verso" @ "main"
 
 require LeanCopilot from git
-  "https://github.com/lean-dojo/LeanCopilot" @ "v1.1.1"
+  "https://github.com/lean-dojo/LeanCopilot" @ "v1.1.0"
 
 require verbose from git
   "https://github.com/PatrickMassot/verbose-lean4"
 
 require auto from git
-  "https://github.com/leanprover-community/lean-auto" @ "v0.0.6"
+  "https://github.com/leanprover-community/lean-auto" @ "v0.0.5"
 
 require Duper from git
-  "https://github.com/leanprover-community/duper" @ "v0.0.6"
+  "https://github.com/leanprover-community/duper" @ "v0.0.5"
 
 -- require smt from git
 --   "https://github.com/ufmg-smite/lean-smt.git" @ "main"
