@@ -9,22 +9,22 @@ package leanplayground where
   ]
 
 require mathlib from git
-  "https://github.com/leanprover-community/mathlib4" @"v4.5.0"
+  "https://github.com/leanprover-community/mathlib4"
 
 require verso from git
   "https://github.com/leanprover/verso" @ "main"
 
 require LeanCopilot from git
-  "https://github.com/lean-dojo/LeanCopilot" @ "v1.1.0"
+  "https://github.com/lean-dojo/LeanCopilot" @ "v1.1.1"
 
 require verbose from git
   "https://github.com/PatrickMassot/verbose-lean4"
 
 require auto from git
-  "https://github.com/leanprover-community/lean-auto" @ "v0.0.5"
+  "https://github.com/leanprover-community/lean-auto" @ "v0.0.6"
 
 require Duper from git
-  "https://github.com/leanprover-community/duper" @ "v0.0.5"
+  "https://github.com/leanprover-community/duper" @ "v0.0.6"
 
 -- require smt from git
 --   "https://github.com/ufmg-smite/lean-smt.git" @ "main"

@@ -13,7 +13,7 @@ open Verso.Genre.Blog (Post Page label ref lean leanInit leanOutput)
 
 -- set_option pp.rawOnError true
 
-set_option maxRecDepth 600 in
+set_option maxRecDepth 1000 in
 #doc (Page)
   "Syntax, semantics, implementation and end user facing documentation for L4"
 =>
