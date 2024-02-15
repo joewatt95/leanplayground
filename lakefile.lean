@@ -9,7 +9,7 @@ package leanplayground where
   ]
 
 require mathlib from git
-  "https://github.com/leanprover-community/mathlib4"
+  "https://github.com/leanprover-community/mathlib4" @ "v4.6.0-rc1"
 
 require verso from git
   "https://github.com/leanprover/verso" @ "main"
@@ -21,7 +21,7 @@ require verbose from git
   "https://github.com/PatrickMassot/verbose-lean4"
 
 require auto from git
-  "https://github.com/leanprover-community/lean-auto" @ "v0.0.6"
+  "https://github.com/leanprover-community/lean-auto" @ "v4.6.0-rc1"
 
 require Duper from git
   "https://github.com/leanprover-community/duper" @ "v0.0.6"
