@@ -3,7 +3,7 @@ import Leanplayground.Natural4.Test
 -- import Leanplayground.Natural4
 -- import Leanplayground.Primes.PrimeSieve
 
-import Verso.Genre.Blog
+-- import Verso.Genre.Blog
 
 --open Verso Genre Blog Site Syntax in
 -- def main (options : List String) : IO UInt32 := do
