@@ -16,7 +16,7 @@ inductive Leq : (m n : ℕ) → Prop
 infix:50 " leq " => Leq
 
 lemma zero_leq : ∀ {m}, 0 leq m
-| 0 => Leq.Self
+| 0 => .Self
 | m + 1 =>
   haveI : 0 leq m := zero_leq
   show 0 leq m + 1 from this.Succ
@@ -70,8 +70,7 @@ private lemma Leq.transitive : (x leq y) → (y leq z) → x leq z
   haveI : ∃ d, x + d = z := ⟨d1 + d2, by ring_nf; rw [h1, h2]⟩
   show x leq z by rw [←leq_iff_leq'] at this; assumption
 
-instance : Trans Leq Leq Leq where
-  trans := Leq.transitive
+instance : Trans Leq Leq Leq := ⟨Leq.transitive⟩
 
 private lemma Leq.antisymmetric : x leq y → y leq x → x = y
 | x_leq_y, y_leq_x =>
@@ -103,13 +102,13 @@ private lemma leq_plus_of_leq : a leq b → c leq d → a + c leq b + d
 | .Self, .Self => .Self
 
 | .Self, .Succ c_leq => calc
-    a + c leq a + _ := by exact leq_plus_of_leq .Self c_leq
-        _ leq a + _ + 1 := .Succ .Self
+  a + c leq a + _ := by exact leq_plus_of_leq .Self c_leq
+      _ leq a + _ + 1 := .Succ .Self
 
 | .Succ a_leq, .Self => calc
-    a + c leq _ + c := by exact leq_plus_of_leq a_leq .Self
-        _ leq _ + c + 1 := .Succ .Self
-        _ = _ + 1 + c := by ring_nf
+  a + c leq _ + c := by exact leq_plus_of_leq a_leq .Self
+      _ leq _ + c + 1 := .Succ .Self
+      _ = _ + 1 + c := by ring_nf
 
 | .Succ a_leq, .Succ c_leq => calc
   a + c leq _ + _ := by exact leq_plus_of_leq a_leq c_leq
@@ -145,7 +144,7 @@ private lemma leq_sum_of_leq :
   haveI : as.length < (a :: as).length := by aesop
   have : ∀ i, ∃ j, i.val = j.val ∧ as.get i ≤ bs.get j
     | ⟨i, _⟩ =>
-      let ⟨⟨i, h_i⟩, _, h⟩ := h ⟨i, by linarith⟩
+      let ⟨⟨i, h_i⟩, _, h⟩ := h ⟨i, by omega⟩
       match i with
       | 0 => sorry
       | i + 1 =>

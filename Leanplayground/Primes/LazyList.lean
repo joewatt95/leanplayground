@@ -257,7 +257,7 @@ partial def iterate (f : α → α) (x : α) : LazyList α :=
   x L:: iterate f <| f x
 
 -- This says that iterate produces infinite lists.
-theorem thm2 {x : α}
+theorem thm_iterate {x : α}
 -- We need an extra hypothesis that iterate is equal to its definition.
 -- This is because it's a partial function which we can't prove will always
 -- terminate properly.
@@ -280,7 +280,7 @@ theorem thm2 {x : α}
     (iterate f x |>.take (n + 1) |>.length)
     = (x :: ((iterate f <| f x) |>.take n) |>.length) := congrArg List.length this
   _ = ((iterate f <| f x) |>.take n |>.length) + 1 := rfl
-  _ = n + 1 := congrArg (. + 1) <| thm2 h _
+  _ = n + 1 := congrArg (. + 1) <| thm_iterate h _
 
 -- #eval iterate (. + 1) 0 |>.map (. + 1) |>.take 5
 -- #eval L[x + 1 | for x in iterate id 0] |>.take 5

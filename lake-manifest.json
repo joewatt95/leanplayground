@@ -85,7 +85,7 @@
   {"url": "https://github.com/PatrickMassot/verbose-lean4",
    "type": "git",
    "subDir": null,
-   "rev": "d1603d09d6b490867a10ef25505516ac57bd43f2",
+   "rev": "3c49648eb4151626143b6a45234d6f13ae7582d0",
    "name": "verbose",
    "manifestFile": "lake-manifest.json",
    "inputRev": null,
