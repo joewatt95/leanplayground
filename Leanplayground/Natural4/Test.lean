@@ -51,7 +51,7 @@ GIVEN
   p2 IS A Party
 DECIDE canTransfer OF p1, n, p2
 IF
-  letI p1NEp2 := p1 ≠ p2
+  let p1NEp2 := p1 ≠ p2
   (p1.bankBalance ≥ n) AND p1NEp2
 
 -- DECIDE isLender IF (Party.role OF p) EQUALS Role.Lender
@@ -144,7 +144,7 @@ def WebForm : Type :=
     -- if _ : claimType == ClaimType.Accident
     -- then AccidentForm
     -- else
-    --   haveI : claimType == ClaimType.Illness := by cases claimType; repeat aesop
+    --   have : claimType == ClaimType.Illness := by cases claimType; repeat aesop
     --   IllnessForm
 
 #reduce WebForm

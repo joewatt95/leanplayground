@@ -25,16 +25,16 @@ macro "define" id:ident "as" term:term "," body:term : term =>
 syntax ("[" ident "]")? "we" "have" term "," "because" term "," term : term
 macro_rules
 | `(we have $type, because $term, $body)
-=> `(haveI : $type := $term; $body)
+=> `(have : $type := $term; $body)
 | `([ $id ] we have $type, because $term, $body)
-=> `(haveI $id : $type := $term; $body)
+=> `(have $id : $type := $term; $body)
 
 syntax ("[" ident "]")? "we" "have" term "," "by" tactic "," term : term
 macro_rules
 | `(we have $type, by $tactic, $body)
-=> `(haveI : $type := by { $tactic }; $body)
+=> `(have : $type := by { $tactic }; $body)
 | `([ $id ] we have $type, by $tactic, $body)
-=> `(haveI $id : $type := by { $tactic }; $body)
+=> `(have $id : $type := by { $tactic }; $body)
 
 notation "finally" "we" "have" type "," "because" term =>
   show type from term
@@ -156,7 +156,7 @@ theorem forall_exists_iff_exists_forall {R : α → β → Prop} :
 theorem distrib {S : α → β → Set U} :
   ⋂ a, ⋃ b, S a b = ⋃ f : _ → _, ⋂ a, S a (f a) :=
 
-  haveI (x) := calc
+  have (x) := calc
         x ∈ ⋂ a, ⋃ b, S a b
       ↔ ∀ a, ∃ b, x ∈ S a b              := by simp
     _ ↔ ∃ f : _ → _, ∀ a, x ∈ S a (f a)  := forall_exists_iff_exists_forall
