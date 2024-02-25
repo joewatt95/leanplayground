@@ -26,6 +26,9 @@ require auto from git
 require Duper from git
   "https://github.com/leanprover-community/duper" @ "v0.0.6"
 
+require loogle from git
+  "https://github.com/nomeata/loogle"
+
 -- require smt from git
 --   "https://github.com/ufmg-smite/lean-smt.git" @ "main"
 
