@@ -21,7 +21,7 @@ require verso from git
     @ "77540864f089f12017a6aa2585b31130271bc111"
 
 require LeanCopilot from git
-  "https://github.com/lean-dojo/LeanCopilot" @ "v1.1.1"
+  "https://github.com/lean-dojo/LeanCopilot" @ "v1.1.2"
 
 require verbose from git
   "https://github.com/PatrickMassot/verbose-lean4"
