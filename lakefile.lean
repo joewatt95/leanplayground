@@ -14,18 +14,18 @@ lean_lib Leanplayground where
 
 require mathlib from git
   "https://github.com/leanprover-community/mathlib4"
-    @ "dad5e8c449e037e72c9890baa70a85b2a307db68"
+    @ "v4.6.0"
 
 require verso from git
   "https://github.com/leanprover/verso"
-    @ "77540864f089f12017a6aa2585b31130271bc111"
+    @ "3e44cd7cb8b2e757a4aa57c3a6f5a51e058c3db0"
 
-require LeanCopilot from git
-  "https://github.com/lean-dojo/LeanCopilot" @ "v1.1.2"
+-- require LeanCopilot from git
+--   "https://github.com/lean-dojo/LeanCopilot" @ "v1.1.2"
 
 require verbose from git
   "https://github.com/PatrickMassot/verbose-lean4"
-    @ "3c49648eb4151626143b6a45234d6f13ae7582d0"
+    @ "312b53abc724fe1eed2f1f9f4e570b30a59b501d"
 
 require auto from git
   "https://github.com/leanprover-community/lean-auto" @ "v0.0.7"
@@ -35,7 +35,7 @@ require Duper from git
 
 require loogle from git
   "https://github.com/nomeata/loogle"
-    @ "c6903e48f1441118b6d27489d884eb0893278e2f"
+    @ "b266dac0429b598e76979b20441c4ddc737fe894"
 
 -- require smt from git
 --   "https://github.com/ufmg-smite/lean-smt.git" @ "main"

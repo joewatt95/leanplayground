@@ -1,4 +1,4 @@
-import LeanCopilot
+-- import LeanCopilot
 
 import Mathlib.Algebra.Group.Defs
 import Mathlib.Data.List.Basic

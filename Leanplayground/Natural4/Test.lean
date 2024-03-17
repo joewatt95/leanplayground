@@ -5,7 +5,7 @@ import Leanplayground.Natural4.Attrs
 import Leanplayground.Natural4.Commands
 import Leanplayground.Natural4.Dynamics
 
-import LeanCopilot
+-- import LeanCopilot
 
 -- import Smt
 

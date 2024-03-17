@@ -1,6 +1,6 @@
 import Auto.Tactic
 import Duper
-import LeanCopilot
+-- import LeanCopilot
 import Mathlib.Data.Nat.Basic
 import Mathlib.Tactic
 
@@ -72,7 +72,7 @@ set_option auto.smt.solver.name "z3"
 set_option trace.auto.smt.printCommands true
 set_option trace.auto.smt.result true
 
-#configure_llm_aesop
+-- #configure_llm_aesop
 
 syntax "date" "{" term  "}": term
 macro_rules
