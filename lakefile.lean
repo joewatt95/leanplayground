@@ -3,18 +3,17 @@ open Lake DSL
 
 package leanplayground where
   -- add any package configuration options here
-  moreLinkArgs := #[
-    "-L./.lake/packages/LeanCopilot/.lake/build/lib",
-    "-lctranslate2"
-  ]
+  -- moreLinkArgs := #[
+  --   "-L./.lake/packages/LeanCopilot/.lake/build/lib",
+  --   "-lctranslate2"
+  -- ]
 
 @[default_target]
 lean_lib Leanplayground where
   -- add any library configuration options here
 
 require mathlib from git
-  "https://github.com/leanprover-community/mathlib4"
-    @ "v4.6.0"
+  "https://github.com/leanprover-community/mathlib4" @ "v4.6.1"
 
 require verso from git
   "https://github.com/leanprover/verso"
