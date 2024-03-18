@@ -46,12 +46,12 @@ private lemma leq'_of_leq : ∀ {n}, m leq n → m leq' n
 
 private lemma leq_of_leq' : ∀ {n}, (∃ d, m + d = n) → m leq n
 | n, ⟨0, h⟩ =>
-  have : m = n := by simp at h; exact h
+  have : m = n := by simp only [add_zero] at h ; exact h
   show m leq n by rw [this]; exact Leq.Self
 
 | n + 1, ⟨d + 1, h⟩ =>
   have : (m + d) + 1 = n + 1 := by rw [add_assoc, h]
-  have : ∃ d, m + d = n := ⟨d, by simp at this; assumption⟩
+  have : ∃ d, m + d = n := ⟨d, by simp only [add_left_inj] at this ; assumption⟩
   have : m leq n := leq_of_leq' this
   show m leq n + 1 from this.Succ
 
@@ -64,9 +64,9 @@ private lemma Leq.reflexive : x leq x := Leq.Self
 private lemma Leq.transitive : (x leq y) → (y leq z) → x leq z
 | x_leq_y, y_leq_z =>
   have ⟨d1, h1⟩ : ∃ d1, x + d1 = y :=
-    by simp [leq_iff_leq'] at x_leq_y; assumption
+    by simp only [leq_iff_leq'] at x_leq_y ; assumption
   have ⟨d2, h2⟩ : ∃ d2, y + d2 = z :=
-    by simp [leq_iff_leq'] at y_leq_z; assumption
+    by simp only [leq_iff_leq'] at y_leq_z ; assumption
   have : ∃ d, x + d = z := ⟨d1 + d2, by ring_nf; rw [h1, h2]⟩
   show x leq z by rw [←leq_iff_leq'] at this; assumption
 
@@ -75,9 +75,9 @@ instance : Trans Leq Leq Leq := ⟨Leq.transitive⟩
 private lemma Leq.antisymmetric : x leq y → y leq x → x = y
 | x_leq_y, y_leq_x =>
   have ⟨d1, h1⟩ : ∃ d1, x + d1 = y :=
-    by simp [leq_iff_leq'] at x_leq_y; assumption
+    by simp only [leq_iff_leq'] at x_leq_y ; assumption
   have ⟨d2, h2⟩ : ∃ d2, y + d2 = x :=
-    by simp [leq_iff_leq'] at y_leq_x; assumption
+    by simp only [leq_iff_leq'] at y_leq_x ; assumption
   have : x + (d1 + d2) = x := by rw [←h1] at h2; ring_nf; assumption
   have : d1 + d2 = 0 := Nat.add_left_cancel this
   have : d1 = 0 :=
@@ -85,7 +85,11 @@ private lemma Leq.antisymmetric : x leq y → y leq x → x = y
     | .inl d1_eq_zero => d1_eq_zero
     | .inr ⟨d, d1_eq_d_succ⟩ =>
       suffices ⊥ from this.elim
-      have : d + d2 + 1 = 0 := by ring_nf; simp [d1_eq_d_succ] at this
+      have : d + d2 + 1 = 0 := by
+        ring_nf
+        simp only
+          [d1_eq_d_succ, add_eq_zero, one_ne_zero, and_false, false_and]
+          at this
       show ⊥ from Nat.succ_ne_zero _ this
   show x = y by rw [this] at h1; exact h1
 
@@ -93,7 +97,7 @@ private lemma leq_plus : ∀ {b}, a leq a + b
 | 0 => .Self
 | b + 1 => calc
   a leq a + b     := leq_plus
-  _ leq a + b + 1 := by simp
+  _ leq a + b + 1 := by simp only [leq_iff_leq', add_right_inj, exists_eq]
 
 private lemma eq_zero_of_leq : ∀ {n}, n leq 0 → n = 0
 | 0, _ => rfl
@@ -113,7 +117,9 @@ private lemma leq_plus_of_leq : a leq b → c leq d → a + c leq b + d
 | .Succ a_leq, .Succ c_leq => calc
   a + c leq _ + _ := by exact leq_plus_of_leq a_leq c_leq
       _ leq _ + _ + 2 := leq_plus
-      _ = _ + 1 + _ + 1 := by simp; ring_nf
+      _ = _ + 1 + _ + 1 := by
+        simp only [Nat.add_eq, add_zero, Nat.succ.injEq]
+        ring_nf
 
 private lemma h :
   ∀ {as bs : List α},
@@ -121,7 +127,6 @@ private lemma h :
     as.length ≤ bs.length
 
 | [], _, _ | a :: as, [], _ => by aesop
-
 | a :: as, b :: bs, h =>
   suffices as.length ≤ bs.length from sorry
   suffices ∀ (i : Fin as.length), ∃ j : Fin bs.length, i.val = j from sorry
@@ -312,10 +317,11 @@ theorem hh {n} : ∃ k, n * (n + 1) * (n + 2) = 3 * k :=
 theorem well_ordering_principle {S : Set ℕ} (h_S_non_empty : ∃ x, x ∈ S) :
   ∃ x ∈ S, ∀ y ∈ S, x ≤ y := sorry
 
-theorem quot_rem {n d} (d_pos : d > 0)
+theorem quot_rem {n d} (h_d_pos : d > 0)
 : ∃ q, ∃ r < d, n = d * q + r :=
   let S := {r | ∃ q, n = d * q + r}
-  have : ∃ r, r ∈ S := ⟨n, by simp⟩
+  have : ∃ r, r ∈ S :=
+    ⟨n, by simp only [Set.mem_setOf_eq, self_eq_add_left, mul_eq_zero, exists_or_eq_right]⟩
 
   have ⟨
     r₀,
@@ -330,10 +336,10 @@ theorem quot_rem {n d} (d_pos : d > 0)
     have := calc
       n + d = (d * q₀) + r₀ + d := by rw [h_n_eq_d_q₀_r₀]
           _ = d * (q₀ + 1) + r₀ := by ring
-    have : n = d * (q₀ + 1) + (r₀ - d) := by omega
+    have : n = d * (q₀ + 1) + r₀ - d := by omega
     have : r₀ - d ∈ S := ⟨q₀ + 1, by omega⟩
     have : r₀ ≤ r₀ - d := h_r₀_minimal_in_S _ this
-    have : d ≤ 0 ∧ d > 0:= ⟨by omega, d_pos⟩
+    have : d ≤ 0 ∧ d > 0:= ⟨by omega, h_d_pos⟩
     show ⊥ by omega
 
 end MyNat

@@ -6,7 +6,7 @@ import Mathlib.Tactic
 
 namespace Date
 
-abbrev Date : Set <| ℕ × ℕ × ℕ :=
+abbrev Date :=
   {(year, month, day) | is_valid_date year month day}
 where
   @[reducible]
@@ -67,7 +67,7 @@ infix:65 "AFTER" => BeforeAfterDate.mk BeforeAfter.After
 
 set_option auto.smt true
 set_option auto.smt.trust true
-set_option auto.smt.solver.name "z3"
+-- set_option auto.smt.solver.name "z3"
 
 set_option trace.auto.smt.printCommands true
 set_option trace.auto.smt.result true
@@ -79,13 +79,16 @@ macro_rules
 | `(date { $year - $month - $day }) =>
   `((⟨($year, $month, $day), by
       simp[Date.is_valid_date, Date.is_leap_year]
-      repeat (first| decide | duper | omega | auto)⟩
+      repeat (first| omega | duper | auto)⟩
     : Date))
 
 -- #check 3 DAYS AFTER date { 2024 - 2 - 29 }
 -- #check 10 YEARS BEFORE date { 2022 - 2 - 29 }
 
--- example (year : ℕ): Date.is_valid_date year 1 29 := by
---   auto
+example
+  (_ : 1 ≤ month ∧ month ≤ 12)
+  (_ : 1 ≤ day ∧ day ≤ 28)
+  : Date.is_valid_date year month day := by
+  omega
 
 end Date
