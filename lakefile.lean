@@ -17,14 +17,14 @@ require mathlib from git
 
 require verso from git
   "https://github.com/leanprover/verso"
-    @ "3e44cd7cb8b2e757a4aa57c3a6f5a51e058c3db0"
+    @ "f325880d52ae21ae053e6439d465fcf0b23d903b"
 
 -- require LeanCopilot from git
 --   "https://github.com/lean-dojo/LeanCopilot" @ "v1.1.2"
 
 require verbose from git
   "https://github.com/PatrickMassot/verbose-lean4"
-    @ "312b53abc724fe1eed2f1f9f4e570b30a59b501d"
+    @ "5fcaebf576d110067601099234a110a8ee2a9173"
 
 require auto from git
   "https://github.com/leanprover-community/lean-auto" @ "v0.0.7"
