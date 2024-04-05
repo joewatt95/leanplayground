@@ -18,7 +18,7 @@ require mathlib from git
 
 require verso from git
   "https://github.com/leanprover/verso"
-    @ "7e56494bbedb702fa3d2aed6ccabcb1e6b867721"
+    @ "1428bd0ee7dd76f63315aaa77953aac5adcc4c0b"
 
 require LeanCopilot from git
   "https://github.com/lean-dojo/LeanCopilot" @ "v1.2.0"
