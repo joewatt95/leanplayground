@@ -321,7 +321,7 @@ theorem quot_rem {n d} (h_d_pos : d > 0)
 : ∃ q, ∃ r < d, n = d * q + r :=
   let S := {r | ∃ q, n = d * q + r}
   have : ∃ r, r ∈ S :=
-    ⟨n, by simp only [Set.mem_setOf_eq, self_eq_add_left, mul_eq_zero, exists_or_eq_right]⟩
+    ⟨n, by aesop⟩
 
   have ⟨
     r₀,

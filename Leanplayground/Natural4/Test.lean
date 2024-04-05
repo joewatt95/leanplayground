@@ -1,5 +1,5 @@
 import Lean
-import Mathlib.Data.List.BigOperators.Defs
+import Mathlib.Algebra.BigOperators.List.Defs
 
 import Leanplayground.Natural4.Attrs
 import Leanplayground.Natural4.Commands
@@ -147,7 +147,7 @@ def WebForm : Type :=
     --   have : claimType == ClaimType.Illness := by cases claimType; repeat aesop
     --   IllnessForm
 
-#reduce WebForm
+-- #reduce WebForm
 
 -- open Cardinal
 
