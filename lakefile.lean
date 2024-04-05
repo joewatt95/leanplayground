@@ -3,10 +3,10 @@ open Lake DSL
 
 package leanplayground where
   -- add any package configuration options here
-  -- moreLinkArgs := #[
-  --   "-L./.lake/packages/LeanCopilot/.lake/build/lib",
-  --   "-lctranslate2"
-  -- ]
+  moreLinkArgs := #[
+    "-L./.lake/packages/LeanCopilot/.lake/build/lib",
+    "-lctranslate2"
+  ]
 
 @[default_target]
 lean_lib Leanplayground where
