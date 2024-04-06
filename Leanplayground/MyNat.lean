@@ -320,8 +320,7 @@ theorem well_ordering_principle {S : Set ℕ} (h_S_non_empty : ∃ x, x ∈ S) :
 theorem quot_rem {n d} (h_d_pos : d > 0)
 : ∃ q, ∃ r < d, n = d * q + r :=
   let S := {r | ∃ q, n = d * q + r}
-  have : ∃ r, r ∈ S :=
-    ⟨n, by aesop⟩
+  have : ∃ r, r ∈ S := ⟨n, by aesop⟩
 
   have ⟨
     r₀,
