@@ -1,5 +1,5 @@
 import Lean
-import Mathlib.Algebra.BigOperators.List.Defs
+import Mathlib.Algebra.BigOperators.List.Basic
 
 import Leanplayground.Natural4.Attrs
 import Leanplayground.Natural4.Commands
