@@ -2,7 +2,6 @@
 
 import Mathlib.Algebra.Group.Defs
 import Mathlib.Data.List.Basic
-import Mathlib.Data.Nat.Basic
 import Mathlib.Tactic
 
 import Std.Data.List.Lemmas

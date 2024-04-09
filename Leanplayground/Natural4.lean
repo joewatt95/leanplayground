@@ -3,7 +3,7 @@ import Auto.Tactic
 import Duper
 import Lean.Data.Json
 -- import LeanCopilot
-import Mathlib.Algebra.BigOperators.List.Defs
+import Mathlib.Algebra.BigOperators.List.Basic
 import Mathlib.Tactic.SlimCheck
 
 import Verso.Genre.Blog

@@ -1,7 +1,7 @@
 import Auto.Tactic
 import Duper
 -- import LeanCopilot
-import Mathlib.Data.Nat.Basic
+-- import Mathlib.Data.Nat.Basic
 import Mathlib.Tactic
 
 namespace Date
