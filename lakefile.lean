@@ -14,7 +14,7 @@ lean_lib Leanplayground where
 
 require mathlib from git
   "https://github.com/leanprover-community/mathlib4"
-    @ "9ebc624274b89929620d773a6bca0de2a794d02f"
+    @ "60650e9049f2cf9ae720f521ef136045f72ccb3f"
 
 require verso from git
   "https://github.com/leanprover/verso"
