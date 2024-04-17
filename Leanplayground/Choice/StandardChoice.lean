@@ -153,9 +153,9 @@ private lemma exists_forall_of_forall_exists {R : α → β → Prop}
   -- because it is witnessed by a ↦ f a |>.val and h
 
 private lemma forall_exists_of_exists_forall {R : α → β → Prop}
-  (h : ∃ f : _ → _, ∀ a, R a (f a)) : ∀ a, ∃ b, R a b
-  | a =>
-    have ⟨f, hf⟩ := h
+  (h : ∃ f : _ → _, ∀ a, R a (f a)) : ∀ a, ∃ b, R a b :=
+  have ⟨f, hf⟩ := h
+  λ a ↦
     have : R a <| f a := hf a
     show ∃ b, R a b from ⟨f a, this⟩
 
