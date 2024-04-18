@@ -37,11 +37,11 @@ private lemma eq_zero_or_succ : ∀ {n}, n = 0 ∨ ∃ m, n = m + 1
 private lemma leq'_of_leq : ∀ {n}, m leq n → m leq' n
 | _, (.Self : m leq m) =>
   show ∃ d, m + d = m from ⟨0, rfl⟩
-| .(_ + 1), (.Succ m_leq_n) =>
-  have : m leq' _ := leq'_of_leq m_leq_n
+| .(_ + 1), (@Leq.Succ m n m_leq_n) =>
+  have : m leq' n := leq'_of_leq m_leq_n
   let ⟨d, h⟩ := this
-  have : m + (d + 1) = _ + 1 := by rw [←h]; ring
-  show ∃ d, m + d = _ + 1 from ⟨d + 1, this⟩
+  have : m + (d + 1) = n + 1 := by rw [←h]; ring
+  show ∃ d, m + d = n + 1 from ⟨d + 1, this⟩
 
 private lemma leq_of_leq' : ∀ {n}, (∃ d, m + d = n) → m leq n
 | n, ⟨0, h⟩ =>
@@ -104,19 +104,19 @@ private lemma eq_zero_of_leq : ∀ {n}, n leq 0 → n = 0
 private lemma leq_plus_of_leq : a leq b → c leq d → a + c leq b + d
 | .Self, .Self => .Self
 
-| .Self, .Succ c_leq => calc
-  a + c leq a + _ := by exact leq_plus_of_leq .Self c_leq
-      _ leq a + _ + 1 := .Succ .Self
+| .Self, @Leq.Succ c d c_leq_d => calc
+  a + c leq a + d := by exact leq_plus_of_leq .Self c_leq_d
+      _ leq a + d + 1 := .Succ .Self
 
-| .Succ a_leq, .Self => calc
-  a + c leq _ + c := by exact leq_plus_of_leq a_leq .Self
-      _ leq _ + c + 1 := .Succ .Self
-      _ = _ + 1 + c := by ring_nf
+| @Leq.Succ a b a_leq_b, .Self => calc
+  a + c leq b + c := by exact leq_plus_of_leq a_leq_b .Self
+      _ leq b + c + 1 := .Succ .Self
+      _ = b + 1 + c := by ring_nf
 
-| .Succ a_leq, .Succ c_leq => calc
-  a + c leq _ + _ := by exact leq_plus_of_leq a_leq c_leq
-      _ leq _ + _ + 2 := leq_plus
-      _ = _ + 1 + _ + 1 := by
+| @Leq.Succ a b a_leq_b, @Leq.Succ c d c_leq_d => calc
+  a + c leq b + d := by exact leq_plus_of_leq a_leq_b c_leq_d
+      _ leq b + d + 2 := leq_plus
+      _ = b + 1 + d + 1 := by
         simp only [Nat.add_eq, add_zero, Nat.succ.injEq]
         ring_nf
 
