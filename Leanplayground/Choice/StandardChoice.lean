@@ -124,7 +124,7 @@ theorem choice
 private lemma exists_forall_of_forall_exists {R : α → β → Prop}
   (h : ∀ a, ∃ b, R a b) : ∃ f : _ → _, ∀ a, R a (f a) :=
   let σ a := {b | R a b}
-  have : ∀ a, Nonempty $ σ a
+  have : ∀ a, Nonempty <| σ a
     | a =>
       have : ∃ b, R a b := h a
       show Nonempty {b | R a b} from Utils.nonempty_subtype_iff_exists.mpr this
