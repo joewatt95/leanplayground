@@ -131,10 +131,8 @@ private lemma exists_forall_of_forall_exists {R : α → β → Prop}
   have : Nonempty <| (a : α) → σ a := choice this
 
   let f : (a : α) → σ a := Classical.choice this
-  have : ∀ a, R a (f a)
-    | a => f a |>.prop
-  show ∃ f: _ → _, ∀ a, R a (f a) from
-    ⟨λ a ↦ f a |>.val, this⟩
+  have : ∀ a, R a (f a) := (f . |>.prop)
+  show ∃ f: _ → _, ∀ a, R a (f a) from ⟨(f .), this⟩
 
   -- define σ as a ∈ α ↦ {b ∈ β | (a, b) ∈ R},
 
