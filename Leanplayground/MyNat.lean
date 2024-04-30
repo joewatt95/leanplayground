@@ -50,7 +50,7 @@ private lemma leq_of_leq' : ∀ {n}, (∃ d, m + d = n) → m leq n
 
 | n + 1, ⟨d + 1, h⟩ =>
   have : (m + d) + 1 = n + 1 := by rw [add_assoc, h]
-  have : ∃ d, m + d = n := ⟨d, by simp only [add_left_inj] at this ; assumption⟩
+  have : ∃ d, m + d = n := ⟨d, by simp only [add_left_inj] at this; assumption⟩
   have : m leq n := leq_of_leq' this
   show m leq n + 1 from this.Succ
 
