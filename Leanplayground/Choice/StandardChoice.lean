@@ -175,7 +175,6 @@ theorem forall_exists_iff_exists_forall {R : α → β → Prop} :
 
 theorem distrib {S : α → β → Set U} :
   ⋂ a, ⋃ b, S a b = ⋃ f : _ → _, ⋂ a, S a (f a) :=
-
   have := λ x ↦ calc
         x ∈ ⋂ a, ⋃ b, S a b
       ↔ ∀ a, ∃ b, x ∈ S a b

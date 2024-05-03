@@ -3,6 +3,7 @@ import Leanplayground.Natural4.Test
 import Leanplayground.Choice.StandardChoice
 import Leanplayground.Logic
 import Leanplayground.MyNat
+import Leanplayground.MathInLean
 
 -- import Leanplayground.Natural4
 -- import Leanplayground.Primes.PrimeSieve
