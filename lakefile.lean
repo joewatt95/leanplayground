@@ -14,7 +14,7 @@ lean_lib Leanplayground where
 
 require mathlib from git
   "https://github.com/leanprover-community/mathlib4"
-    @ "0b522a14d05af74adeb78e7e2853fe288d53d507"
+    @ "f3ca78288e785e4c4219ab0e6a88af33dcb5b85f"
 
 require verso from git
   "https://github.com/leanprover/verso"
@@ -29,7 +29,7 @@ require verbose from git
 
 require auto from git
   "https://github.com/leanprover-community/lean-auto"
-    @ "12e31756e3e97f167493e251165d77569b01c504"
+    @ "c2a2c0a08d7cabd66b4cc2dc2ce2b77b26be2c95"
 
 require Duper from git
   "https://github.com/leanprover-community/duper"
