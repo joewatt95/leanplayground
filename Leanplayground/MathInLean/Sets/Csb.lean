@@ -50,6 +50,7 @@ lemma piecewise_is_surj
 
 end piecewise_inj_surj
 
+open OrderHom OrdinalApprox in
 theorem bij_of_2_inj
   {f : α → β} {g : β → α}
   (f_inj : Injective f) (g_inj : Injective g)
@@ -59,15 +60,15 @@ theorem bij_of_2_inj
     { toFun := λ X ↦ g '' (f '' X ᶜ)ᶜ
       monotone' := λ _X _Y ↦ by aesop }
 
-  let S : Ordinal → Set α := OrdinalApprox.lfpApprox F ∅
-  have ⟨O, _⟩ := OrdinalApprox.lfp_mem_range_lfpApprox F
+  let S : Ordinal → Set α := lfpApprox F ⊥
+  have ⟨O, _⟩ := lfp_mem_range_lfpApprox F
+
   let S₀ := S O
+  have : S₀ = lfp F := by assumption
 
   let h a := if _ : a ∈ S₀ then invFun g a else f a
 
-  have : g '' (f '' S₀ᶜ)ᶜ = S₀ :=
-    have : S₀ = OrderHom.lfp F := by aesop
-    by rw [this]; exact F.map_lfp
+  have : g '' (f '' S₀ᶜ)ᶜ = S₀ := by rw [‹S₀ = lfp F›]; exact F.map_lfp
 
   have g_surj_on : ∀ a ∈ S₀, ∃ b ∈ (f '' S₀ᶜ)ᶜ, g b = a
     | a, _ =>
