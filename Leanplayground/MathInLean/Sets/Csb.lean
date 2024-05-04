@@ -2,7 +2,7 @@ import Mathlib.Data.Set.Lattice
 import Mathlib.Order.FixedPoints
 import Mathlib.SetTheory.Ordinal.FixedPointApproximants
 
-import Loogle.Find
+-- import Loogle.Find
 
 namespace Sets
 
@@ -22,7 +22,7 @@ lemma piecewise_is_inj
   (f_inj : InjOn f X)
   (g_inj : InjOn g Xᶜ)
   (f_inter_g_empty : f '' X ∩ g '' Xᶜ = ∅)
-  : Injective $ @h _ _ f g X
+  : Injective <| @h _ _ f g X
   | a, a', (_ : h a = h a') =>
     have : (a ∈ X ∧ a' ∈ X) ∨ (a ∉ X ∧ a' ∉ X) → a = a' := by aesop
 
@@ -40,7 +40,7 @@ lemma piecewise_is_inj
 
 lemma piecewise_is_surj
   (f_union_g_eq_univ : f '' X ∪ g '' Xᶜ = univ)
-  : Surjective $ @h _ _ f g X
+  : Surjective <| @h _ _ f g X
   | b =>
     have : b ∈ f '' X ∪ g '' Xᶜ := by aesop
     match this with
@@ -58,47 +58,52 @@ theorem bij_of_2_inj
       monotone' := λ _X _Y ↦ by aesop }
 
   let S : Ordinal → Set α := OrdinalApprox.lfpApprox F ∅
-  let ⟨O, _⟩ := OrdinalApprox.lfp_mem_range_lfpApprox F
-  let h a := if _ : a ∈ S O then invFun g a else f a
+  have ⟨O, _⟩ := OrdinalApprox.lfp_mem_range_lfpApprox F
+  let S₀ := S O
 
-  have : S O = OrderHom.lfp F := by aesop
-  have : g '' (f '' (S O)ᶜ)ᶜ = S O := by rw [this]; exact F.map_lfp
+  let h a := if _ : a ∈ S₀ then invFun g a else f a
 
-  have g_surjects {a} (_ : a ∈ S O) : ∃ b ∈ (f '' (S O)ᶜ)ᶜ, g b = a :=
-    have : a ∈ g '' (f '' (S O)ᶜ)ᶜ := by aesop
+  have := calc
+        g '' (f '' S₀ᶜ)ᶜ
+      = g '' (f '' (OrderHom.lfp F)ᶜ)ᶜ := by aesop
+    _ = OrderHom.lfp F                 := by exact F.map_lfp
+    _ = S₀                             := by aesop
+
+  have g_surjects {a} (_ : a ∈ S₀) : ∃ b ∈ (f '' S₀ᶜ)ᶜ, g b = a :=
+    have : a ∈ g '' (f '' S₀ᶜ)ᶜ := by aesop
     by rw [←mem_image]; exact this
 
   have : LeftInverse (invFun g) g := leftInverse_invFun g_inj
   have := calc
-        (f '' (S O)ᶜ)ᶜ
-      = invFun g '' (g '' (f '' (S O)ᶜ)ᶜ) := by rw [this.image_image]
-    _ = invFun g '' S O                   := by aesop
+        (f '' S₀ᶜ)ᶜ
+      = invFun g '' (g '' (f '' S₀ᶜ)ᶜ)  := by rw [this.image_image]
+    _ = invFun g '' S₀                  := by aesop
 
-  have : Surjective h := piecewise_is_surj $ calc
-        invFun g '' S O ∪ f '' (S O)ᶜ
-      = (f '' (S O)ᶜ)ᶜ ∪ f '' (S O)ᶜ := by aesop
-    _ = univ                         := by ext _; simp only [compl_union_self, mem_univ]
+  have : Surjective h := piecewise_is_surj <| calc
+        invFun g '' S₀ ∪ f '' S₀ᶜ
+      = (f '' S₀ᶜ)ᶜ ∪ f '' S₀ᶜ    := by aesop
+    _ = univ                      := by ext _; simp only [compl_union_self, mem_univ]
 
   have : Injective h :=
-    have : InjOn f (S O)ᶜ := λ _a _ _a' _ ↦ by aesop
-
     have := calc
-          invFun g '' S O ∩ f '' (S O)ᶜ
-      _ = (f '' (S O)ᶜ)ᶜ ∩ f '' (S O)ᶜ := by aesop
-      _ = ∅                            := by ext _; simp only [compl_inter_self, mem_empty_iff_false]
+          invFun g '' S₀ ∩ f '' S₀ᶜ
+      _ = (f '' S₀ᶜ)ᶜ ∩ f '' S₀ᶜ    := by aesop
+      _ = ∅                         := by ext _; simp only [compl_inter_self, mem_empty_iff_false]
 
-    have : InjOn (invFun g) $ S O
-      | a, (_ : a ∈ S O), a', (_ : a' ∈ S O),
-        (_ : invFun g a = invFun g a') =>
-        have ⟨b, _, _⟩ : ∃ b ∈ (f '' (S O)ᶜ)ᶜ, g b = a := g_surjects ‹a ∈ S O›
-        have ⟨b', _, _⟩ : ∃ b' ∈ (f '' (S O)ᶜ)ᶜ, g b' = a' := g_surjects ‹a' ∈ S O›
+    have : InjOn f S₀ᶜ := λ _a _ _a' _ ↦ by aesop
+
+    have : InjOn (invFun g) S₀ :=
+      λ a (_ : a ∈ S₀) a' (_ : a' ∈ S₀) (_ : invFun g a = invFun g a') ↦
+        have ⟨b, _, _⟩ : ∃ b ∈ (f '' S₀ᶜ)ᶜ, g b = a := g_surjects ‹a ∈ S₀›
+        have ⟨b', _, _⟩ : ∃ b' ∈ (f '' S₀ᶜ)ᶜ, g b' = a' := g_surjects ‹a' ∈ S₀›
+        have := ‹LeftInverse (invFun g) g›
         calc
           a = g b                 := by aesop
-          _ = g (invFun g $ g b)  := by exact congr_arg _ $ Eq.symm $ ‹LeftInverse (invFun g) g› _
+          _ = g (invFun g $ g b)  := by exact b |> this |>.symm |> congr_arg g
           _ = g (invFun g a)      := by aesop
           _ = g (invFun g a')     := by aesop
           _ = g (invFun g $ g b') := by aesop
-          _ = g b'                := by exact congr_arg _ $ ‹LeftInverse (invFun g) g› _
+          _ = g b'                := by exact b' |> this |> congr_arg g
           _ = a'                  := by aesop
 
     show Injective h by apply piecewise_is_inj; repeat assumption
