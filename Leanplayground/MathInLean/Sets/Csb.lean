@@ -95,11 +95,11 @@ theorem bij_of_2_inj
         have ⟨b', _, _⟩ : ∃ b' ∈ (f '' (S O)ᶜ)ᶜ, g b' = a' := g_surjects ‹a' ∈ S O›
         calc
           a = g b                 := by aesop
-          _ = g (invFun g $ g b)  := by exact congr rfl $ Eq.symm $ ‹LeftInverse (invFun g) g› b
+          _ = g (invFun g $ g b)  := by exact congr_arg _ $ Eq.symm $ ‹LeftInverse (invFun g) g› _
           _ = g (invFun g a)      := by aesop
           _ = g (invFun g a')     := by aesop
           _ = g (invFun g $ g b') := by aesop
-          _ = g b'                := by exact congr rfl $ ‹LeftInverse (invFun g) g› b'
+          _ = g b'                := by exact congr_arg _ $ ‹LeftInverse (invFun g) g› _
           _ = a'                  := by aesop
 
     by apply piecewise_is_inj; repeat assumption
