@@ -72,8 +72,8 @@ theorem bij_of_2_inj
 
   have g_surj_on : ∀ a ∈ S₀, ∃ b ∈ (f '' S₀ᶜ)ᶜ, g b = a
     | a, _ =>
-        have : a ∈ g '' (f '' S₀ᶜ)ᶜ := by aesop
-        by simp only [mem_image] at this; exact this
+      have : a ∈ g '' (f '' S₀ᶜ)ᶜ := by aesop
+      by simp only [mem_image] at this; exact this
 
   have g_inv_left_inv : LeftInverse (invFun g) g := leftInverse_invFun g_inj
 
