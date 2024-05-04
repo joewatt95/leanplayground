@@ -1,4 +1,3 @@
-import Duper
 import Mathlib.Data.Set.Lattice
 import Mathlib.Order.FixedPoints
 import Mathlib.SetTheory.Ordinal.FixedPointApproximants
@@ -37,7 +36,7 @@ lemma piecewise_is_inj
         _ ∈ f '' X ∩ g '' Xᶜ := by exact ⟨by aesop, by aesop⟩
         _ = ∅                := by assumption
 
-    show a = a' by duper [*]
+    show a = a' by aesop
 
 lemma piecewise_is_surj
   (f_union_g_eq_univ : f '' X ∪ g '' Xᶜ = univ)
@@ -102,7 +101,7 @@ theorem bij_of_2_inj
           _ = g b'                := by exact congr_arg _ $ ‹LeftInverse (invFun g) g› _
           _ = a'                  := by aesop
 
-    by apply piecewise_is_inj; repeat assumption
+    show Injective h by apply piecewise_is_inj; repeat assumption
 
   ⟨h, ‹Injective h›, ‹Surjective h›⟩
 
