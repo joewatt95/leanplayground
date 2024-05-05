@@ -58,14 +58,13 @@ theorem bij_of_2_inj
   {f : α → β} {g : β → α}
   (f_inj : Injective f) (g_inj : Injective g)
   : ∃ h : α → β, Bijective h :=
-  open OrderHom OrdinalApprox in
   match isEmpty_or_nonempty β with
   -- We need to consider cases on whether β is empty because Nonempty β is
   -- required for invFun g to be well-defined.
   | .inl (_ : IsEmpty β) =>
     ⟨f, ‹Injective f›, show Surjective f from surj_of_isEmpty⟩
 
-  | .inr (_ : Nonempty β) =>
+  | .inr (_ : Nonempty β) => open OrderHom OrdinalApprox in
     let F : Set α →o Set α :=
       { toFun := λ X ↦ g '' (f '' X ᶜ)ᶜ
         monotone' := λ _X _Y ↦ by aesop }
