@@ -1,12 +1,15 @@
-import Auto
-import Duper
-import Egg
+-- import Auto
+-- import Duper
+-- import Egg
 
 import Mathlib.Data.Set.Lattice
 import Mathlib.Order.FixedPoints
 import Mathlib.SetTheory.Ordinal.FixedPointApproximants
 
-import Loogle.Find
+-- Import this below mathlib so that Loogle's #find shadows mathlib's
+-- import Loogle.Find
+
+import Leanplayground.MathInLean.Utils.Function
 
 namespace Sets
 
@@ -51,16 +54,16 @@ lemma piecewise_is_surj
 
 end piecewise_inj_surj
 
-open OrderHom OrdinalApprox in
 theorem bij_of_2_inj
   {f : α → β} {g : β → α}
   (f_inj : Injective f) (g_inj : Injective g)
   : ∃ h : α → β, Bijective h :=
+  open OrderHom OrdinalApprox in
   match isEmpty_or_nonempty β with
   -- We need to consider cases on whether β is empty because Nonempty β is
   -- required for invFun g to be well-defined.
   | .inl (_ : IsEmpty β) =>
-    ⟨f, ‹Injective f›, show Surjective f from (nomatch IsEmpty.false .)⟩
+    ⟨f, ‹Injective f›, show Surjective f from surj_of_isEmpty⟩
 
   | .inr (_ : Nonempty β) =>
     let F : Set α →o Set α :=
