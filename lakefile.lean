@@ -31,6 +31,10 @@ require auto from git
   "https://github.com/leanprover-community/lean-auto"
     @ "c2a2c0a08d7cabd66b4cc2dc2ce2b77b26be2c95"
 
+require egg from git
+  "https://github.com/marcusrossel/lean-egg"
+    @ "1df4ebfd04ea5bfe44b27bcd322dd0d8a2d89ac5"
+
 require Duper from git
   "https://github.com/leanprover-community/duper"
     @ "98cc99fc30243e2a73c0044377479c1a46ff56a4"
