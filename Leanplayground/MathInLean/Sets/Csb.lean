@@ -29,18 +29,21 @@ lemma piecewise_is_inj
   (g_inj : InjOn g Xᶜ)
   (f_inter_g_empty : f '' X ∩ g '' Xᶜ = ∅)
   : Injective <| @h _ _ f g X
-  | a, a', (_ : h a = h a') =>
+  | a, a', (ha_eq_ha' : h a = h a') =>
     have (_ : (a ∈ X ∧ a' ∈ X) ∨ (a ∉ X ∧ a' ∉ X)) : a = a' := by aesop
 
-    have (_ : a ∈ X) (_ : a' ∉ X) : a = a' := nomatch calc
-      f a = g a'             := by aesop
-        _ ∈ f '' X ∩ g '' Xᶜ := by exact ⟨by aesop, by aesop⟩
-        _ = ∅                := by assumption
+    have : ∀ a ∈ X, ∀ a' ∉ X, h a = h a' → a = a'
+    | a, _, a', _, _ =>
+      nomatch calc
+        f a = g a'             := by aesop
+          _ ∈ f '' X ∩ g '' Xᶜ := by exact ⟨by aesop, by aesop⟩
+          _ = ∅                := by assumption
 
-    have (_ : a ∉ X) (_ : a' ∈ X) : a = a' := nomatch calc
-      g a = f a'             := by aesop
-        _ ∈ f '' X ∩ g '' Xᶜ := by exact ⟨by aesop, by aesop⟩
-        _ = ∅                := by assumption
+    have _ (_ : a ∈ X) (_ : a' ∉ X) : a = a' :=
+      ha_eq_ha' |> this _ ‹_› _ ‹_›
+
+    have _ (_ : a ∉ X) (_ : a' ∈ X) : a = a' :=
+      ha_eq_ha' |>.symm |> this _ ‹_› _ ‹_› |>.symm
 
     show a = a' by aesop
 
