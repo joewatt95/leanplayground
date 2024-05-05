@@ -67,7 +67,9 @@ theorem bij_of_2_inj
   | .inl (_ : IsEmpty β) =>
     ⟨f, ‹Injective f›, show Surjective f from surj_of_isEmpty⟩
 
-  | .inr (_ : Nonempty β) => open OrderHom OrdinalApprox in
+  | .inr (_ : Nonempty β) =>
+    open OrderHom OrdinalApprox in
+
     let F : Set α →o Set α :=
       { toFun := λ X ↦ g '' (f '' X ᶜ)ᶜ
         monotone' := λ _X _Y ↦ by aesop }
