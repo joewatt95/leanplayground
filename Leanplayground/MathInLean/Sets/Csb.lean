@@ -100,8 +100,7 @@ theorem bij_of_2_inj
         (_ : invFun g a = invFun g a') =>
         have : ∀ x, invFun g (g x) = x := ‹LeftInverse _ _›
 
-        have : S₀ ⊆ g '' (f '' S₀ᶜ)ᶜ :=
-          ‹g '' _ = _› |>.symm |> subset_of_eq
+        have : S₀ ⊆ g '' (f '' S₀ᶜ)ᶜ := ‹g '' _ = _› |>.symm |> subset_of_eq
         have : ∀ a ∈ _, ∃ b ∈ _, g b = a := this
 
         have ⟨b, _, (_ : g b = a)⟩ := this _ ‹_ ∈ _›
