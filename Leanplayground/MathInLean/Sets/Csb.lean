@@ -63,7 +63,7 @@ theorem bij_of_2_inj
     ⟨f, ‹Injective f›, show Surjective f from (nomatch IsEmpty.false .)⟩
 
   | .inr (_ : Nonempty β) =>
-    let F :=
+    let F : Set α →o Set α :=
       { toFun := λ X ↦ g '' (f '' X ᶜ)ᶜ
         monotone' := λ _X _Y ↦ by aesop }
 
