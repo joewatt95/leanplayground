@@ -6,7 +6,7 @@ import Mathlib.Data.Set.Lattice
 import Mathlib.Order.FixedPoints
 import Mathlib.SetTheory.Ordinal.FixedPointApproximants
 
--- import Loogle.Find
+import Loogle.Find
 
 namespace Sets
 
@@ -56,38 +56,30 @@ theorem bij_of_2_inj
   {f : α → β} {g : β → α}
   (f_inj : Injective f) (g_inj : Injective g)
   : ∃ h : α → β, Bijective h :=
-  if _ : IsEmpty β
-  then
-    have : Surjective f := (nomatch IsEmpty.false .)
-    ⟨f, ‹Injective f›, ‹Surjective f›⟩
-  else
-    -- This is needed as mathlib requires it for invFun g to be well-defined.
-    have : Nonempty β := by aesop
+  match isEmpty_or_nonempty β with
+  -- We need to consider cases on whether β is empty because Nonempty β is
+  -- required for invFun g to be well-defined.
+  | .inl (_ : IsEmpty β) =>
+    ⟨f, ‹Injective f›, show Surjective f from (nomatch IsEmpty.false .)⟩
 
-    let F : Set α →o Set α :=
+  | .inr (_ : Nonempty β) =>
+    let F :=
       { toFun := λ X ↦ g '' (f '' X ᶜ)ᶜ
         monotone' := λ _X _Y ↦ by aesop }
 
-    let S : Ordinal → Set α := lfpApprox F ⊥
+    let S : Ordinal → Set α := lfpApprox F ∅
     have ⟨O, _⟩ := lfp_mem_range_lfpApprox F
 
     let S₀ := S O
-    have : S₀ = lfp F := by assumption
+    have : g '' (f '' S₀ᶜ)ᶜ = S₀ := by rw [‹S₀ = lfp F›]; exact F.map_lfp
 
     let h a := if _ : a ∈ S₀ then invFun g a else f a
 
-    have g_inv_left_inv : LeftInverse (invFun g) g := leftInverse_invFun g_inj
-
-    have : g '' (f '' S₀ᶜ)ᶜ = S₀ := by rw [‹S₀ = lfp F›]; exact F.map_lfp
-
-    have g_surj_on : SurjOn g (f '' S₀ᶜ)ᶜ S₀
-      | a, _ =>
-        have : a ∈ g '' (f '' S₀ᶜ)ᶜ := by aesop
-        by simp only [mem_image] at this; exact this
+    have : LeftInverse (invFun g) g := leftInverse_invFun g_inj
 
     have := calc
           (f '' S₀ᶜ)ᶜ
-      _ = invFun g '' (g '' (f '' S₀ᶜ)ᶜ) := by rw [g_inv_left_inv.image_image]
+      _ = invFun g '' (g '' (f '' S₀ᶜ)ᶜ) := by rw [‹LeftInverse _ _›.image_image]
       _ = invFun g '' S₀                 := by aesop
 
     have : Surjective h := piecewise_is_surj <| calc
@@ -104,12 +96,18 @@ theorem bij_of_2_inj
       have : InjOn f S₀ᶜ := λ _a _ _a' _ ↦ by aesop
 
       have : InjOn (invFun g) S₀
-        | a, (_ : a ∈ S₀), a', (_ : a' ∈ S₀),
-          (_ : invFun g a = invFun g a') =>
-          have : ∃ b ∈ (f '' S₀ᶜ)ᶜ, g b = a := g_surj_on ‹a ∈ S₀›
-          have : ∃ b' ∈ _, g b' = a' := g_surj_on ‹a' ∈ S₀›
-          have : ∀ x, invFun g (g x) = x := g_inv_left_inv
-          show a = a' by aesop
+      | a, _, a', _,
+        (_ : invFun g a = invFun g a') =>
+        have : ∀ x, invFun g (g x) = x := ‹LeftInverse _ _›
+
+        have : S₀ ⊆ g '' (f '' S₀ᶜ)ᶜ :=
+          ‹g '' _ = _› |>.symm |> subset_of_eq
+        have : ∀ a ∈ _, ∃ b ∈ _, g b = a := this
+
+        have ⟨b, _, (_ : g b = a)⟩ := this _ ‹_ ∈ _›
+        have ⟨b', _, (_ : g b' = a')⟩ := this _ ‹_ ∈ _›
+
+        show a = a' by aesop
 
       show Injective h by apply piecewise_is_inj; repeat assumption
 
