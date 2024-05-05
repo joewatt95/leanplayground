@@ -106,8 +106,8 @@ theorem bij_of_2_inj
         have : S₀ ⊆ g '' (f '' S₀ᶜ)ᶜ := ‹g '' _ = _› |>.symm |> subset_of_eq
         have : ∀ a ∈ _, ∃ b ∈ _, g b = a := this
 
-        have ⟨b, _, (_ : g b = a)⟩ := this _ ‹_ ∈ _›
-        have ⟨b', _, (_ : g b' = a')⟩ := this _ ‹_ ∈ _›
+        have ⟨b, _, (_ : g b = a)⟩ := this _ ‹_›
+        have ⟨b', _, (_ : g b' = a')⟩ := this _ ‹_›
 
         show a = a' by aesop
 
