@@ -31,21 +31,15 @@ lemma piecewise_is_inj
   : Injective <| @h _ _ f g X
   | a, a', (ha_eq_ha' : h a = h a') =>
     have (_ : (a ∈ X ∧ a' ∈ X) ∨ (a ∉ X ∧ a' ∉ X)) : a = a' := by aesop
-
-    have (_ : a ∈ X) (_ : a' ∉ X) : a = a' :=
-      go _ ‹_› _ ‹_› ha_eq_ha'
-
-    have (_ : a ∉ X) (_ : a' ∈ X) : a = a' :=
-      go _ ‹_› _ ‹_› ha_eq_ha'.symm |>.symm
-
+    have (_ : a ∈ X) (_ : a' ∉ X) : a = a' := nomatch go ‹_› ‹_› ha_eq_ha'
+    have (_ : a ∉ X) (_ : a' ∈ X) : a = a' := nomatch go ‹_› ‹_› ha_eq_ha'.symm
     show a = a' by aesop
   where
-    go : ∀ a ∈ X, ∀ a' ∉ X, h a = h a' → a = a'
-      | a, _, a', _, _ =>
-        nomatch calc
-          f a = g a'             := by aesop
-            _ ∈ f '' X ∩ g '' Xᶜ := by exact ⟨by aesop, by aesop⟩
-            _ = ∅                := by assumption
+    go : ∀ {a a'}, a ∈ X → a' ∉ X → ¬ h a = h a'
+    | a, a', _, _, _ => calc
+      f a = g a'             := by aesop
+        _ ∈ f '' X ∩ g '' Xᶜ := by exact ⟨by aesop, by aesop⟩
+        _ = ∅                := by assumption
 
 lemma piecewise_is_surj
   (f_union_g_eq_univ : f '' X ∪ g '' Xᶜ = univ)
