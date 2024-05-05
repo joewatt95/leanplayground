@@ -76,14 +76,14 @@ theorem bij_of_2_inj
 
     let h a := if _ : a ∈ S₀ then invFun g a else f a
 
+    have g_inv_left_inv : LeftInverse (invFun g) g := leftInverse_invFun g_inj
+
     have : g '' (f '' S₀ᶜ)ᶜ = S₀ := by rw [‹S₀ = lfp F›]; exact F.map_lfp
 
-    have g_surj_on : ∀ a ∈ S₀, ∃ b ∈ (f '' S₀ᶜ)ᶜ, g b = a
+    have g_surj_on : SurjOn g (f '' S₀ᶜ)ᶜ S₀
       | a, _ =>
         have : a ∈ g '' (f '' S₀ᶜ)ᶜ := by aesop
         by simp only [mem_image] at this; exact this
-
-    have g_inv_left_inv : LeftInverse (invFun g) g := leftInverse_invFun g_inj
 
     have := calc
           (f '' S₀ᶜ)ᶜ
@@ -106,8 +106,8 @@ theorem bij_of_2_inj
       have : InjOn (invFun g) S₀
         | a, (_ : a ∈ S₀), a', (_ : a' ∈ S₀),
           (_ : invFun g a = invFun g a') =>
-          have : ∃ b ∈ (f '' S₀ᶜ)ᶜ, g b = a := g_surj_on _ ‹a ∈ S₀›
-          have : ∃ b' ∈ _, g b' = a' := g_surj_on _ ‹a' ∈ S₀›
+          have : ∃ b ∈ (f '' S₀ᶜ)ᶜ, g b = a := g_surj_on ‹a ∈ S₀›
+          have : ∃ b' ∈ _, g b' = a' := g_surj_on ‹a' ∈ S₀›
           have : ∀ x, invFun g (g x) = x := g_inv_left_inv
           show a = a' by aesop
 
