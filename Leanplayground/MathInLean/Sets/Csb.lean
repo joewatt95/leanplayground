@@ -30,7 +30,7 @@ lemma piecewise_is_inj
   (f_inter_g_empty : f '' X ∩ g '' Xᶜ = ∅)
   : Injective <| @h _ _ f g X
   | a, a', (ha_eq_ha' : h a = h a') =>
-    match Classical.em (a ∈ X), Classical.em (a' ∈ X) with
+    match Classical.em _, Classical.em _ with
     | .inl (_ : a ∈ X), .inr (_ : a' ∉ X) => nomatch go ‹_› ‹_› ha_eq_ha'
     | .inr (_ : a ∉ X), .inl (_ : a' ∈ X) => nomatch go ‹_› ‹_› ha_eq_ha'.symm
     | .inl _, .inl _ | .inr _, .inr _ => by aesop
@@ -83,7 +83,7 @@ theorem bij_of_2_inj
       _ = invFun g '' (g '' (f '' S₀ᶜ)ᶜ) := by rw [‹LeftInverse _ _›.image_image]
       _ = invFun g '' S₀                 := by aesop
 
-    have : Surjective h := piecewise_is_surj <| calc
+    have : Surjective h := piecewise_is_surj $ calc
           invFun g '' S₀ ∪ f '' S₀ᶜ
       _ = (f '' S₀ᶜ)ᶜ ∪ f '' S₀ᶜ    := by aesop
       _ = univ                      := by simp only [compl_union_self]
