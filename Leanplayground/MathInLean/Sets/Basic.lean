@@ -7,8 +7,8 @@ variable {α : Type u} (s t u : Set α)
 
 -- open Set
 
-example : s ∩ t = t ∩ s :=
-  by ext _; exact ⟨mp, mpr⟩
+example : s ∩ t = t ∩ s := by
+  ext _; exact ⟨mp, mpr⟩
   where
     mp {x} : x ∈ s ∧ x ∈ t → x ∈ t ∧ x ∈ s
       | ⟨x_in_s, x_in_t⟩ => ⟨x_in_t, x_in_s⟩
