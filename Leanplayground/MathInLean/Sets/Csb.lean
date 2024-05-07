@@ -30,10 +30,10 @@ lemma piecewise_is_inj
   (f_inter_g_empty : f '' X ∩ g '' Xᶜ = ∅)
   : Injective <| @h _ _ f g X
   | a, a', (ha_eq_ha' : h a = h a') =>
-    have (_ : (a ∈ X ∧ a' ∈ X) ∨ (a ∉ X ∧ a' ∉ X)) : a = a' := by aesop
-    have (_ : a ∈ X) (_ : a' ∉ X) : a = a' := nomatch go ‹_› ‹_› ha_eq_ha'
-    have (_ : a ∉ X) (_ : a' ∈ X) : a = a' := nomatch go ‹_› ‹_› ha_eq_ha'.symm
-    show a = a' by aesop
+    match Classical.em (a ∈ X), Classical.em (a' ∈ X) with
+    | .inl (_ : a ∈ X), .inr (_ : a' ∉ X) => nomatch go ‹_› ‹_› ha_eq_ha'
+    | .inr (_ : a ∉ X), .inl (_ : a' ∈ X) => nomatch go ‹_› ‹_› ha_eq_ha'.symm
+    | .inl _, .inl _ | .inr _, .inr _ => by aesop
   where
     go : ∀ {a a'}, a ∈ X → a' ∉ X → ¬ h a = h a'
     | a, a', _, _, _ => calc
