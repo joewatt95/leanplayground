@@ -29,8 +29,8 @@ example : s ∩ (t ∪ u) ⊆ s ∩ t ∪ s ∩ u :=
 
 example : s \ (t ∪ u) ⊆ (s \ t) \ u :=
   λ x ⟨(x_in_s : x ∈ s), (_ : x ∉ t ∪ u)⟩ ↦
-    have : x ∉ t := λ _ : x ∈ t ↦ ‹x ∈ t› |> .inl |> ‹x ∉ t ∪ u›
-    have : x ∉ u := λ _ : x ∈ u ↦ ‹x ∈ u› |> .inr |> ‹x ∉ t ∪ u›
+    have : x ∉ t := (. |> .inl |> ‹x ∉ t ∪ u›)
+    have : x ∉ u := (. |> .inr |> ‹x ∉ t ∪ u›)
     show (x ∈ s ∧ x ∉ t) ∧ x ∉ u from ⟨⟨‹x ∈ s›, ‹x ∉ t›⟩, ‹x ∉ u›⟩
 
 example : f '' s ⊆ v ↔ s ⊆ f ⁻¹' v
