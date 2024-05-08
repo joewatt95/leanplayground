@@ -84,7 +84,7 @@ theorem schroeder_bernstein
       _ = invFun g '' (g '' (f '' S₀ᶜ)ᶜ) := by rw [‹LeftInverse _ _›.image_image]
       _ = invFun g '' S₀                 := by aesop
 
-    have : Surjective h := piecewise_is_surj $ calc
+    have : Surjective h := piecewise_is_surj <| calc
           invFun g '' S₀ ∪ f '' S₀ᶜ
       _ = (f '' S₀ᶜ)ᶜ ∪ f '' S₀ᶜ    := by aesop
       _ = univ                      := by simp only [compl_union_self]
