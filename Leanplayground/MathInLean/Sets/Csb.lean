@@ -27,7 +27,7 @@ noncomputable abbrev h a := if _ : a ∈ X then f a else g a
 lemma piecewise_is_inj
   (f_inj : InjOn f X)
   (g_inj : InjOn g Xᶜ)
-  (f_inter_g_empty : f '' X ∩ g '' Xᶜ = ∅)
+  (img_inter_empty : f '' X ∩ g '' Xᶜ = ∅)
   : Injective <| @h _ _ f g X
   | a, a', (ha_eq_ha' : h a = h a') =>
     have {a} := Classical.em <| a ∈ X
