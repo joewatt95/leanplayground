@@ -52,7 +52,7 @@ lemma piecewise_is_surj
 
 end piecewise_inj_surj
 
-theorem bij_of_2_inj
+theorem schroeder_bernstein
   {f : α → β} {g : β → α}
   (f_inj : Injective f) (g_inj : Injective g)
   : ∃ h : α → β, Bijective h :=
