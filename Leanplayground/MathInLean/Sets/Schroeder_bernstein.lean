@@ -56,7 +56,7 @@ theorem schroeder_bernstein
   {f : α → β} {g : β → α}
   (f_inj : Injective f) (g_inj : Injective g)
   : ∃ h : α → β, Bijective h :=
-  match isEmpty_or_nonempty β with
+  match isEmpty_or_nonempty _ with
   -- We need to consider cases on whether β is empty because Nonempty β is
   -- required for invFun g to be well-defined.
   | .inl (_ : IsEmpty β) =>
@@ -75,7 +75,7 @@ theorem schroeder_bernstein
     let S₀ := S O
     have : g '' (f '' S₀ᶜ)ᶜ = S₀ := by rw [‹S₀ = lfp F›]; exact F.map_lfp
 
-    let h a := if _ : a ∈ S₀ then invFun g a else f a
+    let h a := if a ∈ S₀ then invFun g a else f a
 
     have : LeftInverse (invFun g) g := leftInverse_invFun g_inj
 
