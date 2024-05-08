@@ -32,12 +32,12 @@ lemma piecewise_is_inj
   | a, a', (ha_eq_ha' : h a = h a') =>
     have {a} := Classical.em <| a ∈ X
     match this, this with
-    | .inl (_ : a ∈ X), .inr (_ : a' ∉ X) => nomatch go ‹_› ‹_› ha_eq_ha'
-    | .inr (_ : a ∉ X), .inl (_ : a' ∈ X) => nomatch go ‹_› ‹_› ha_eq_ha'.symm
+    | .inl (_ : a ∈ X), .inr (_ : a' ∉ X) => go ‹_› ‹_› ha_eq_ha'
+    | .inr (_ : a ∉ X), .inl (_ : a' ∈ X) => go ‹_› ‹_› ha_eq_ha'.symm
     | .inl _, .inl _ | .inr _, .inr _ => by aesop
   where
-    go : ∀ {a a'}, a ∈ X → a' ∉ X → ¬ h a = h a'
-    | a, a', _, _, _ => calc
+    go {φ} : ∀ {a a'}, a ∈ X → a' ∉ X → h a = h a' → φ
+    | a, a', _, _, _ => nomatch calc
       f a = g a'             := by aesop
         _ ∈ f '' X ∩ g '' Xᶜ := by exact ⟨by aesop, by aesop⟩
         _ = ∅                := by assumption
