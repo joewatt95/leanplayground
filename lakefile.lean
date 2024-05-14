@@ -18,7 +18,7 @@ require mathlib from git
 
 require verso from git
   "https://github.com/leanprover/verso"
-    @ "6562ce9589de8964dddba4568e3bcbecfd681aec"
+    @ "6817e3cb02c95767c0a46e0413e5631a2e9bcc31"
 
 require LeanCopilot from git
   "https://github.com/lean-dojo/LeanCopilot" @ "v1.2.0"
@@ -31,9 +31,9 @@ require auto from git
   "https://github.com/leanprover-community/lean-auto"
     @ "c2a2c0a08d7cabd66b4cc2dc2ce2b77b26be2c95"
 
-require egg from git
-  "https://github.com/marcusrossel/lean-egg"
-    @ "1df4ebfd04ea5bfe44b27bcd322dd0d8a2d89ac5"
+-- require egg from git
+--   "https://github.com/marcusrossel/lean-egg"
+--     @ "1df4ebfd04ea5bfe44b27bcd322dd0d8a2d89ac5"
 
 require Duper from git
   "https://github.com/leanprover-community/duper"
