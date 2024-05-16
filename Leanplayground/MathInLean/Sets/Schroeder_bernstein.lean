@@ -36,7 +36,7 @@ lemma piecewise_is_inj
     | .inr (_ : a ∉ X), .inl (_ : a' ∈ X) => go ‹_› ‹_› ha_eq_ha'.symm
     | .inl _, .inl _ | .inr _, .inr _ => by aesop
   where
-    go {φ} : ∀ {a a'}, a ∈ X → a' ∉ X → h a = h a' → φ
+    go {P} : ∀ {a a'}, a ∈ X → a' ∉ X → h a = h a' → P
     | a, a', _, _, _ => nomatch calc
       f a = g a'             := by aesop
         _ ∈ f '' X ∩ g '' Xᶜ := by exact ⟨by aesop, by aesop⟩
