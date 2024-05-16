@@ -10,6 +10,6 @@ open Function
 lemma surj_of_isEmpty
   [IsEmpty β] {f : α → β}
   : Surjective f :=
-  (. |> IsEmpty.false |>.elim)
+  (. |> IsEmpty.false |> (nomatch .))
 
 end Function
