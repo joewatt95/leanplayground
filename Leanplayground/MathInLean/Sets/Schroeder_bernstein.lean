@@ -70,10 +70,12 @@ theorem schroeder_bernstein
         monotone' := λ _X _Y ↦ by aesop }
 
     let S : Ordinal → Set α := lfpApprox F ∅
-    have ⟨O, _⟩ := lfp_mem_range_lfpApprox F
+    have ⟨O, this⟩ := lfp_mem_range_lfpApprox F
 
     let S₀ := S O
-    have : g '' (f '' S₀ᶜ)ᶜ = S₀ := by rw [‹S₀ = lfp F›]; exact F.map_lfp
+    have : g '' (f '' S₀ᶜ)ᶜ = S₀ :=
+      have : S₀ = lfp F := this
+      by rw [this]; exact F.map_lfp
 
     let h a := if a ∈ S₀ then invFun g a else f a
 
