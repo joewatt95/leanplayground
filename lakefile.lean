@@ -25,19 +25,18 @@ require LeanCopilot from git
 
 require verbose from git
   "https://github.com/PatrickMassot/verbose-lean4"
-    @ "7efc519da69167122d5a8797b47ca11661fbe98c"
+    @ "0fef059edf6bf2da0fcdf03100ca6631fb73d79a"
 
 require auto from git
   "https://github.com/leanprover-community/lean-auto"
-    @ "a8ad757346819d367607f5eac27451789364348b"
+    @ "664c8f272a9f5552fd1bac68644e0d3b19c9438e"
 
 -- require egg from git
 --   "https://github.com/marcusrossel/lean-egg"
 --     @ "1df4ebfd04ea5bfe44b27bcd322dd0d8a2d89ac5"
 
 require Duper from git
-  "https://github.com/leanprover-community/duper"
-    @ "98cc99fc30243e2a73c0044377479c1a46ff56a4"
+  "https://github.com/leanprover-community/duper" @ "v0.0.11"
 
 require loogle from git
   "https://github.com/nomeata/loogle"
