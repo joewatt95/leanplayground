@@ -1,6 +1,5 @@
 -- import Auto
 -- import Duper
--- import Egg
 
 import Mathlib.Data.Set.Lattice
 import Mathlib.Order.FixedPoints
@@ -39,7 +38,7 @@ lemma piecewise_is_inj
     go {P} : ∀ {a a'}, a ∈ X → a' ∉ X → h a = h a' → P
     | a, a', _, _, _ => nomatch calc
       f a = g a'             := by aesop
-        _ ∈ f '' X ∩ g '' Xᶜ := by exact ⟨by aesop, by aesop⟩
+        _ ∈ f '' X ∩ g '' Xᶜ := ⟨by aesop, by aesop⟩
         _ = ∅                := by assumption
 
 lemma piecewise_is_surj
@@ -73,8 +72,8 @@ theorem schroeder_bernstein
     have ⟨O, (_ : S O = lfp F)⟩ := lfp_mem_range_lfpApprox F
 
     let S₀ := S O
-    have : g '' (f '' S₀ᶜ)ᶜ = S₀ :=
-      by rw [‹S₀ = lfp F›]; exact F.map_lfp
+    have : g '' (f '' S₀ᶜ)ᶜ = S₀ := by
+      rw [‹S₀ = lfp F›]; exact F.map_lfp
 
     let h a := if a ∈ S₀ then invFun g a else f a
 
@@ -82,19 +81,19 @@ theorem schroeder_bernstein
 
     have := calc
           (f '' S₀ᶜ)ᶜ
-      _ = invFun g '' (g '' (f '' S₀ᶜ)ᶜ) := by rw [‹LeftInverse _ _›.image_image]
+      _ = invFun g '' (g '' (f '' S₀ᶜ)ᶜ) := by rw [this.image_image]
       _ = invFun g '' S₀                 := by aesop
 
     have : Surjective h := piecewise_is_surj <| calc
           invFun g '' S₀ ∪ f '' S₀ᶜ
       _ = (f '' S₀ᶜ)ᶜ ∪ f '' S₀ᶜ    := by aesop
-      _ = univ                      := by simp only [compl_union_self]
+      _ = univ                      := by rw [compl_union_self]
 
     have : Injective h :=
       have := calc
             invFun g '' S₀ ∩ f '' S₀ᶜ
         _ = (f '' S₀ᶜ)ᶜ ∩ f '' S₀ᶜ    := by aesop
-        _ = ∅                         := by simp only [compl_inter_self]
+        _ = ∅                         := by rw [compl_inter_self]
 
       have : InjOn f S₀ᶜ := λ _a _ _a' _ ↦ by aesop
 
