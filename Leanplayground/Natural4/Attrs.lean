@@ -1,5 +1,5 @@
 import Lean
-import Std.Data.HashMap.Basic
+import Batteries.Data.HashMap.Basic
 
 -- See: https://github.com/arthurpaulino/lean4-metaprogramming-book/blob/d381cba5681582407b46fe554b0e1504d9f28132/lean/extra/attrs/tag.lean
 
@@ -13,7 +13,8 @@ initialize regulative : TagAttribute ←
 
 namespace Attrs
 
-def listAll (tagAttr : TagAttribute) : MetaM <| Std.HashMap Name Expr := do
+def listAll (tagAttr : TagAttribute) :
+  MetaM <| Batteries.HashMap Name Expr := do
   let env ← getEnv
   let mut result := .empty
   for declName in tagAttr.ext.getState env do
@@ -42,7 +43,7 @@ def listAll (tagAttr : TagAttribute) : MetaM <| Std.HashMap Name Expr := do
 
   trace[Meta.debug] "
     Log:
-    {(← Core.getMessageLog).toList.map Message.data}"
+    {(← Core.getMessageLog).toList.map BaseMessage.data}"
 
   return result
 

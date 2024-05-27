@@ -1,14 +1,14 @@
 import Lean.Data.Json
 -- import Lean.Data.Parsec
 -- import Lean.Parser.Term
-import Std.Data.HashMap.Basic
-import Std.Lean.PersistentHashMap
+import Batteries.Data.HashMap.Basic
+import Batteries.Lean.PersistentHashMap
 
 import Leanplayground.Natural4.Attrs
 
--- import Std.Lean.Parser
+-- import Batteries.Lean.Parser
 
--- import Std.Data.Array.Basic
+-- import Batteries.Data.Array.Basic
 namespace Statics
 
 macro "derive" "stuff" "for" id:ident : command
@@ -127,7 +127,7 @@ variable [BEq α] [Hashable α]
 instance [BEq β] : BEq (Lean.PHashMap α β) where
   beq m0 m1 := m0.toArray == m1.toArray
 
-instance [BEq β] : BEq (Std.HashMap α β) where
+instance [BEq β] : BEq (Batteries.HashMap α β) where
   beq m0 m1 := m0.toArray == m1.toArray
 
 -- instance [DecidableEq α] [DecidableEq β] : DecidableEq (Lean.PHashMap α β) :=
@@ -136,14 +136,14 @@ instance [BEq β] : BEq (Std.HashMap α β) where
 instance [Hashable β] : Hashable (Lean.PHashMap α β) where
   hash := hash ∘ Lean.PersistentHashMap.toArray
 
-instance [Hashable β] : Hashable (Std.HashMap α β) where
-  hash := hash ∘ Std.HashMap.toArray
+instance [Hashable β] : Hashable (Batteries.HashMap α β) where
+  hash := hash ∘ Batteries.HashMap.toArray
 
 instance [Repr α] [Repr β] : Repr (Lean.PHashMap α β) where
   reprPrec := reprPrec ∘ Lean.PersistentHashMap.toArray
 
-instance [Repr α] [Repr β] : Repr (Std.HashMap α β) where
-  reprPrec := reprPrec ∘ Std.HashMap.toArray
+instance [Repr α] [Repr β] : Repr (Batteries.HashMap α β) where
+  reprPrec := reprPrec ∘ Batteries.HashMap.toArray
 
 end
 

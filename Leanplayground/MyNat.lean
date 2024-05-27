@@ -1,10 +1,10 @@
 -- import LeanCopilot
 
-import Mathlib.Algebra.Group.Defs
+-- import Mathlib.Algebra.Group.Defs
 import Mathlib.Data.List.Basic
 import Mathlib.Tactic
 
-import Std.Data.List.Lemmas
+import Batteries.Data.List.Lemmas
 
 namespace MyNat
 

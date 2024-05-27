@@ -1,7 +1,7 @@
 import Lean.Data.Json
 import Mathlib.Data.Set.Functor
 -- import Mathlib.Order.BoundedOrder
-import Std.Data.HashMap
+import Batteries.Data.HashMap
 import Leanplayground.Natural4.Statics
 
 namespace Dynamics
