@@ -31,9 +31,9 @@ require auto from git
   "https://github.com/leanprover-community/lean-auto"
     @ "91cd0e81ec8bd16baa2c08e3d00a7f8e473477b4"
 
--- require egg from git
---   "https://github.com/marcusrossel/lean-egg"
---     @ "1df4ebfd04ea5bfe44b27bcd322dd0d8a2d89ac5"
+require egg from git
+  "https://github.com/marcusrossel/lean-egg"
+    @ "5715f55d754b32f57fa32bf3187ca270caccebb3"
 
 require Duper from git
   "https://github.com/leanprover-community/duper" @ "v0.0.12"
@@ -43,7 +43,8 @@ require loogle from git
     @ "fa2ddf5771cc25b0d6e552ef63b51a68351e437f"
 
 -- require smt from git
---   "https://github.com/ufmg-smite/lean-smt.git" @ "main"
+--   "https://github.com/ufmg-smite/lean-smt.git"
+--     @ "9dbfde40c19776fe64b4b3ba1554033a8d7382de"
 
 -- require LeanCodePrompts from git
 --   "https://github.com/siddhartha-gadgil/LeanAide" @ "main"
