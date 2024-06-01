@@ -1,1 +1,2 @@
-import Leanplayground.MathInLean.NumberTheory.Basic
+import Leanplayground.MathInLean.NumberTheory.IrrationalRoots
+import Leanplayground.MathInLean.NumberTheory.InfinitelyManyPrimes

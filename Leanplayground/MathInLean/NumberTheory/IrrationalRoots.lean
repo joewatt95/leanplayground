@@ -1,19 +1,5 @@
 import Mathlib.Tactic
-
-import Auto
-import Duper
-import Egg
-
-import Loogle.Find
-
-set_option auto.smt true
-set_option auto.smt.trust true
-set_option auto.smt.solver.name "z3"
-
-set_option trace.auto.smt.printCommands true
-set_option trace.auto.smt.result true
-
-set_option auto.tptp true
+import Leanplayground.MathInLean.Utils.Tactics
 
 namespace NumberTheory
 
@@ -28,8 +14,7 @@ example {m n : ℕ} (_ : m.Coprime n) :
   m ^ 2 ≠ 2 * n ^ 2
   | (_ : m ^ 2 = 2 * n ^ 2) =>
   have : 2 ∣ m := boop
-
-  have ⟨k, (_ : m = 2 * k)⟩ := this
+  let ⟨k, (_ : m = 2 * k)⟩ := this
 
   have := calc
     2 * n ^ 2 = (2 * k) ^ 2 := by aesop
