@@ -55,7 +55,7 @@ theorem primes_infinite' : ∀ {S : Finset ℕ}, ∃ p, p.Prime ∧ p ∉ S
       let ⟨p, (_ : p.Prime), (_ : p ∣ S_primes_prod + 1)⟩ :=
         exists_prime_factor <| by linarith
 
-      have : p ∣ S_primes_prod := by duper [dvd_prod_of_mem, *]
+      have : p ∣ S_primes_prod := by duper [*, dvd_prod_of_mem] {portfolioInstance := 1}
       have : p ∣ 1 := by duper [*, Nat.dvd_add_right] {portfolioInstance := 1}
       show ⊥ by aesop
 
