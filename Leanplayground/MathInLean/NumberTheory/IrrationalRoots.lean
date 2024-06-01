@@ -8,26 +8,24 @@ def even_iff_even_sqr {m : ℕ} := calc
          _ ↔ 2 ∣ m ∨ 2 ∣ m := Nat.prime_two.dvd_mul
          _ ↔ 2 ∣ m        := by rw [or_self]
 
-macro " boop " : term => `(by rw [←even_iff_even_sqr]; omega)
-
 example {m n : ℕ} (_ : m.Coprime n) :
   m ^ 2 ≠ 2 * n ^ 2
   | (_ : m ^ 2 = 2 * n ^ 2) =>
-  have : 2 ∣ m := boop
+  have : 2 ∣ m := by aesop (add safe even_iff_even_sqr.mp)
   let ⟨k, (_ : m = 2 * k)⟩ := this
 
   have := calc
     2 * n ^ 2 = (2 * k) ^ 2 := by aesop
-            _ = 4 * k ^ 2 := by linarith
+            _ = 4 * k ^ 2   := by linarith
 
-  have : 2 ∣ n := boop
+  have : 2 ∣ n := by rw [←even_iff_even_sqr]; omega
 
   have := calc
     2 = gcd 2 2 := by aesop
-    _ ∣ gcd m n  := gcd_dvd_gcd ‹2 ∣ m› ‹2 ∣ n›
+    _ ∣ gcd m n  := by duper [gcd_dvd_gcd, *]
     _ = 1       := by aesop
 
-  show ⊥ by omega
+  show ⊥ by duper [this]
 
 -- #check Nat.factors
 -- #check Nat.prime_of_mem_factors
@@ -51,7 +49,7 @@ example {m n k r p : ℕ}
     have := calc
           r.factorization p
       _ = k * m.factorization p - k * n.factorization p := by aesop
-      _ = k * (m.factorization p - n.factorization p)   := by rw [Nat.mul_sub_left_distrib]
+      _ = k * (m.factorization p - n.factorization p)   := by duper [Nat.mul_sub_left_distrib]
 
     show k ∣ r.factorization p by aesop
 
