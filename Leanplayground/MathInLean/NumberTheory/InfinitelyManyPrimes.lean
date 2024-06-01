@@ -18,9 +18,9 @@ theorem exists_prime_factor {n : ℕ} (_ : 2 ≤ n) : ∃ p, p.Prime ∧ p ∣ n
       p ∣ m := by assumption
       _ ∣ n := by assumption
 
-    by aesop
+    by tauto
 
-theorem primes_infinite : ∀ {n}, ∃ p > n, (p : ℕ).Prime
+theorem primes_infinite : ∀ {n : ℕ}, ∃ p > n, p.Prime
   | n =>
     -- open Scoped ! factorial notation
     open scoped Nat in
@@ -53,7 +53,7 @@ theorem primes_infinite' : ∀ {S : Finset ℕ}, ∃ p, p.Prime ∧ p ∉ S
         duper [*, Finset.single_le_prod', Nat.Prime.one_le, Nat.prime_two] {portfolioInstance := 1}
 
       let ⟨p, (_ : p.Prime), (_ : p ∣ S_primes_prod + 1)⟩ :=
-        exists_prime_factor <| by linarith
+        exists_prime_factor <| Nat.le_succ_of_le this
 
       have : p ∣ S_primes_prod := by duper [*, dvd_prod_of_mem] {portfolioInstance := 1}
       have : p ∣ 1 := by duper [*, Nat.dvd_add_right] {portfolioInstance := 1}

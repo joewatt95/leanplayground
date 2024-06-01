@@ -11,7 +11,7 @@ def even_iff_even_sqr {m : ℕ} := calc
 example {m n : ℕ} (_ : m.Coprime n) :
   m ^ 2 ≠ 2 * n ^ 2
   | (_ : m ^ 2 = 2 * n ^ 2) =>
-  have : 2 ∣ m := by aesop (add safe even_iff_even_sqr.mp)
+  have : 2 ∣ m := by rw [←even_iff_even_sqr]; omega
   let ⟨k, (_ : m = 2 * k)⟩ := this
 
   have := calc
@@ -20,12 +20,7 @@ example {m n : ℕ} (_ : m.Coprime n) :
 
   have : 2 ∣ n := by rw [←even_iff_even_sqr]; omega
 
-  have := calc
-    2 = gcd 2 2 := by aesop
-    _ ∣ gcd m n  := by duper [gcd_dvd_gcd, *]
-    _ = 1       := by aesop
-
-  show ⊥ by duper [this]
+  show ⊥ by duper [*, Nat.dvd_gcd] {portfolioInstance := 7}
 
 -- #check Nat.factors
 -- #check Nat.prime_of_mem_factors
@@ -49,7 +44,7 @@ example {m n k r p : ℕ}
     have := calc
           r.factorization p
       _ = k * m.factorization p - k * n.factorization p := by aesop
-      _ = k * (m.factorization p - n.factorization p)   := by duper [Nat.mul_sub_left_distrib]
+      _ = k * (m.factorization p - n.factorization p)   := by rw [Nat.mul_sub_left_distrib]
 
     show k ∣ r.factorization p by aesop
 
