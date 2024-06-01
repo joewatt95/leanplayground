@@ -1,5 +1,5 @@
 import Mathlib.Tactic
-import Leanplayground.MathInLean.Utils.Tactics
+import Leanplayground.MathInLean.Utils.Tactic
 
 namespace NumberTheory
 

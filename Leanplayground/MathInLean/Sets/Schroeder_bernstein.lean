@@ -1,12 +1,6 @@
--- import Auto
--- import Duper
-
 import Mathlib.Data.Set.Lattice
 import Mathlib.Order.FixedPoints
 import Mathlib.SetTheory.Ordinal.FixedPointApproximants
-
--- Import this below mathlib so that Loogle's #find shadows mathlib's
--- import Loogle.Find
 
 import Leanplayground.MathInLean.Utils.Function
 
