@@ -22,10 +22,12 @@ def even_iff_even_sqr {m : ℕ} := calc
          _ ↔ 2 ∣ m ∨ 2 ∣ m := Nat.prime_two.dvd_mul
          _ ↔ 2 ∣ m        := by rw [or_self]
 
+macro " boop " : term => `(by rw [←even_iff_even_sqr]; omega)
+
 example {m n : ℕ} (_ : m.Coprime n) :
   m ^ 2 ≠ 2 * n ^ 2
   | (_ : m ^ 2 = 2 * n ^ 2) =>
-  have : 2 ∣ m := by rw [←even_iff_even_sqr]; omega
+  have : 2 ∣ m := boop
 
   have ⟨k, (_ : m = 2 * k)⟩ := this
 
@@ -33,7 +35,7 @@ example {m n : ℕ} (_ : m.Coprime n) :
     2 * n ^ 2 = (2 * k) ^ 2 := by aesop
             _ = 4 * k ^ 2 := by linarith
 
-  have : 2 ∣ n := by rw [←even_iff_even_sqr]; omega
+  have : 2 ∣ n := boop
 
   have := calc
     2 = gcd 2 2 := by aesop
