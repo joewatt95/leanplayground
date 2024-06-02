@@ -17,7 +17,6 @@ theorem exists_prime_factor {n : ℕ} (_ : 2 ≤ n) : ∃ p, p.Prime ∧ p ∣ n
     have := calc
       p ∣ m := ‹_›
       _ ∣ n := ‹_›
-
     by tauto
 
 theorem primes_infinite : ∀ {n : ℕ}, ∃ p > n, p.Prime
