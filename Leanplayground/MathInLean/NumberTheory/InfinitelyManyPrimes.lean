@@ -98,11 +98,10 @@ theorem exists_prime_factor_mod_4_eq_3 {n : ℕ}
     | .inr (_ : n / m % 4 = 3) =>
       -- This is required to justify the well-founded recursion on n / m.
       have : n / m < n :=
-        suffices m ≠ 0 by apply Nat.div_lt_self; all_goals omega
-        λ _ : m = 0 ↦ show ⊥ by simp_all only [
-          ne_eq, zero_dvd_iff, zero_ne_one, not_false_eq_true, Nat.zero_mod,
-          OfNat.zero_ne_ofNat, Nat.div_zero, or_self
-        ]
+        suffices 0 < n ∧ 1 < m by
+          apply Nat.div_lt_self; all_goals simp_all only [ne_eq, or_true]
+        suffices m ≠ 0 by omega
+        by aesop
 
       have ⟨p, (_ : p.Prime), (_ : p ∣ n / m), (_ : p % 4 = 3)⟩ :=
         exists_prime_factor_mod_4_eq_3 ‹n / m % 4 = 3›

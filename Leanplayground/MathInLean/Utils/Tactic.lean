@@ -14,3 +14,13 @@ set_option trace.auto.smt.printCommands true
 set_option trace.auto.smt.result true
 
 set_option auto.tptp true
+
+macro_rules | `(tactic| trivial) => `(tactic| tauto)
+
+macro_rules | `(tactic| trivial) => `(tactic| simp <;> trivial)
+macro_rules | `(tactic| trivial) => `(tactic| simp_all)
+
+macro_rules | `(tactic| trivial) => `(tactic| aesop)
+
+macro_rules | `(tactic| trivial) => `(tactic| omega)
+macro_rules | `(tactic| trivial) => `(tactic| linarith)
