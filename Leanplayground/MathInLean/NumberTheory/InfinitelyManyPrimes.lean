@@ -5,7 +5,7 @@ namespace NumberTheory
 
 theorem exists_prime_factor {n : ℕ} (_ : 2 ≤ n) : ∃ p, p.Prime ∧ p ∣ n :=
   suffices ¬ n.Prime → ∃ p, p.Prime ∧ p ∣ n  by tauto
-  λ _ ↦
+  λ _ : ¬ n.Prime ↦
     have : ∃ m < n, m ∣ n ∧ m ≠ 1 := by duper [*, Nat.prime_def_lt] {portfolioInstance := 1}
     let ⟨m, (_ : m < n), (_ : m ∣ n), (_ : m ≠ 1)⟩ := this
 
@@ -58,5 +58,38 @@ theorem primes_infinite' : ∀ {S : Finset ℕ}, ∃ p, p.Prime ∧ p ∉ S
       have : p ∣ S_primes_prod := by duper [*, dvd_prod_of_mem] {portfolioInstance := 1}
       have : p ∣ 1 := by duper [*, Nat.dvd_add_right] {portfolioInstance := 1}
       show ⊥ by aesop
+
+lemma mod_4_eq_3_or {m n : ℕ} (_ : m * n % 4 = 3) : m % 4 = 3 ∨ n % 4 = 3 :=
+  have : (m % 4) * (n % 4) % 4 = 3 := by duper [*, Nat.mul_mod] {portfolioInstance := 1}
+  have : m % 4 ≠ 0 ∧ n % 4 ≠ 0 := ⟨λ _ ↦ by aesop, λ _ ↦ by aesop⟩
+
+  suffices ¬ ((m % 4 = 1 ∨ m % 4 = 2) ∧ (n % 4 = 1 ∨ n % 4 = 2)) by omega
+  (by rcases . with ⟨_ | _, _ | _⟩; all_goals simp_all)
+
+lemma aux {m n : ℕ}
+  (_ : m ∣ n) (_ : 2 ≤ m) (_ : m < n)
+  : n / m ∣ n ∧ n / m < n :=
+  suffices 0 < n ∧ 1 < m by duper [*, Nat.div_dvd_of_dvd, Nat.div_lt_self]
+  by omega
+
+theorem exists_prime_factor_mod_4_eq_3 {n : ℕ}
+  (_ : n % 4 = 3)
+  : ∃ p, p.Prime ∧ p ∣ n ∧ p % 4 = 3 :=
+  suffices ¬ n.Prime → ∃ p, p.Prime ∧ p ∣ n ∧ p % 4 = 3 by tauto
+  λ _ : ¬ n.Prime ↦
+    have : ∃ m < n, m ∣ n ∧ m ≠ 1 :=
+      have : 2 ≤ n := by omega
+      by duper [*, Nat.prime_def_lt] {portfolioInstance := 1}
+
+    let ⟨m, (_ : m < n), (_ : m ∣ n), (_ : m ≠ 1)⟩ := this
+
+    have : m % 4 = 3 ∨ n / m % 4 = 3 := by
+      duper [*, Nat.mul_div_cancel', mod_4_eq_3_or] {portfolioInstance := 1}
+
+    match this with
+    | .inl (_ : m % 4 = 3) =>
+      sorry
+    | .inr (_ : n / m % 4 = 3) =>
+      sorry
 
 end NumberTheory
