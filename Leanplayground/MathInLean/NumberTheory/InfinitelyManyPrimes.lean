@@ -32,6 +32,7 @@ theorem primes_infinite : ∀ {n : ℕ}, ∃ p > n, p.Prime
 
     have ⟨p, (_ : p.Prime), (_ : p ∣ (n + 1)! + 1)⟩ := exists_prime_factor this
 
+    suffices p > n by tauto
     suffices ¬ p ≤ n by aesop
     λ _ : p ≤ n ↦
       have := calc
