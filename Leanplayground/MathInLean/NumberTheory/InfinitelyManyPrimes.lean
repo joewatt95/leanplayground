@@ -5,7 +5,7 @@ namespace NumberTheory
 
 theorem exists_prime_factor {n : ℕ} (_ : 2 ≤ n) : ∃ p, p.Prime ∧ p ∣ n :=
   match em _ with
-  | .inl (_ : n.Prime) => by aesop
+  | .inl (_ : n.Prime) => by tauto
   | .inr (_ : ¬ n.Prime) =>
     have : ∃ m < n, m ∣ n ∧ m ≠ 1 := by duper [*, Nat.prime_def_lt] {portfolioInstance := 1}
     let ⟨m, (_ : m < n), (_ : m ∣ n), (_ : m ≠ 1)⟩ := this
