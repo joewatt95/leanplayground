@@ -4,14 +4,14 @@ import Leanplayground.MathInLean.Utils.Tactic
 namespace NumberTheory
 
 theorem exists_prime_factor {n : ℕ} (_ : 2 ≤ n) : ∃ p, p.Prime ∧ p ∣ n :=
-  match em _ with
-  | .inl (_ : n.Prime) => by tauto
-  | .inr (_ : ¬ n.Prime) =>
+  suffices ¬ n.Prime → ∃ p, p.Prime ∧ p ∣ n  by tauto
+  λ _ ↦
     have : ∃ m < n, m ∣ n ∧ m ≠ 1 := by duper [*, Nat.prime_def_lt] {portfolioInstance := 1}
     let ⟨m, (_ : m < n), (_ : m ∣ n), (_ : m ≠ 1)⟩ := this
 
-    have : m ≠ 0 := by aesop
-    have : 2 ≤ m := by omega
+    have : 2 ≤ m :=
+      have : m ≠ 0 := by aesop
+      by omega
 
     let ⟨p, (_ : p.Prime), (_ : p ∣ m)⟩ := exists_prime_factor this
     have := calc
@@ -35,8 +35,8 @@ theorem primes_infinite : ∀ {n : ℕ}, ∃ p > n, p.Prime
     suffices ¬ p ≤ n by aesop
     λ _ : p ≤ n ↦
       have := calc
-          p ∣ n !      := by duper [*, Nat.Prime.dvd_factorial] {portfolioInstance := 1}
-          _ ∣ (n + 1)! := by simp only [Nat.factorial_succ, dvd_mul_left]
+        p ∣ n !      := by duper [*, Nat.Prime.dvd_factorial] {portfolioInstance := 1}
+        _ ∣ (n + 1)! := by simp only [Nat.factorial_succ, dvd_mul_left]
       have : p ∣ 1 := by duper [*, Nat.dvd_add_right] {portfolioInstance := 1}
       show ⊥ by aesop
 
