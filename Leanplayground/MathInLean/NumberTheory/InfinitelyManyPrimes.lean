@@ -15,8 +15,8 @@ theorem exists_prime_factor {n : ℕ} (_ : 2 ≤ n) : ∃ p, p.Prime ∧ p ∣ n
 
     let ⟨p, (_ : p.Prime), (_ : p ∣ m)⟩ := exists_prime_factor this
     have := calc
-      p ∣ m := by assumption
-      _ ∣ n := by assumption
+      p ∣ m := ‹_›
+      _ ∣ n := ‹_›
 
     by tauto
 
@@ -66,11 +66,11 @@ lemma mod_4_eq_3_or {m n : ℕ} (_ : m * n % 4 = 3) : m % 4 = 3 ∨ n % 4 = 3 :=
   suffices ¬ ((m % 4 = 1 ∨ m % 4 = 2) ∧ (n % 4 = 1 ∨ n % 4 = 2)) by omega
   (by rcases . with ⟨_ | _, _ | _⟩; all_goals simp_all)
 
-lemma aux {m n : ℕ}
-  (_ : m ∣ n) (_ : 2 ≤ m) (_ : m < n)
-  : n / m ∣ n ∧ n / m < n :=
-  suffices 0 < n ∧ 1 < m by duper [*, Nat.div_dvd_of_dvd, Nat.div_lt_self]
-  by omega
+-- lemma aux {m n : ℕ}
+--   (_ : m ∣ n) (_ : 2 ≤ m) (_ : m < n)
+--   : n / m ∣ n ∧ n / m < n :=
+--   suffices 0 < n ∧ 1 < m by duper [*, Nat.div_dvd_of_dvd, Nat.div_lt_self]
+--   by omega
 
 theorem exists_prime_factor_mod_4_eq_3 {n : ℕ}
   (_ : n % 4 = 3)
@@ -88,8 +88,27 @@ theorem exists_prime_factor_mod_4_eq_3 {n : ℕ}
 
     match this with
     | .inl (_ : m % 4 = 3) =>
-      sorry
+      let ⟨p, (_ : p.Prime), (_ : p ∣ m), (_ : p % 4 = 3)⟩ :=
+        exists_prime_factor_mod_4_eq_3 ‹m % 4 = 3›
+      have := calc
+        p ∣ m := ‹_›
+        _ ∣ n := ‹_›
+      by tauto
+
     | .inr (_ : n / m % 4 = 3) =>
-      sorry
+      -- This is required to justify the well-founded recursion on n / m.
+      have : n / m < n :=
+        suffices m ≠ 0 by apply Nat.div_lt_self; all_goals omega
+        λ _ : m = 0 ↦ nomatch calc
+          3 = n / m % 4 := Eq.symm ‹_›
+          _ = n / 0 % 4 := by rw [‹m = 0›]
+          _ = 0         := by simp only [Nat.div_zero, Nat.zero_mod]
+
+      let ⟨p, (_ : p.Prime), (_ : p ∣ n / m), (_ : p % 4 = 3)⟩ :=
+        exists_prime_factor_mod_4_eq_3 ‹n / m % 4 = 3›
+      have := calc
+        p ∣ n / m := by assumption
+        _ ∣ n     := Nat.div_dvd_of_dvd ‹_›
+      by tauto
 
 end NumberTheory
