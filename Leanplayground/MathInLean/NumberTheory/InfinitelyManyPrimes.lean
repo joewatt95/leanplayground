@@ -1,4 +1,6 @@
+-- import Mathlib.Order.Bounds.Basic
 import Mathlib.Tactic
+
 import Leanplayground.MathInLean.Utils.Tactic
 
 namespace NumberTheory
@@ -98,8 +100,8 @@ theorem exists_prime_factor_mod_4_eq_3 {n : ℕ}
     | .inr (_ : n / m % 4 = 3) =>
       -- This is required to justify the well-founded recursion on n / m.
       have : n / m < n :=
-        suffices 0 < n ∧ 1 < m by
-          apply Nat.div_lt_self; all_goals simp_all only [ne_eq, or_true]
+        suffices 0 < n ∧ 1 < m by duper [*, Nat.div_lt_self] {portfolioInstance := 1}
+        have : n % 4 = 3 ∧ m ∣ n ∧ m ≠ 1 := by tauto
         suffices m ≠ 0 by omega
         by aesop
 
@@ -109,5 +111,52 @@ theorem exists_prime_factor_mod_4_eq_3 {n : ℕ}
         p ∣ n / m := ‹_›
         _ ∣ n     := Nat.div_dvd_of_dvd ‹_›
       by tauto
+
+theorem primes_mod_4_eq_3_infinite {n : ℕ} : ∃ p > n, p.Prime ∧ p % 4 = 3 :=
+  let φ := ∀ p > n, p.Prime → p % 4 ≠ 3
+  suffices ¬ φ by aesop
+  λ _ : φ ↦
+    let S := {p | p.Prime ∧ p % 4 = 3}
+    let S : Finset ℕ :=
+      have : ∀ p ∈ S, p ≤ n
+        | p, (_ : p ∈ S) =>
+          have := λ _ : p > n ↦ show ⊥ by aesop
+          by aesop
+      have : BddAbove S := ⟨n, λ p (_ : p ∈ S) ↦ by aesop⟩
+      have : S.Finite := by
+        duper [*, Set.finite_iff_bddAbove] {portfolioInstance := 1}
+      this.toFinset
+
+    let S_prod := ∏ m in S.erase 3, m
+
+    have ⟨p, (_ : p.Prime), (_ : p ∣ 4 * S_prod + 3), (_ : p % 4 = 3)⟩ :=
+      have : (4 * S_prod + 3) % 4 = 3 := by omega
+      exists_prime_factor_mod_4_eq_3 this
+
+    have : p ≠ 3
+      | (_ : p = 3) =>
+        have : 3 ∣ 4 * S_prod := by aesop
+        have : 3 ∣ S_prod :=
+          have {a b} : ¬ 3 ∣ 4 ∧ (3 ∣ a * b ↔ 3 ∣ a ∨ 3 ∣ b) :=
+            ⟨by omega, Nat.prime_three.dvd_mul⟩
+          by aesop
+
+        have ⟨p', _, _⟩ : ∃ p' ∈ S.erase 3, 3 ∣ p' := by
+          refine (Prime.dvd_finset_prod_iff ?_ id).mp this
+          duper [Nat.prime_iff, Nat.prime_three]
+
+        have : p'.Prime ∧ p' ≠ 3 ∧ 3 ∣ p' := by aesop
+        show ⊥ by duper [Nat.prime_def_lt'', this]
+
+    have := calc
+      p ∣ S_prod     := dvd_prod_of_mem id <| show p ∈ S.erase 3 by aesop
+      _ ∣ 4 * S_prod := by aesop
+
+    have : p ∣ 3 := Nat.dvd_add_iff_right this |>.mpr ‹_›
+    have : p = 3 := by
+      duper [Nat.prime_dvd_prime_iff_eq, Nat.prime_three, ‹p.Prime›, this]
+        {portfolioInstance := 1}
+
+    show ⊥ by tauto
 
 end NumberTheory
