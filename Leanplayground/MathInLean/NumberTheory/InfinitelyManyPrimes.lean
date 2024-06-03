@@ -129,11 +129,10 @@ theorem primes_mod_4_eq_3_infinite {n : ℕ}
     let S := {p | p.Prime ∧ p % 4 = 3}
 
     have : BddAbove S :=
-      have : ∀ p ∈ S, p ≤ n
-        | p, (_ : p ∈ S) =>
-          have : ¬ p > n := λ _ ↦ by aesop
-          by aesop
-      ⟨n, this⟩
+      suffices ∀ p ∈ S, p ≤ n from ⟨n, this⟩
+      λ p (_ : p ∈ S) ↦
+        have : ¬ p > n := λ _ ↦ by aesop
+        by aesop
 
     have : S.Finite := by
       duper [*, Set.finite_iff_bddAbove] {portfolioInstance := 1}
