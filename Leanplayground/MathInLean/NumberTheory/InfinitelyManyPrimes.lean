@@ -21,48 +21,47 @@ theorem exists_prime_factor {n : ℕ} (_ : 2 ≤ n) : ∃ p, p.Prime ∧ p ∣ n
       _ ∣ n := ‹_›
     by tauto
 
-theorem primes_infinite : ∀ {n : ℕ}, ∃ p > n, p.Prime
-  | n =>
-    -- open Scoped ! factorial notation
-    open scoped Nat in
+theorem primes_infinite {n : ℕ} : ∃ p > n, p.Prime :=
+  -- open Scoped ! factorial notation
+  open scoped Nat in
 
-    have : 2 ≤ (n + 1)! + 1 :=
-      have : 2 ≤ n ! + 1 := have := n.factorial_pos; by omega
-      have : n ! ≤ (n + 1) ! := by apply Nat.factorial_le; omega
-      by omega
+  have : 2 ≤ (n + 1)! + 1 :=
+    have : 2 ≤ n ! + 1 := have := n.factorial_pos; by omega
+    have : n ! ≤ (n + 1) ! := by apply Nat.factorial_le; omega
+    by omega
 
-    have ⟨p, (_ : p.Prime), (_ : p ∣ (n + 1)! + 1)⟩ := exists_prime_factor this
+  have ⟨p, (_ : p.Prime), (_ : p ∣ (n + 1)! + 1)⟩ := exists_prime_factor this
 
-    suffices p > n by tauto
-    suffices ¬ p ≤ n by aesop
-    λ _ : p ≤ n ↦
-      have := calc
-        p ∣ n !      := by duper [*, Nat.Prime.dvd_factorial] {portfolioInstance := 1}
-        _ ∣ (n + 1)! := by simp only [Nat.factorial_succ, dvd_mul_left]
-      have : p ∣ 1 := by duper [*, Nat.dvd_add_right] {portfolioInstance := 1}
-      show ⊥ by aesop
+  suffices p > n by tauto
+  suffices ¬ p ≤ n by aesop
+  λ _ : p ≤ n ↦
+    have := calc
+      p ∣ n !      := by duper [*, Nat.Prime.dvd_factorial] {portfolioInstance := 1}
+      _ ∣ (n + 1)! := by simp only [Nat.factorial_succ, dvd_mul_left]
+    have : p ∣ 1 := by duper [*, Nat.dvd_add_right] {portfolioInstance := 1}
+    show ⊥ by aesop
 
 open BigOperators Finset
 
-theorem primes_infinite' : ∀ {S : Finset ℕ}, ∃ p, p.Prime ∧ p ∉ S
-  | S =>
-    let S_primes := S.filter Nat.Prime
-    suffices ¬ ∀ {p}, p.Prime ↔ p ∈ S_primes by aesop
-    λ _ ↦
-      let S_primes_prod := ∏ n ∈ S_primes, n
+theorem primes_infinite' {S : Finset ℕ} : ∃ p, p.Prime ∧ p ∉ S :=
+  let S_primes := S.filter Nat.Prime
+  suffices ¬ ∀ {p}, p.Prime ↔ p ∈ S_primes by aesop
+  λ _ ↦
+    let S_primes_prod := ∏ n ∈ S_primes, n
 
-      have : 2 ≤ S_primes_prod := by
-        duper [*, Finset.single_le_prod', Nat.Prime.one_le, Nat.prime_two] {portfolioInstance := 1}
+    have : 2 ≤ S_primes_prod := by
+      duper [*, Finset.single_le_prod', Nat.Prime.one_le, Nat.prime_two] {portfolioInstance := 1}
 
-      have ⟨p, (_ : p.Prime), (_ : p ∣ S_primes_prod + 1)⟩ :=
-        exists_prime_factor <| Nat.le_succ_of_le this
+    have ⟨p, (_ : p.Prime), (_ : p ∣ S_primes_prod + 1)⟩ :=
+      exists_prime_factor <| Nat.le_succ_of_le this
 
-      have : p ∣ S_primes_prod := by duper [*, dvd_prod_of_mem] {portfolioInstance := 1}
-      have : p ∣ 1 := by duper [*, Nat.dvd_add_right] {portfolioInstance := 1}
-      show ⊥ by aesop
+    have : p ∣ S_primes_prod := by duper [*, dvd_prod_of_mem] {portfolioInstance := 1}
+    have : p ∣ 1 := by duper [*, Nat.dvd_add_right] {portfolioInstance := 1}
+    show ⊥ by aesop
 
 lemma mod_4_eq_3_or {m n : ℕ} (_ : m * n % 4 = 3) : m % 4 = 3 ∨ n % 4 = 3 :=
-  have : (m % 4) * (n % 4) % 4 = 3 := by duper [*, Nat.mul_mod] {portfolioInstance := 1}
+  have : (m % 4) * (n % 4) % 4 = 3 := by
+    duper [*, Nat.mul_mod] {portfolioInstance := 1}
   have : m % 4 ≠ 0 ∧ n % 4 ≠ 0 := ⟨λ _ ↦ by aesop, λ _ ↦ by aesop⟩
 
   suffices ¬ ((m % 4 = 1 ∨ m % 4 = 2) ∧ (n % 4 = 1 ∨ n % 4 = 2)) by omega
@@ -100,7 +99,8 @@ theorem exists_prime_factor_mod_4_eq_3 {n : ℕ}
     | .inr (_ : n / m % 4 = 3) =>
       -- This is required to justify the well-founded recursion on n / m.
       have : n / m < n :=
-        suffices 0 < n ∧ 1 < m by duper [*, Nat.div_lt_self] {portfolioInstance := 1}
+        suffices 0 < n ∧ 1 < m by
+          duper [*, Nat.div_lt_self] {portfolioInstance := 1}
         have : n % 4 = 3 ∧ m ∣ n ∧ m ≠ 1 := by tauto
         suffices m ≠ 0 by omega
         by aesop
