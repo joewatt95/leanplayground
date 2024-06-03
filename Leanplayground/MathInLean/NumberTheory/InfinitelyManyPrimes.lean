@@ -37,7 +37,7 @@ theorem primes_infinite {n : ℕ}
 
   suffices p > n by tauto
   suffices ¬ p ≤ n by aesop
-  λ _ : p ≤ n ↦
+  λ _ ↦
     have := calc
       p ∣ n !      := by duper [*, Nat.Prime.dvd_factorial] {portfolioInstance := 1}
       _ ∣ (n + 1)! := by simp only [Nat.factorial_succ, dvd_mul_left]
@@ -127,7 +127,7 @@ theorem primes_mod_4_eq_3_infinite {n : ℕ}
     have : ∀ p ∈ S, p ≤ n
       | p, (_ : p ∈ S) =>
         have : ¬ p > n := λ _ ↦ by aesop
-        by omega
+        by aesop
 
     let S : Finset ℕ :=
       have : BddAbove S := ⟨n, this⟩
