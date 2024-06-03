@@ -1,6 +1,6 @@
 import Mathlib.Tactic
 
-import Auto
+import Auto.Tactic
 import Duper
 import Egg
 
