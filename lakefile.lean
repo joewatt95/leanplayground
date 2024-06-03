@@ -31,12 +31,12 @@ require auto from git
   "https://github.com/leanprover-community/lean-auto"
     @ "91cd0e81ec8bd16baa2c08e3d00a7f8e473477b4"
 
+require Duper from git
+  "https://github.com/leanprover-community/duper" @ "v0.0.12"
+
 require egg from git
   "https://github.com/marcusrossel/lean-egg"
     @ "5715f55d754b32f57fa32bf3187ca270caccebb3"
-
-require Duper from git
-  "https://github.com/leanprover-community/duper" @ "v0.0.12"
 
 require loogle from git
   "https://github.com/nomeata/loogle"
