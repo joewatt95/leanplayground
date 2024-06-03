@@ -10,7 +10,8 @@ theorem exists_prime_factor {n : ℕ}
   : ∃ p, p.Prime ∧ p ∣ n :=
   suffices ¬ n.Prime → ∃ p, p.Prime ∧ p ∣ n  by tauto
   λ _ : ¬ n.Prime ↦
-    have : ∃ m < n, m ∣ n ∧ m ≠ 1 := by duper [*, Nat.prime_def_lt] {portfolioInstance := 1}
+    have : ∃ m < n, m ∣ n ∧ m ≠ 1 := by
+      duper [*, Nat.prime_def_lt] {portfolioInstance := 1}
     have ⟨m, (_ : m < n), (_ : m ∣ n), (_ : m ≠ 1)⟩ := this
 
     have : 2 ≤ m :=
@@ -54,12 +55,14 @@ theorem primes_infinite' {S : Finset ℕ}
     let S_primes_prod := ∏ n ∈ S_primes, n
 
     have : 2 ≤ S_primes_prod := by
-      duper [*, Finset.single_le_prod', Nat.Prime.one_le, Nat.prime_two] {portfolioInstance := 1}
+      duper [*, Finset.single_le_prod', Nat.Prime.one_le, Nat.prime_two]
+        {portfolioInstance := 1}
 
     have ⟨p, (_ : p.Prime), (_ : p ∣ S_primes_prod + 1)⟩ :=
       exists_prime_factor <| Nat.le_succ_of_le this
 
-    have : p ∣ S_primes_prod := by duper [*, dvd_prod_of_mem] {portfolioInstance := 1}
+    have : p ∣ S_primes_prod := by
+      duper [*, dvd_prod_of_mem] {portfolioInstance := 1}
     have : p ∣ 1 := by duper [*, Nat.dvd_add_right] {portfolioInstance := 1}
     show ⊥ by aesop
 
@@ -124,16 +127,18 @@ theorem primes_mod_4_eq_3_infinite {n : ℕ}
   suffices ¬ ∀ p > n, p.Prime → p % 4 ≠ 3 by aesop
   λ _ ↦
     let S := {p | p.Prime ∧ p % 4 = 3}
-    have : ∀ p ∈ S, p ≤ n
-      | p, (_ : p ∈ S) =>
-        have : ¬ p > n := λ _ ↦ by aesop
-        by aesop
 
-    let S : Finset ℕ :=
-      have : BddAbove S := ⟨n, this⟩
-      have : S.Finite := by
-        duper [*, Set.finite_iff_bddAbove] {portfolioInstance := 1}
-      this.toFinset
+    have : BddAbove S :=
+      have : ∀ p ∈ S, p ≤ n
+        | p, (_ : p ∈ S) =>
+          have : ¬ p > n := λ _ ↦ by aesop
+          by aesop
+      ⟨n, this⟩
+
+    have : S.Finite := by
+      duper [*, Set.finite_iff_bddAbove] {portfolioInstance := 1}
+
+    let S : Finset ℕ := this.toFinset
 
     let S_prod := ∏ m in S.erase 3, m
 
@@ -144,25 +149,28 @@ theorem primes_mod_4_eq_3_infinite {n : ℕ}
     have : p ≠ 3
       | (_ : p = 3) =>
         have : 3 ∣ 4 * S_prod := by aesop
-        have : 3 ∣ S_prod :=
-          have {a b} : ¬ 3 ∣ 4 ∧ (3 ∣ a * b ↔ 3 ∣ a ∨ 3 ∣ b) :=
-            ⟨by omega, Nat.prime_three.dvd_mul⟩
-          by aesop
+        have : ¬ 3 ∣ 4 := by omega
+        have : 3 ∣ S_prod := by
+          duper [*, Nat.prime_three, Nat.Prime.dvd_mul]
+            {portfolioInstance := 1}
 
         have ⟨p', _, _⟩ : ∃ p' ∈ S.erase 3, 3 ∣ p' := by
-          refine (Prime.dvd_finset_prod_iff ?_ id).mp this
-          duper [Nat.prime_iff, Nat.prime_three]
+          duper
+            [*, Nat.prime_iff, Nat.prime_three, Prime.exists_mem_finset_dvd]
+            {portfolioInstance := 3}
 
         have : p'.Prime ∧ p' ≠ 3 ∧ 3 ∣ p' := by aesop
-        show ⊥ by duper [Nat.prime_def_lt'', this] {portfolioInstance := 3}
+        show ⊥ by duper [*, Nat.prime_def_lt''] {portfolioInstance := 3}
 
+    have : p ∈ S.erase 3 := by aesop
     have := calc
-      p ∣ S_prod     := dvd_prod_of_mem id <| show p ∈ S.erase 3 by aesop
+      p ∣ S_prod     := by duper [*, dvd_prod_of_mem] {portfolioInstance := 1}
       _ ∣ 4 * S_prod := by aesop
 
-    have : p ∣ 3 := Nat.dvd_add_iff_right this |>.mpr ‹_›
+    have : p ∣ 3 := by
+      duper [*, Nat.dvd_add_iff_right] {portfolioInstance := 1}
     have : p = 3 := by
-      duper [Nat.prime_dvd_prime_iff_eq, Nat.prime_three, ‹p.Prime›, this]
+      duper [*, Nat.prime_dvd_prime_iff_eq, Nat.prime_three]
         {portfolioInstance := 1}
 
     show ⊥ from ‹p ≠ 3› ‹p = 3›
