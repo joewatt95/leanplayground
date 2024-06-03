@@ -3,10 +3,10 @@ open Lake DSL
 
 package leanplayground where
   -- add any package configuration options here
-  moreLinkArgs := #[
-    "-L./.lake/packages/LeanCopilot/.lake/build/lib",
-    "-lctranslate2"
-  ]
+  -- moreLinkArgs := #[
+  --   "-L./.lake/packages/LeanCopilot/.lake/build/lib",
+  --   "-lctranslate2"
+  -- ]
 
 @[default_target]
 lean_lib Leanplayground where
@@ -15,17 +15,6 @@ lean_lib Leanplayground where
 require mathlib from git
   "https://github.com/leanprover-community/mathlib4"
     @ "7aa5faafc8815ed358053e05f51f4aea8e47f4e2"
-
-require verso from git
-  "https://github.com/leanprover/verso"
-    @ "297444dc7fc47066872156c58220bcc21c0b2aab"
-
-require LeanCopilot from git
-  "https://github.com/lean-dojo/LeanCopilot" @ "v1.2.2"
-
-require verbose from git
-  "https://github.com/PatrickMassot/verbose-lean4"
-    @ "0fef059edf6bf2da0fcdf03100ca6631fb73d79a"
 
 require auto from git
   "https://github.com/leanprover-community/lean-auto"
@@ -38,9 +27,20 @@ require egg from git
   "https://github.com/marcusrossel/lean-egg"
     @ "5715f55d754b32f57fa32bf3187ca270caccebb3"
 
+-- require LeanCopilot from git
+--   "https://github.com/lean-dojo/LeanCopilot" @ "v1.2.2"
+
 require loogle from git
   "https://github.com/nomeata/loogle"
     @ "fa2ddf5771cc25b0d6e552ef63b51a68351e437f"
+
+require verso from git
+  "https://github.com/leanprover/verso"
+    @ "297444dc7fc47066872156c58220bcc21c0b2aab"
+
+require verbose from git
+  "https://github.com/PatrickMassot/verbose-lean4"
+    @ "0fef059edf6bf2da0fcdf03100ca6631fb73d79a"
 
 -- require smt from git
 --   "https://github.com/ufmg-smite/lean-smt.git"
