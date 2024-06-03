@@ -132,10 +132,9 @@ theorem primes_mod_4_eq_3_infinite {n : ℕ}
       suffices ∀ p ∈ S, p ≤ n from ⟨n, this⟩
       λ p (_ : p ∈ S) ↦
         have : ¬ p > n := λ _ ↦ by aesop
-        by aesop
+        Nat.le_of_not_lt this
 
-    have : S.Finite := by
-      duper [*, Set.finite_iff_bddAbove] {portfolioInstance := 1}
+    have : S.Finite := Set.finite_iff_bddAbove.mpr this
 
     let S : Finset ℕ := this.toFinset
 
@@ -154,16 +153,15 @@ theorem primes_mod_4_eq_3_infinite {n : ℕ}
             {portfolioInstance := 1}
 
         have ⟨p', _, _⟩ : ∃ p' ∈ S.erase 3, 3 ∣ p' := by
-          duper
-            [*, Nat.prime_iff, Nat.prime_three, Prime.exists_mem_finset_dvd]
-            {portfolioInstance := 3}
+          refine Prime.exists_mem_finset_dvd ?_ this
+          duper [Nat.prime_iff, Nat.prime_three] {portfolioInstance := 1}
 
         have : p'.Prime ∧ p' ≠ 3 ∧ 3 ∣ p' := by aesop
         show ⊥ by duper [*, Nat.prime_def_lt''] {portfolioInstance := 3}
 
     have : p ∈ S.erase 3 := by aesop
     have := calc
-      p ∣ S_prod     := by duper [*, dvd_prod_of_mem] {portfolioInstance := 1}
+      p ∣ S_prod     := dvd_prod_of_mem id this
       _ ∣ 4 * S_prod := by aesop
 
     have : p ∣ 3 := by
