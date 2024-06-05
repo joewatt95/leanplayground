@@ -87,7 +87,7 @@ theorem exists_prime_factor_mod_4_eq_3 {n : ℕ}
   : ∃ p, p.Prime ∧ p ∣ n ∧ p % 4 = 3 :=
   let φ := ∃ p, p.Prime ∧ p ∣ n ∧ p % 4 = 3
   suffices ¬ n.Prime → φ by tauto
-  λ _ : ¬ n.Prime ↦
+  λ _ ↦
     have : ∃ m < n, m ∣ n ∧ m ≠ 1 :=
       suffices 2 ≤ n by duper [*, Nat.prime_def_lt] {portfolioInstance := 1}
       by omega
@@ -162,7 +162,7 @@ theorem primes_mod_4_eq_3_infinite {n : ℕ}
           --   {portfolioInstance := 1}
 
         have : p'.Prime ∧ p' ≠ 3 ∧ 3 ∣ p' := by rename_i x S_1 this_1 this_2 this_3 left left_1 right x_1 this_4 this_5 left_2 right_1; focus subst x_1; simp_all only [gt_iff_lt, ne_eq, mem_erase, Set.Finite.mem_toFinset, Set.mem_setOf_eq, Nat.dvd_add_self_right, Nat.mod_succ, not_false_eq_true, and_self, S_1, S_prod, S]
-        show ⊥ by duper [*, Nat.prime_def_lt''] {portfolioInstance := 3}
+        show ⊥ by duper [this, Nat.prime_def_lt''] {portfolioInstance := 3}
 
     have : p ∈ S.erase 3 := by rename_i x S_1 this_1 this_2 this_3 left left_1 right; simp_all only [gt_iff_lt, ne_eq, mem_erase, not_false_eq_true, Set.Finite.mem_toFinset, Set.mem_setOf_eq, and_self, S_1, S_prod, S]
     have := calc
