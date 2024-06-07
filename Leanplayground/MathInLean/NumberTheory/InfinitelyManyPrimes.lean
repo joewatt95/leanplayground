@@ -133,7 +133,7 @@ theorem primes_mod_4_eq_3_infinite {n : ℕ}
     have : BddAbove S :=
       suffices ∀ p ∈ S, p ≤ n from ⟨n, this⟩
       λ p (_ : p ∈ S) ↦
-        have : ¬ p > n := λ _ ↦ by rename_i x x_1 x_2; simp_all only [gt_iff_lt, ne_eq, Set.mem_setOf_eq, S]; unhygienic with_reducible aesop_destruct_products; simp_all only
+        have : ¬ p > n := λ _ ↦ by aesop
         Nat.le_of_not_lt this
 
     have : S.Finite := Set.finite_iff_bddAbove.mpr this
@@ -148,7 +148,7 @@ theorem primes_mod_4_eq_3_infinite {n : ℕ}
 
     have : p ≠ 3
       | (_ : p = 3) =>
-        have : 3 ∣ 4 * S_prod := by rename_i x S_1 this_1 this_2 left left_1 right x_1; focus subst x_1; simp_all only [gt_iff_lt, ne_eq, Nat.dvd_add_self_right, Nat.mod_succ, S_1, S_prod, S]
+        have : 3 ∣ 4 * S_prod := by aesop
         have : ¬ 3 ∣ 4 := by omega
         have : 3 ∣ S_prod := by
           duper [*, Nat.prime_three, Nat.Prime.dvd_mul]
@@ -161,13 +161,13 @@ theorem primes_mod_4_eq_3_infinite {n : ℕ}
           --   [Prime.exists_mem_finset_dvd, this, Nat.prime_iff, Nat.prime_three]
           --   {portfolioInstance := 1}
 
-        have : p'.Prime ∧ p' ≠ 3 ∧ 3 ∣ p' := by rename_i x S_1 this_1 this_2 this_3 left left_1 right x_1 this_4 this_5 left_2 right_1; focus subst x_1; simp_all only [gt_iff_lt, ne_eq, mem_erase, Set.Finite.mem_toFinset, Set.mem_setOf_eq, Nat.dvd_add_self_right, Nat.mod_succ, not_false_eq_true, and_self, S_1, S_prod, S]
+        have : p'.Prime ∧ p' ≠ 3 ∧ 3 ∣ p' := by aesop
         show ⊥ by duper [this, Nat.prime_def_lt''] {portfolioInstance := 3}
 
-    have : p ∈ S.erase 3 := by rename_i x S_1 this_1 this_2 this_3 left left_1 right; simp_all only [gt_iff_lt, ne_eq, mem_erase, not_false_eq_true, Set.Finite.mem_toFinset, Set.mem_setOf_eq, and_self, S_1, S_prod, S]
+    have : p ∈ S.erase 3 := by aesop
     have := calc
       p ∣ S_prod     := dvd_prod_of_mem _ this
-      _ ∣ 4 * S_prod := by rename_i x S_1 this_1 this_2 this_3 left left_1 right this_4; simp_all only [gt_iff_lt, ne_eq, mem_erase, not_false_eq_true, Set.Finite.mem_toFinset, Set.mem_setOf_eq, and_self, dvd_mul_left, S_1, S_prod, S]
+      _ ∣ 4 * S_prod := by aesop
 
     have : p ∣ 3 := by
       duper [*, Nat.dvd_add_iff_right] {portfolioInstance := 1}
