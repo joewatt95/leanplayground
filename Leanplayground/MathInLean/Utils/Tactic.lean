@@ -3,6 +3,8 @@ import Mathlib.Tactic
 import Auto.Tactic
 import Duper
 import Egg
+-- import cvc5
+-- import Smt
 
 import Loogle.Find
 

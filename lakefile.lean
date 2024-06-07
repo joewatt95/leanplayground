@@ -23,6 +23,14 @@ require egg from git
   "https://github.com/marcusrossel/lean-egg"
     @ "6cffc706e5f0824a7696137c3675f984323ef9e4"
 
+require cvc5 from git
+  "https://github.com/anzenlang/lean-cvc5"
+    @ "5c18f7fe381143b62ef9d809b52214405cdc7c9e"
+
+require smt from git
+  "https://github.com/ufmg-smite/lean-smt"
+    @ "95747e9bf4bda4f80a7bf359cf774b8514633328"
+
 -- require LeanCopilot from git
 --   "https://github.com/lean-dojo/LeanCopilot" @ "v1.2.2"
 
