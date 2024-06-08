@@ -1,10 +1,9 @@
-import Mathlib.Tactic
+import Mathlib.Tactic.Common
 
 import Auto.Tactic
 import Duper
 import Egg
--- import cvc5
--- import Smt
+import Smt
 
 import Loogle.Find
 
