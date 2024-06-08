@@ -146,8 +146,8 @@ theorem primes_mod_4_eq_3_infinite {n : ℕ}
     have ⟨p, (_ : p.Prime), (_ : p ∣ 4 * S_prod + 3), (_ : p % 4 = 3)⟩ :=
       exists_prime_factor_mod_4_eq_3 this
 
-    have : p ≠ 3
-      | (_ : p = 3) =>
+    have : p ≠ 3 :=
+      λ _ ↦
         have : 3 ∣ 4 * S_prod := by aesop
         have : ¬ 3 ∣ 4 := by omega
         have : 3 ∣ S_prod := by
