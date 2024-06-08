@@ -9,7 +9,7 @@ private def libcpp : String :=
 private def args : Array String := #[s!"--load-dynlib={libcpp}"]
 
 package leanplayground where
-  precompileModules := true
+  -- precompileModules := true
   moreLeanArgs := args
   moreGlobalServerArgs := args
   -- moreLinkArgs := #[
