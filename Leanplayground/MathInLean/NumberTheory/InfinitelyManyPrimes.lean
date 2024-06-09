@@ -153,7 +153,7 @@ theorem primes_mod_4_eq_3_infinite {n : ℕ}
     have : p ≠ 3 :=
       λ _ ↦
         have : 3 ∣ 4 * S_prod := by aesop
-        have : ¬ 3 ∣ 4 := by omega
+        have : ¬ 3 ∣ 4 := by decide
         have : 3 ∣ S_prod := by
           duper [*, Nat.prime_three, Nat.Prime.dvd_mul]
             {portfolioInstance := 1}
