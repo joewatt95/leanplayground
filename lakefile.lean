@@ -1,17 +1,17 @@
 import Lake
 open Lake DSL
 
-private def libcpp : String :=
-  if System.Platform.isWindows then "libstdc++-6.dll"
-  else if System.Platform.isOSX then "libc++.dylib"
-  else "libstdc++.so.6"
+-- private def libcpp : String :=
+--   if System.Platform.isWindows then "libstdc++-6.dll"
+--   else if System.Platform.isOSX then "libc++.dylib"
+--   else "libstdc++.so.6"
 
-private def args : Array String := #[s!"--load-dynlib={libcpp}"]
+-- private def args : Array String := #[s!"--load-dynlib={libcpp}"]
 
 package leanplayground where
   -- precompileModules := true
-  moreLeanArgs := args
-  moreGlobalServerArgs := args
+  -- moreLeanArgs := args
+  -- moreGlobalServerArgs := args
   -- moreLinkArgs := #[
   --   "-L./.lake/packages/LeanCopilot/.lake/build/lib",
   --   "-lctranslate2"
@@ -25,15 +25,16 @@ require mathlib from git
     @ "v4.8.0"
 
 require Duper from git
-  "https://github.com/leanprover-community/duper" @ "v0.0.12"
+  "https://github.com/leanprover-community/duper"
+    @ "v0.0.12"
 
 require egg from git
   "https://github.com/marcusrossel/lean-egg"
     @ "6cffc706e5f0824a7696137c3675f984323ef9e4"
 
-require smt from git
-  "https://github.com/joewatt95/lean-smt"
-    @ "56b72670e0fbf703132db7aa98fbc6499a8b6241"
+-- require smt from git
+--   "https://github.com/joewatt95/lean-smt"
+--     @ "56b72670e0fbf703132db7aa98fbc6499a8b6241"
   -- "https://github.com/ufmg-smite/lean-smt"
   --   @ "64d482b74c32913120a7e6de9145e92433532200"
 
