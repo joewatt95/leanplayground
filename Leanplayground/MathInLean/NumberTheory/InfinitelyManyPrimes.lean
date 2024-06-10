@@ -22,7 +22,7 @@ theorem exists_prime_factor {n : ℕ}
       have : m ≠ 0 := by aesop
       by omega
 
-    let ⟨p, (_ : p.Prime), (_ : p ∣ m)⟩ := exists_prime_factor this
+    have ⟨p, (_ : p.Prime), (_ : p ∣ m)⟩ := exists_prime_factor this
     have := calc
       p ∣ m := ‹_›
       _ ∣ n := ‹_›
@@ -54,7 +54,7 @@ open BigOperators Finset
 theorem primes_infinite' {S : Finset ℕ}
   : ∃ p, p.Prime ∧ p ∉ S :=
   let S_primes := S.filter Nat.Prime
-  suffices ¬ ∀ {p}, p.Prime ↔ p ∈ S_primes by aesop
+  suffices ¬ ∀ p, p.Prime ↔ p ∈ S_primes by aesop
   λ _ ↦
     let S_primes_prod := ∏ n ∈ S_primes, n
 
@@ -141,7 +141,6 @@ theorem primes_mod_4_eq_3_infinite {n : ℕ}
         Nat.le_of_not_lt this
 
     have : S.Finite := Set.finite_iff_bddAbove.mpr this
-
     let S : Finset ℕ := this.toFinset
 
     let S_prod := ∏ m in S.erase 3, m
@@ -162,7 +161,7 @@ theorem primes_mod_4_eq_3_infinite {n : ℕ}
           refine Prime.exists_mem_finset_dvd ?_ this
           duper [Nat.prime_iff, Nat.prime_three] {portfolioInstance := 1}
           -- duper
-          --   [Prime.exists_mem_finset_dvd, this, Nat.prime_iff, Nat.prime_three]
+          --   [this, Prime.exists_mem_finset_dvd, Nat.prime_iff, Nat.prime_three]
           --   {portfolioInstance := 1}
 
         have : p'.Prime ∧ p' ≠ 3 ∧ 3 ∣ p' := by aesop
