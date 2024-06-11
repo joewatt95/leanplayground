@@ -13,12 +13,12 @@ where
 
 example {drunk : α → Prop} [Inhabited α] : ∃ x, drunk x → ∀ x, drunk x :=
   match Classical.em _ with
-  | .inl (h : ∀ x, drunk x) =>
+  | .inl (_ : ∀ x, drunk x) =>
     have : drunk default → ∀ x, drunk x := by aesop
     show ∃ _, _ from ⟨default, this⟩
 
-  | .inr _ =>
-    have ⟨x, h_not_drunk_x⟩ : ∃ x, ¬ drunk x := by aesop
+  | .inr (_ : ¬ ∀ x, drunk x) =>
+    have ⟨x, (_ : ¬ drunk x)⟩ : ∃ x, ¬ drunk x := by aesop
     have : drunk x → ∀ x, drunk x := by aesop
     show ∃ _, _ from ⟨x, this⟩
 
