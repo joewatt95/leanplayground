@@ -34,7 +34,7 @@ require egg from git
 
 -- require smt from git
 --   "https://github.com/ufmg-smite/lean-smt"
---     @ "9dff10149ddf5e8941c973ebedab1743920e6812"
+--     @ "1c870041542025ee49184112b8ca372adb9b7ecd"
 
 -- require LeanCopilot from git
 --   "https://github.com/lean-dojo/LeanCopilot" @ "v1.2.2"

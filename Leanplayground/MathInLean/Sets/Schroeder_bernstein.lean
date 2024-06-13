@@ -91,18 +91,17 @@ theorem schroeder_bernstein
 
       have : InjOn f S₀ᶜ := λ _a _ _a' _ ↦ by aesop
 
-      have : InjOn (invFun g) S₀
-      | a, _, a', _,
-        (_ : invFun g a = invFun g a') =>
-        have : ∀ x, invFun g (g x) = x := ‹LeftInverse _ _›
+      have : InjOn (invFun g) S₀ :=
+        λ a _ a' _ (_ : invFun g a = invFun g a') ↦
+          have : ∀ x, invFun g (g x) = x := ‹LeftInverse _ _›
 
-        have : S₀ ⊆ g '' (f '' S₀ᶜ)ᶜ := ‹g '' _ = _› |>.symm |> subset_of_eq
-        have : ∀ a ∈ _, ∃ b ∈ _, g b = a := this
+          have : S₀ ⊆ g '' (f '' S₀ᶜ)ᶜ := ‹g '' _ = _› |>.symm |> subset_of_eq
+          have : ∀ a ∈ _, ∃ b ∈ _, g b = a := this
 
-        have ⟨b, _, (_ : g b = a)⟩ := this _ ‹_›
-        have ⟨b', _, (_ : g b' = a')⟩ := this _ ‹_›
+          have ⟨b, _, (_ : g b = a)⟩ := this _ ‹_›
+          have ⟨b', _, (_ : g b' = a')⟩ := this _ ‹_›
 
-        show a = a' by aesop
+          show a = a' by aesop
 
       show Injective h by apply piecewise_is_inj; repeat assumption
 
