@@ -1,2 +1,2 @@
 import Leanplayground.MathInLean.Sets.Basic
-import Leanplayground.MathInLean.Sets.Schroeder_bernstein
+import Leanplayground.MathInLean.Sets.SchroederBernstein
