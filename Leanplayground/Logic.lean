@@ -11,11 +11,12 @@ where
   -- curry
   mpr f a b := f ⟨a, b⟩
 
-example {drunk : α → Prop} [Inhabited α] : ∃ x, drunk x → ∀ x, drunk x :=
+example {drunk : α → Prop} [Nonempty α] : ∃ x, drunk x → ∀ x, drunk x :=
   match Classical.em _ with
   | .inl (_ : ∀ x, drunk x) =>
-    have : drunk default → ∀ x, drunk x := by aesop
-    show ∃ _, _ from ⟨default, this⟩
+    have ⟨a⟩ := ‹Nonempty α›
+    have : drunk a → ∀ x, drunk x := by aesop
+    show ∃ _, _ from ⟨a, this⟩
 
   | .inr (_ : ¬ ∀ x, drunk x) =>
     have ⟨x, (_ : ¬ drunk x)⟩ : ∃ x, ¬ drunk x := by aesop
