@@ -16,6 +16,8 @@ set_option trace.auto.smt.printCommands true
 set_option trace.auto.smt.result true
 
 set_option auto.tptp true
+set_option auto.tptp.solver.name "zipperposition"
+set_option auto.tptp.zeport.path ""
 
 macro_rules | `(tactic| trivial) => `(tactic| tauto)
 
