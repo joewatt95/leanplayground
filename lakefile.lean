@@ -45,7 +45,7 @@ require loogle from git
 
 require verso from git
   "https://github.com/leanprover/verso"
-    @ "63146023205d4be508f607d3197cd88132447598"
+    @ "d3b46deea2db68bc3d26dadfcbdf820f575636b2"
 
 require verbose from git
   "https://github.com/PatrickMassot/verbose-lean4"
