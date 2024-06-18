@@ -22,7 +22,7 @@ macro "setup_auto" : command =>
     set_option auto.tptp.solver.name "zipperposition"
     set_option auto.tptp.zeport.path "/home/joe/dev/zipperposition/portfolio")
 
-syntax "setup_trivial" sepBy1(tactic, ",") : command
+syntax "setup_trivial" sepBy(tactic, ",") : command
 
 macro_rules
   | `(setup_trivial $[$tacs:tactic],*) => do
