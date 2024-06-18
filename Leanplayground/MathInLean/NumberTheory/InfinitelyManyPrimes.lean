@@ -138,7 +138,7 @@ theorem primes_mod_4_eq_3_infinite {n : ℕ}
       suffices ∀ p ∈ S, p ≤ n from ⟨n, this⟩
       λ p (_ : p ∈ S) ↦
         have : ¬ p > n := λ _ ↦ show ⊥ by aesop
-        Nat.le_of_not_lt this
+        show p ≤ n by omega
 
     have : S.Finite := Set.finite_iff_bddAbove.mpr this
     let S : Finset ℕ := this.toFinset

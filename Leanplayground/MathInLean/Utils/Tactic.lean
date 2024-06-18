@@ -1,3 +1,5 @@
+import Lean
+
 import Mathlib.Tactic.Common
 import Mathlib.Tactic.Linarith
 
@@ -21,12 +23,22 @@ macro "setup_auto" : command => `(
   set_option auto.tptp.zeport.path "/home/joe/dev/zipperposition/portfolio"
 )
 
-macro_rules | `(tactic| trivial) => `(tactic| tauto)
+syntax "setup_trivial" sepBy1(tactic, ",") : command
 
-macro_rules | `(tactic| trivial) => `(tactic| simp <;> trivial)
-macro_rules | `(tactic| trivial) => `(tactic| simp_all)
+macro_rules
+  | `(setup_trivial $[$tacs:tactic],*) => do
+    let mut cmds := #[← `(set_option linter.unreachableTactic false)]
 
-macro_rules | `(tactic| trivial) => `(tactic| aesop)
+    for tac in tacs do
+      cmds := cmds.push <|
+        ← `(macro_rules | `(tactic| trivial) => `(tactic| $tac))
 
-macro_rules | `(tactic| trivial) => `(tactic| omega)
-macro_rules | `(tactic| trivial) => `(tactic| linarith)
+    pure <| Lean.mkNullNode cmds
+
+    -- let cmd : TSyntax `command := { raw := mkNullNode cmds }
+    -- `(command| $cmd)
+
+setup_trivial decide, tauto, aesop, omega, linarith
+
+-- macro_rules | `(tactic| trivial) => `(tactic| simp <;> trivial)
+-- macro_rules | `(tactic| trivial) => `(tactic| simp_all)
