@@ -11,7 +11,7 @@ import Loogle.Find
 macro "setup_auto" : command => `(
   set_option auto.smt true
   set_option auto.smt.trust true
-  set_option auto.smt.solver.name "cvc5"
+  set_option auto.smt.solver.name "z3"
 
   set_option trace.auto.smt.printCommands true
   set_option trace.auto.smt.result true
