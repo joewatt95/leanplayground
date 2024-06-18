@@ -137,7 +137,7 @@ theorem primes_mod_4_eq_3_infinite {n : ℕ}
     have : BddAbove S :=
       suffices ∀ p ∈ S, p ≤ n from ⟨n, this⟩
       λ p (_ : p ∈ S) ↦
-        have : ¬ p > n := λ _ ↦ by aesop
+        have : ¬ p > n := λ _ ↦ show ⊥ by aesop
         Nat.le_of_not_lt this
 
     have : S.Finite := Set.finite_iff_bddAbove.mpr this
