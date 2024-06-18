@@ -22,22 +22,26 @@ macro "setup_auto" : command =>
     set_option auto.tptp.solver.name "zipperposition"
     set_option auto.tptp.zeport.path "/home/joe/dev/zipperposition/portfolio")
 
-syntax "setup_trivial" sepBy(tactic, ",") : command
+syntax "setup_trivial" manyIndent(tactic) : command
 
 macro_rules
-  | `(setup_trivial $[$tacs:tactic],*) => do
+  | `(setup_trivial $[$tacs:tactic]*) => do
     let mut cmds := #[← `(set_option linter.unreachableTactic false)]
 
     for tac in tacs do
       cmds := cmds.push <|
         ← `(macro_rules | `(tactic| trivial) => `(tactic| $tac))
 
-    pure <| Lean.mkNullNode cmds
+    return Lean.mkNullNode cmds
 
     -- let cmd : TSyntax `command := { raw := mkNullNode cmds }
     -- `(command| $cmd)
 
-setup_trivial decide, tauto, aesop, omega, linarith
+setup_trivial
+  decide
+  tauto
+  aesop
+  omega linarith
 
 -- macro_rules | `(tactic| trivial) => `(tactic| simp <;> trivial)
 -- macro_rules | `(tactic| trivial) => `(tactic| simp_all)
