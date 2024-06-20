@@ -26,11 +26,11 @@ require mathlib from git
 
 require Duper from git
   "https://github.com/leanprover-community/duper"
-    @ "v0.0.13"
+    @ "8077ac787b604ff16a854931058ec4c788932c6f"
 
 require egg from git
   "https://github.com/marcusrossel/lean-egg"
-    @ "ed699643e837ededeb75d88746b69a41c6890432"
+    @ "abaab85d51d33ef01ed8c757bfb49cc55abae229"
 
 -- require smt from git
 --   "https://github.com/ufmg-smite/lean-smt"
@@ -45,7 +45,7 @@ require loogle from git
 
 require verso from git
   "https://github.com/leanprover/verso"
-    @ "d3b46deea2db68bc3d26dadfcbdf820f575636b2"
+    @ "b51349a1af0e0429e5e30343e6e6127b01db5911"
 
 require verbose from git
   "https://github.com/PatrickMassot/verbose-lean4"
