@@ -114,7 +114,7 @@ theorem exists_prime_factor_mod_4_eq_3 {n : ℕ}
       -- This is required to justify the well-founded recursion on n / m.
       have : n / m < n :=
         suffices 0 < n ∧ 1 < m by
-          duper [*, Nat.div_lt_self] {portfolioInstance := 1}
+          duper [this, Nat.div_lt_self] {portfolioInstance := 1}
         have : n % 4 = 3 ∧ m ∣ n ∧ m ≠ 1 := by tauto
         suffices m ≠ 0 by omega
         by aesop
