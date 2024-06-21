@@ -92,11 +92,9 @@ theorem exists_prime_factor_mod_4_eq_3 {n : ℕ}
   let φ := ∃ p, p.Prime ∧ p ∣ n ∧ p % 4 = 3
   suffices ¬ n.Prime → φ by tauto
   λ _ ↦
-    have : ∃ m < n, m ∣ n ∧ m ≠ 1 :=
+    have ⟨m, _, _, _⟩ : ∃ m < n, m ∣ n ∧ m ≠ 1 :=
       suffices 2 ≤ n by duper [*, Nat.prime_def_lt] {portfolioInstance := 1}
       by omega
-
-    have ⟨m, (_ : m < n), (_ : m ∣ n), (_ : m ≠ 1)⟩ := this
 
     have : m % 4 = 3 ∨ n / m % 4 = 3 := by
       duper [*, Nat.mul_div_cancel', mod_4_eq_3_or] {portfolioInstance := 1}
