@@ -6,7 +6,7 @@ import Mathlib.Tactic.Linarith
 import Auto.Tactic
 import Duper
 import Egg
--- import Smt
+import Smt
 
 import Loogle.Find
 

@@ -106,7 +106,12 @@ example : goodRule2 := by
 GIVEN
   m IS A Int
   n IS A Int
-DECIDE m < n IF True
+DECIDE m < n
+IF True
+
+-- set_option trace.smt.solve true in
+-- set_option trace.smt.translate.expr true in
+-- #SMT badRule1
 
 § badRule2
 GIVEN xs IS A List OF Int

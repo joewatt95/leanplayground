@@ -1,17 +1,17 @@
 import Lake
 open Lake DSL
 
--- private def libcpp : String :=
---   if System.Platform.isWindows then "libstdc++-6.dll"
---   else if System.Platform.isOSX then "libc++.dylib"
---   else "libstdc++.so.6"
+private def libcpp : String :=
+  if System.Platform.isWindows then "libstdc++-6.dll"
+  else if System.Platform.isOSX then "libc++.dylib"
+  else "libstdc++.so.6"
 
--- private def args : Array String := #[s!"--load-dynlib={libcpp}"]
+private def args : Array String := #[s!"--load-dynlib={libcpp}"]
 
 package leanplayground where
   -- precompileModules := true
-  -- moreLeanArgs := args
-  -- moreGlobalServerArgs := args
+  moreLeanArgs := args
+  moreGlobalServerArgs := args
   -- moreLinkArgs := #[
   --   "-L./.lake/packages/LeanCopilot/.lake/build/lib",
   --   "-lctranslate2"
@@ -32,12 +32,12 @@ require egg from git
   "https://github.com/marcusrossel/lean-egg"
     @ "abaab85d51d33ef01ed8c757bfb49cc55abae229"
 
--- require smt from git
---   "https://github.com/ufmg-smite/lean-smt"
---     @ "1c870041542025ee49184112b8ca372adb9b7ecd"
+require smt from git
+  "https://github.com/ufmg-smite/lean-smt"
+    @ "2899f02744cc12636f71c04e200bce0b308f73b5"
 
 -- require LeanCopilot from git
---   "https://github.com/lean-dojo/LeanCopilot" @ "v1.2.2"
+--   "https://github.com/lean-dojo/LeanCopilot" @ "v1.3.0"
 
 require loogle from git
   "https://github.com/nomeata/loogle"
