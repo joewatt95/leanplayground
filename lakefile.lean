@@ -1,15 +1,15 @@
 import Lake
 open Lake DSL
 
-private def libcpp : String :=
-  if System.Platform.isWindows then "libstdc++-6.dll"
-  else if System.Platform.isOSX then "libc++.dylib"
-  else "libstdc++.so.6"
-
-private def args : Array String := #[s!"--load-dynlib={libcpp}"]
+private def args : Array String :=
+  #[s!"--load-dynlib={libcpp}"]
+  where
+    libcpp :=
+      if System.Platform.isWindows then "libstdc++-6.dll"
+      else if System.Platform.isOSX then "libc++.dylib"
+      else "libstdc++.so.6"
 
 package leanplayground where
-  -- precompileModules := true
   moreLeanArgs := args
   moreGlobalServerArgs := args
   -- moreLinkArgs := #[
@@ -37,7 +37,8 @@ require smt from git
     @ "2899f02744cc12636f71c04e200bce0b308f73b5"
 
 -- require LeanCopilot from git
---   "https://github.com/lean-dojo/LeanCopilot" @ "v1.3.0"
+--   "https://github.com/lean-dojo/LeanCopilot"
+--     @ "v1.3.0"
 
 require loogle from git
   "https://github.com/nomeata/loogle"
