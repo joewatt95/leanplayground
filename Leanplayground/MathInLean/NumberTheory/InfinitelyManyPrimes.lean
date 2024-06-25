@@ -30,12 +30,12 @@ theorem exists_prime_factor {n : ℕ}
 
 theorem primes_infinite {n : ℕ}
   : ∃ p > n, p.Prime :=
-  -- open Scoped ! factorial notation
+  -- open scoped ! factorial notation
   open scoped Nat in
 
   have : 2 ≤ (n + 1)! + 1 :=
     have : 2 ≤ n ! + 1 := have := n.factorial_pos; by omega
-    have : n ! ≤ (n + 1) ! := by apply Nat.factorial_le; omega
+    have : n ! ≤ (n + 1) ! := Nat.factorial_le <| by omega
     by omega
 
   have ⟨p, (_ : p.Prime), (_ : p ∣ (n + 1)! + 1)⟩ := exists_prime_factor this
