@@ -3,6 +3,7 @@ import Mathlib.Order.FixedPoints
 import Mathlib.SetTheory.Ordinal.FixedPointApproximants
 
 import Leanplayground.MathInLean.Utils.Function
+import Leanplayground.MathInLean.Utils.Tactic
 
 namespace Sets
 
@@ -21,27 +22,28 @@ lemma piecewise_is_inj
   (f_inj : InjOn f X)
   (g_inj : InjOn g Xᶜ)
   (img_inter_empty : f '' X ∩ g '' Xᶜ = ∅)
-  : Injective <| @h _ _ f g X
-  | a, a', (ha_eq_ha' : h a = h a') =>
-    have {a} := Classical.em <| a ∈ X
-    match this, this with
-    | .inl (_ : a ∈ X), .inr (_ : a' ∉ X) => go ‹_› ‹_› ha_eq_ha'
-    | .inr (_ : a ∉ X), .inl (_ : a' ∈ X) => go ‹_› ‹_› ha_eq_ha'.symm
-    | .inl _, .inl _ | .inr _, .inr _ => by aesop
-  where
-    go {P} : ∀ {a a'}, a ∈ X → a' ∉ X → h a = h a' → P
-    | a, a', _, _, _ => nomatch calc
-      f a = g a'             := by aesop
-        _ ∈ f '' X ∩ g '' Xᶜ := ⟨by aesop, by aesop⟩
-        _ = ∅                := by assumption
+  : Injective <| h (f := f) (g := g) (X := X)
+  | a, a', (_ : h a = h a') =>
+    let h := h (f := f) (g := g) (X := X)
+
+    have : ∀ a ∈ X, ∀ a' ∉ X, h a ≠ h a' :=
+      λ a _ a' _ (_ : h a = h a') ↦ show ⊥ from calc
+        f a = g a'             := by aesop
+          _ ∈ f '' X ∩ g '' Xᶜ := ⟨by aesop, by aesop⟩
+          _ = ∅                := by assumption
+
+    show a = a' from match Classical.em _, Classical.em _ with
+      | .inl (_ : a ∈ X), .inr (_ : a' ∉ X)
+      | .inr (_ : a ∉ X), .inl (_ : a' ∈ X) => by duper [*]
+      | .inl _, .inl _ | .inr _, .inr _ => by aesop
 
 lemma piecewise_is_surj
   (f_union_g_eq_univ : f '' X ∪ g '' Xᶜ = univ)
-  : Surjective <| @h _ _ f g X
+  : Surjective <| h (f := f) (g := g) (X := X)
   | b =>
     have : b ∈ f '' X ∪ g '' Xᶜ := by aesop
-    match this with
-    | .inl _ | .inr _ => show ∃ a, h a = b by aesop
+    show ∃ a, h a = b from match this with
+      | .inl _ | .inr _ => by aesop
 
 end piecewise_inj_surj
 
