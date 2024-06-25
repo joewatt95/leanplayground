@@ -4,7 +4,6 @@ import Mathlib.Data.Nat.Prime
 import Mathlib.Order.Interval.Finset.Defs
 import Mathlib.Order.Interval.Finset.Nat
 
--- import Mathlib.Order.Bounds.Basic
 import Leanplayground.MathInLean.Utils.Tactic
 
 namespace NumberTheory

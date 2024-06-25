@@ -22,10 +22,9 @@ lemma piecewise_is_inj
   (f_inj : InjOn f X)
   (g_inj : InjOn g Xᶜ)
   (img_inter_empty : f '' X ∩ g '' Xᶜ = ∅)
-  : Injective <| h (f := f) (g := g) (X := X)
-  | a, a', (_ : h a = h a') =>
-    let h := h (f := f) (g := g) (X := X)
-
+  : Injective <| h (f := f) (g := g) (X := X) :=
+  let h := h (f := f) (g := g) (X := X)
+  λ a a' (_ : h a = h a') ↦
     have : ∀ a ∈ X, ∀ a' ∉ X, h a ≠ h a' :=
       λ a _ a' _ (_ : h a = h a') ↦ show ⊥ from calc
         f a = g a'             := by aesop
@@ -71,41 +70,33 @@ theorem schroeder_bernstein
     have : g '' (f '' S₀ᶜ)ᶜ = S₀ := by
       rw [‹S₀ = lfp F›]; exact F.map_lfp
 
-    let h a := if a ∈ S₀ then invFun g a else f a
+    let h a := if _ : a ∈ S₀ then invFun g a else f a
 
     have : LeftInverse (invFun g) g := leftInverse_invFun g_inj
+    have : invFun g '' S₀ = (f '' S₀ᶜ)ᶜ := by egg [*, this.image_image]
 
-    have := calc
-          (f '' S₀ᶜ)ᶜ
-      _ = invFun g '' (g '' (f '' S₀ᶜ)ᶜ) := by rw [this.image_image]
-      _ = invFun g '' S₀                 := by aesop
-
-    have : Surjective h := piecewise_is_surj <| calc
-          invFun g '' S₀ ∪ f '' S₀ᶜ
-      _ = (f '' S₀ᶜ)ᶜ ∪ f '' S₀ᶜ    := by aesop
-      _ = univ                      := by rw [compl_union_self]
+    have : Surjective h :=
+      piecewise_is_surj <| show invFun g '' S₀ ∪ f '' S₀ᶜ = univ by
+        egg [this, compl_union_self]
 
     have : Injective h :=
-      have := calc
-            invFun g '' S₀ ∩ f '' S₀ᶜ
-        _ = (f '' S₀ᶜ)ᶜ ∩ f '' S₀ᶜ    := by aesop
-        _ = ∅                         := by rw [compl_inter_self]
+      have : invFun g '' S₀ ∩ f '' S₀ᶜ = ∅ := by egg [*, compl_inter_self]
 
       have : InjOn f S₀ᶜ := λ (_ : α) _ (_ : α) _ ↦ by aesop
 
       have : InjOn (invFun g) S₀ :=
         λ a _ a' _ (_ : invFun g a = invFun g a') ↦
-          have : ∀ x, invFun g (g x) = x := ‹LeftInverse _ _›
+          have : ∀ {x}, invFun g (g x) = x := ‹LeftInverse _ _›
 
-          have : S₀ ⊆ g '' (f '' S₀ᶜ)ᶜ := ‹g '' _ = _› |>.symm |> subset_of_eq
+          have : S₀ ⊆ g '' (f '' S₀ᶜ)ᶜ := Eq.subset <| by egg [*]
           have : ∀ a ∈ S₀, ∃ b ∈ (f '' S₀ᶜ)ᶜ, g b = a := this
 
           have ⟨b, _, (_ : g b = a)⟩ := this _ ‹_›
           have ⟨b', _, (_ : g b' = a')⟩ := this _ ‹_›
 
-          show a = a' by aesop
+          show a = a' by egg [*]
 
-      show Injective h by apply piecewise_is_inj; repeat assumption
+      show Injective h from piecewise_is_inj ‹_› ‹_› ‹_›
 
     exact ⟨h, ‹Injective h›, ‹Surjective h›⟩
 
