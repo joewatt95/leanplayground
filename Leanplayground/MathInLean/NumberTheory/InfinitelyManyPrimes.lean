@@ -147,6 +147,8 @@ theorem primes_mod_4_eq_3_infinite {n : ℕ}
     have ⟨p, (_ : p.Prime), (_ : p ∣ 4 * S_prod + 3), (_ : p % 4 = 3)⟩ :=
       exists_prime_factor_mod_4_eq_3 this
 
+    suffices p ≠ 3 ∧ p = 3 by tauto
+
     have : p ≠ 3 :=
       λ _ ↦
         have : 3 ∣ 4 * S_prod := by aesop
@@ -165,17 +167,20 @@ theorem primes_mod_4_eq_3_infinite {n : ℕ}
         have : p'.Prime ∧ p' ≠ 3 ∧ 3 ∣ p' := by aesop
         show ⊥ by duper [this, Nat.prime_def_lt''] {portfolioInstance := 3}
 
+    suffices p = 3 by tauto
+
     have : p ∈ S.erase 3 := by aesop
+
     have := calc
       p ∣ S_prod     := dvd_prod_of_mem _ this
       _ ∣ 4 * S_prod := by aesop
 
     have : p ∣ 3 := by
-      duper [*, Nat.dvd_add_iff_right] {portfolioInstance := 1}
-    have : p = 3 := by
-      duper [*, Nat.prime_dvd_prime_iff_eq, Nat.prime_three]
+      duper [this, ‹p ∣ 4 * S_prod + 3›, Nat.dvd_add_iff_right]
         {portfolioInstance := 1}
 
-    show ⊥ from ‹p ≠ 3› ‹p = 3›
+    show p = 3 by
+      duper [*, Nat.prime_dvd_prime_iff_eq, Nat.prime_three]
+        {portfolioInstance := 1}
 
 end NumberTheory
