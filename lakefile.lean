@@ -1,6 +1,7 @@
 import Lake
 open Lake DSL
 
+-- This is needed because we compile and link against the C++ API of cvc5.
 private def args : Array String :=
   #[s!"--load-dynlib={libcpp}"]
   where
@@ -25,16 +26,16 @@ require mathlib from git
     @ "v4.8.0"
 
 require Duper from git
-  "https://github.com/leanprover-community/duper"
-    @ "8077ac787b604ff16a854931058ec4c788932c6f"
-
-require egg from git
-  "https://github.com/marcusrossel/lean-egg"
-    @ "abaab85d51d33ef01ed8c757bfb49cc55abae229"
+  "https://github.com/dranov/duper"
+    @ "64441b020a41cf6c17288b830d1a685fe1fec44c"
 
 require smt from git
   "https://github.com/ufmg-smite/lean-smt"
     @ "2899f02744cc12636f71c04e200bce0b308f73b5"
+
+require egg from git
+  "https://github.com/marcusrossel/lean-egg"
+    @ "abaab85d51d33ef01ed8c757bfb49cc55abae229"
 
 -- require LeanCopilot from git
 --   "https://github.com/lean-dojo/LeanCopilot"
