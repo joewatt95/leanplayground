@@ -76,8 +76,7 @@ theorem schroeder_bernstein
     have : invFun g '' S₀ = (f '' S₀ᶜ)ᶜ := by egg [*, this.image_image]
 
     have : Surjective h :=
-      have : invFun g '' S₀ ∪ f '' S₀ᶜ = univ := by
-        egg [this, compl_union_self]
+      have : invFun g '' S₀ ∪ f '' S₀ᶜ = univ := by egg [this, compl_union_self]
       piecewise_is_surj this
 
     have : Injective h :=
