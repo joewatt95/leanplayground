@@ -152,8 +152,9 @@ theorem primes_mod_4_eq_3_infinite {n : ℕ}
       λ _ ↦
         have : 3 ∣ 4 * S_prod := by aesop
         have : ¬ 3 ∣ 4 := by decide
-        have : 3 ∣ S_prod := by duper [*, Nat.prime_three, Nat.Prime.dvd_mul]
-          {portfolioInstance := 1}
+        have : 3 ∣ S_prod := by
+          duper [*, Nat.prime_three, Nat.Prime.dvd_mul]
+            {portfolioInstance := 1}
 
         have ⟨p', _, _⟩ : ∃ p' ∈ S.erase 3, 3 ∣ p' := by
           refine Prime.exists_mem_finset_dvd ?_ this
