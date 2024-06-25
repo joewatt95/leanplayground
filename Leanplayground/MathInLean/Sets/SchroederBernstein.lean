@@ -61,7 +61,7 @@ theorem schroeder_bernstein
 
     let F : Set α →o Set α :=
       { toFun := λ X ↦ g '' (f '' X ᶜ)ᶜ
-        monotone' := λ _ _ : Set α ↦ by aesop }
+        monotone' := λ _ ↦ by aesop }
 
     let S : Ordinal → Set α := lfpApprox F ∅
     have ⟨O, (_ : S O = lfp F)⟩ := lfp_mem_range_lfpApprox F
@@ -76,13 +76,14 @@ theorem schroeder_bernstein
     have : invFun g '' S₀ = (f '' S₀ᶜ)ᶜ := by egg [*, this.image_image]
 
     have : Surjective h :=
-      piecewise_is_surj <| show invFun g '' S₀ ∪ f '' S₀ᶜ = univ by
+      have : invFun g '' S₀ ∪ f '' S₀ᶜ = univ := by
         egg [this, compl_union_self]
+      piecewise_is_surj this
 
     have : Injective h :=
       have : invFun g '' S₀ ∩ f '' S₀ᶜ = ∅ := by egg [*, compl_inter_self]
 
-      have : InjOn f S₀ᶜ := λ (_ : α) _ (_ : α) _ ↦ by aesop
+      have : InjOn f S₀ᶜ := λ _ ↦ by aesop
 
       have : InjOn (invFun g) S₀ :=
         λ a _ a' _ (_ : invFun g a = invFun g a') ↦

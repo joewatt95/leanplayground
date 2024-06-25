@@ -4,6 +4,7 @@ import Mathlib.Data.Nat.Prime
 import Mathlib.Order.Interval.Finset.Defs
 import Mathlib.Order.Interval.Finset.Nat
 
+import Leanplayground.MathInLean.Utils.Logic
 import Leanplayground.MathInLean.Utils.Tactic
 
 namespace NumberTheory
@@ -146,15 +147,14 @@ theorem primes_mod_4_eq_3_infinite {n : ℕ}
     have ⟨p, (_ : p.Prime), (_ : p ∣ 4 * S_prod + 3), (_ : p % 4 = 3)⟩ :=
       exists_prime_factor_mod_4_eq_3 this
 
-    suffices p ≠ 3 ∧ p = 3 by tauto
+    suffices p ≠ 3 ∧ p = 3 from Logic.uncurry (. <| .) this
 
     have : p ≠ 3 :=
       λ _ ↦
         have : 3 ∣ 4 * S_prod := by aesop
         have : ¬ 3 ∣ 4 := by decide
-        have : 3 ∣ S_prod := by
-          duper [*, Nat.prime_three, Nat.Prime.dvd_mul]
-            {portfolioInstance := 1}
+        have : 3 ∣ S_prod := by duper [*, Nat.prime_three, Nat.Prime.dvd_mul]
+          {portfolioInstance := 1}
 
         have ⟨p', _, _⟩ : ∃ p' ∈ S.erase 3, 3 ∣ p' := by
           refine Prime.exists_mem_finset_dvd ?_ this
@@ -166,20 +166,20 @@ theorem primes_mod_4_eq_3_infinite {n : ℕ}
         have : p'.Prime ∧ p' ≠ 3 ∧ 3 ∣ p' := by aesop
         show ⊥ by duper [this, Nat.prime_def_lt''] {portfolioInstance := 3}
 
-    suffices p = 3 by tauto
+    have : p = 3 :=
+      have : p ∈ S.erase 3 := by aesop
 
-    have : p ∈ S.erase 3 := by aesop
+      have := calc
+        p ∣ S_prod     := dvd_prod_of_mem _ this
+        _ ∣ 4 * S_prod := by aesop
 
-    have := calc
-      p ∣ S_prod     := dvd_prod_of_mem _ this
-      _ ∣ 4 * S_prod := by aesop
+      have : p ∣ 3 := by
+        duper [this, ‹p ∣ 4 * S_prod + 3›, Nat.dvd_add_iff_right]
+          {portfolioInstance := 1}
 
-    have : p ∣ 3 := by
-      duper [this, ‹p ∣ 4 * S_prod + 3›, Nat.dvd_add_iff_right]
+      show p = 3 by duper [*, Nat.prime_dvd_prime_iff_eq, Nat.prime_three]
         {portfolioInstance := 1}
 
-    show p = 3 by
-      duper [*, Nat.prime_dvd_prime_iff_eq, Nat.prime_three]
-        {portfolioInstance := 1}
+    ⟨‹p ≠ 3›, ‹p = 3›⟩
 
 end NumberTheory
