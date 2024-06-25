@@ -54,7 +54,7 @@ open BigOperators Finset
 theorem primes_infinite' {S : Finset ℕ}
   : ∃ p, p.Prime ∧ p ∉ S :=
   let S_primes := S.filter Nat.Prime
-  suffices ¬ ∀ p, p.Prime ↔ p ∈ S_primes by aesop
+  suffices ¬ ∀ {p}, p.Prime ↔ p ∈ S_primes by aesop
   λ _ ↦
     let S_primes_prod := ∏ n ∈ S_primes, n
 
@@ -70,7 +70,7 @@ theorem primes_infinite' {S : Finset ℕ}
     have : p ∣ 1 := by duper [*, Nat.dvd_add_right] {portfolioInstance := 1}
     show ⊥ by aesop
 
-lemma mod_4_eq_3_or {m n : ℕ}
+private lemma mod_4_eq_3_or {m n : ℕ}
   (_ : m * n % 4 = 3)
   : m % 4 = 3 ∨ n % 4 = 3 :=
   have : (m % 4) * (n % 4) % 4 = 3 := by
@@ -86,7 +86,7 @@ lemma mod_4_eq_3_or {m n : ℕ}
 --   suffices 0 < n ∧ 1 < m by duper [*, Nat.div_dvd_of_dvd, Nat.div_lt_self]
 --   by omega
 
-theorem exists_prime_factor_mod_4_eq_3 {n : ℕ}
+private lemma exists_prime_factor_mod_4_eq_3 {n : ℕ}
   (_ : n % 4 = 3)
   : ∃ p, p.Prime ∧ p ∣ n ∧ p % 4 = 3 :=
   let φ := ∃ p, p.Prime ∧ p ∣ n ∧ p % 4 = 3
@@ -109,13 +109,12 @@ theorem exists_prime_factor_mod_4_eq_3 {n : ℕ}
       show φ by tauto
 
     | .inr (_ : n / m % 4 = 3) =>
-      -- This is required to justify the well-founded recursion on n / m.
+      -- This is needed to justify the following well-founded recursion on n / m.
       have : n / m < n :=
-        suffices 0 < n ∧ 1 < m by
-          duper [this, Nat.div_lt_self] {portfolioInstance := 1}
+        suffices 0 < n ∧ 1 < m from Logic.uncurry Nat.div_lt_self this
         have : n % 4 = 3 ∧ m ∣ n ∧ m ≠ 1 := by tauto
-        suffices m ≠ 0 by omega
-        by aesop
+        have : m ≠ 0 := λ _ ↦ by aesop
+        by omega
 
       have ⟨p, (_ : p.Prime), (_ : p ∣ n / m), (_ : p % 4 = 3)⟩ :=
         exists_prime_factor_mod_4_eq_3 ‹n / m % 4 = 3›
@@ -177,8 +176,9 @@ theorem primes_mod_4_eq_3_infinite {n : ℕ}
         duper [this, ‹p ∣ 4 * S_prod + 3›, Nat.dvd_add_iff_right]
           {portfolioInstance := 1}
 
-      show p = 3 by duper [*, Nat.prime_dvd_prime_iff_eq, Nat.prime_three]
-        {portfolioInstance := 1}
+      show p = 3 by
+        duper [this, ‹p.Prime›, Nat.prime_dvd_prime_iff_eq, Nat.prime_three]
+          {portfolioInstance := 1}
 
     ⟨‹p ≠ 3›, ‹p = 3›⟩
 
