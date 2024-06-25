@@ -35,7 +35,7 @@ theorem primes_infinite {n : ℕ}
 
   have : 2 ≤ (n + 1)! + 1 :=
     have : 2 ≤ n ! + 1 := have := n.factorial_pos; by omega
-    have : n ! ≤ (n + 1) ! := Nat.factorial_le <| by omega
+    have : n ! ≤ (n + 1)! := Nat.factorial_le <| by omega
     by omega
 
   have ⟨p, (_ : p.Prime), (_ : p ∣ (n + 1)! + 1)⟩ := exists_prime_factor this
