@@ -89,7 +89,7 @@ theorem schroeder_bernstein
         _ = (f '' S₀ᶜ)ᶜ ∩ f '' S₀ᶜ    := by aesop
         _ = ∅                         := by rw [compl_inter_self]
 
-      have : InjOn f S₀ᶜ := λ _a _ _a' _ ↦ by aesop
+      have : InjOn f S₀ᶜ := λ (_ : α) _ (_ : α) _ ↦ by aesop
 
       have : InjOn (invFun g) S₀ :=
         λ a _ a' _ (_ : invFun g a = invFun g a') ↦
