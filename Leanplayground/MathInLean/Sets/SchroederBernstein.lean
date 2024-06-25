@@ -60,7 +60,7 @@ theorem schroeder_bernstein
 
     let F : Set α →o Set α :=
       { toFun := λ X ↦ g '' (f '' X ᶜ)ᶜ
-        monotone' := λ _X _Y ↦ by aesop }
+        monotone' := λ _ _ : Set α ↦ by aesop }
 
     let S : Ordinal → Set α := lfpApprox F ∅
     have ⟨O, (_ : S O = lfp F)⟩ := lfp_mem_range_lfpApprox F
