@@ -43,7 +43,7 @@ require egg from git
 
 require loogle from git
   "https://github.com/nomeata/loogle"
-    @ "5faf10c5a55c01b1b55585fe44311414df5af3c4"
+    @ "7a57c3ebb7069f659fee729aec54b39896c1f5da"
 
 require verso from git
   "https://github.com/leanprover/verso"
@@ -51,7 +51,7 @@ require verso from git
 
 require verbose from git
   "https://github.com/PatrickMassot/verbose-lean4"
-    @ "0fef059edf6bf2da0fcdf03100ca6631fb73d79a"
+    @ "70bc8099b9e667d628aa0139e077328d8c8534a6"
 
 -- require LeanCodePrompts from git
 --   "https://github.com/siddhartha-gadgil/LeanAide" @ "main"
