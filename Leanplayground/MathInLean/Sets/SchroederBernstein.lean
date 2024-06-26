@@ -29,7 +29,7 @@ lemma piecewise_is_inj
       λ a _ a' _ (_ : h a = h a') ↦ show ⊥ from calc
         f a = g a'             := by aesop
           _ ∈ f '' X ∩ g '' Xᶜ := ⟨by aesop, by aesop⟩
-          _ = ∅                := by assumption
+          _ = ∅                := ‹_›
 
     show a = a' from match Classical.em _, Classical.em _ with
       | .inl (_ : a ∈ X), .inr (_ : a' ∉ X)
