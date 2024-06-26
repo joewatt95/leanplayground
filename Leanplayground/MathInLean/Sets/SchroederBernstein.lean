@@ -24,13 +24,14 @@ lemma piecewise_is_inj
   (img_inter_empty : f '' X ∩ g '' Xᶜ = ∅)
   : Injective <| h (f := f) (g := g) (X := X) :=
   let h := h (f := f) (g := g) (X := X)
-  λ a a' (_ : h a = h a') ↦
-    have : ∀ a ∈ X, ∀ a' ∉ X, h a ≠ h a' :=
-      λ a _ a' _ (_ : h a = h a') ↦ show ⊥ from calc
-        f a = g a'             := by aesop
-          _ ∈ f '' X ∩ g '' Xᶜ := ⟨by aesop, by aesop⟩
-          _ = ∅                := ‹_›
 
+  have : ∀ a ∈ X, ∀ a' ∉ X, h a ≠ h a' :=
+    λ a _ a' _ (_ : h a = h a') ↦ show ⊥ from calc
+      f a = g a'             := by aesop
+        _ ∈ f '' X ∩ g '' Xᶜ := ⟨by aesop, by aesop⟩
+        _ = ∅                := ‹_›
+
+  λ a a' (_ : h a = h a') ↦
     show a = a' from match Classical.em _, Classical.em _ with
       | .inl (_ : a ∈ X), .inr (_ : a' ∉ X)
       | .inr (_ : a ∉ X), .inl (_ : a' ∈ X) => by duper [*]
