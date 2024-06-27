@@ -25,7 +25,7 @@ class Dia₁ (α : Type u) where
 
 infixl:70 " ⋄ "   => Dia₁.dia
 
-class Semigroup₁ (α : Type u) extends Dia₁ α where
+class DiaAssoc (α : Type u) extends Dia₁ α where
   /-- Diamond is associative -/
   dia_assoc : ∀ {a b c : α}, a ⋄ b ⋄ c = a ⋄ (b ⋄ c)
 
@@ -40,17 +40,13 @@ class DiaOne (α : Type u) extends One₁ α, Dia₁ α where
 class DiaComm (α : Type u) extends Dia₁ α where
   dia_comm : ∀ {a b : α}, a ⋄ b = b ⋄ a
 
-class Monoid₁ (α : Type u) extends Semigroup₁ α, OneDia α, DiaOne α
-
 class InvDia (α : Type u) extends Dia₁ α, One₁ α, Inv₁ α where
   inv_dia : ∀ {a : α}, a⁻¹ ⋄ a = 𝟙
 
 class DiaInv (α : Type u) extends Dia₁ α, One₁ α, Inv₁ α where
   dia_inv : ∀ {a : α}, a ⋄ a⁻¹ = 𝟙
 
-class Group₁ (α : Type u) extends Monoid₁ α, InvDia α, DiaInv α where
-
-export Semigroup₁ (dia_assoc)
+export DiaAssoc (dia_assoc)
 
 export DiaOne (dia_one)
 export OneDia (one_dia)
@@ -58,36 +54,45 @@ export OneDia (one_dia)
 export DiaInv (dia_inv)
 export InvDia (inv_dia)
 
+class Semigroup₁ (α : Type u) extends DiaAssoc α
+
+class Monoid₁ (α : Type u) extends Semigroup₁ α, OneDia α, DiaOne α
+
+class Group₁ (α : Type u) extends Monoid₁ α, InvDia α, DiaInv α where
+  dia_inv {a} :=
+    show a ⋄ a⁻¹ = 𝟙 by
+      duper [one_dia, inv_dia, dia_assoc] {portfolioInstance := 1}
+  inv_dia {a} :=
+    show a⁻¹ ⋄ a = 𝟙 by
+      duper [dia_one, dia_inv, dia_assoc] {portfolioInstance := 1}
+
 lemma inv_eq_of_dia [Group₁ G] {a b : G} (_ : a ⋄ b = 𝟙) : a⁻¹ = b := by
   egg [*, one_dia, dia_one, inv_dia, dia_assoc]
 
-lemma dia_inv [Group₁ G] {a : G} : a ⋄ a⁻¹ = 𝟙 := by
-  duper [one_dia, dia_one, inv_dia, dia_assoc]
-
-class CommMonoid₁ (α : Type u) extends Semigroup₁ α, DiaOne α, OneDia α where
-  dia_comm : ∀ {a b : α}, a ⋄ b = b ⋄ a
+class CommMonoid₁ (α : Type u)
+extends Semigroup₁ α, DiaOne α, OneDia α, DiaComm α
+where
   dia_one {a} := show a ⋄ 𝟙 = a by egg [dia_comm, one_dia]
   one_dia {a} := show 𝟙 ⋄ a = a by egg [dia_comm, dia_one]
 
-class CommGroup₁ (α : Type u) extends CommMonoid₁ α, DiaInv α, InvDia α where
-  dia_inv {a} := show a ⋄ a⁻¹ = 𝟙 by rw [dia_comm, inv_dia]
-  -- inv_dia {a} := show a⁻¹ ⋄ a = 𝟙 by rw [dia_comm]; exact dia_inv
-
 export CommMonoid₁ (dia_comm)
 
-instance [inst : CommMonoid₁ α] : Monoid₁ α := { inst with }
-instance [inst : CommGroup₁ α] : Group₁ α := { inst with }
+class CommGroup₁ (α : Type u)
+extends CommMonoid₁ α, Group₁ α, DiaInv α, InvDia α
 
-noncomputable instance : CommGroup₁ ℝ where
+instance [inst : CommMonoid₁ α] : Monoid₁ α := { inst with }
+-- instance [inst : CommGroup₁ α] : Group₁ α := { inst with }
+
+instance : CommGroup₁ ℝˣ where
   dia x y := x * y
   inv x := x⁻¹
   one := 1
-  dia_assoc {a b c} := show a * b * c = a * (b * c) by ring
-  dia_comm {a b} := show a * b = b * a by ring
-  one_dia {a} := show 1 * a = a by ring
-  -- dia_one {a} := show a * 1 = a by ring
-  inv_dia := sorry
-  dia_inv := sorry
+  dia_assoc {a b c} := show a * b * c = a * (b * c) from mul_assoc _ _ _
+  dia_comm {a b} := show a * b = b * a from mul_comm _ _
+  one_dia {a} := show 1 * a = a from one_mul _
+  -- dia_one {a} := show a * 1 = a from mul_one _
+  inv_dia {a} := show a⁻¹ * a = 1 from inv_mul_self _
+  dia_inv {a} := show a * a⁻¹ = 1 from mul_inv_self _
 
 -- #check (inferInstance : Monoid₁ ℝ)
 
