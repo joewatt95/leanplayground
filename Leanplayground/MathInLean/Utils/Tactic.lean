@@ -2,11 +2,13 @@ import Lean
 
 import Mathlib.Tactic.Common
 import Mathlib.Tactic.Linarith
+import Mathlib.Tactic.Ring
 
-import Auto.Tactic
+import Auto
 import Duper
 import Egg
 import Smt
+-- import Smt.Real
 
 import Loogle.Find
 
