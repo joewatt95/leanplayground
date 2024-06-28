@@ -47,11 +47,11 @@ require loogle from git
 
 require verso from git
   "https://github.com/leanprover/verso"
-    @ "e157703f8c898d3ba3ad701a6d9141c7e4c8742c"
+    @ "e5b63b79929e829bda29ac12583ce9d5d2e65f83"
 
 require verbose from git
   "https://github.com/PatrickMassot/verbose-lean4"
-    @ "70bc8099b9e667d628aa0139e077328d8c8534a6"
+    @ "213cffdee33ad52a134e40964ef88cef35314162"
 
 -- require LeanCodePrompts from git
 --   "https://github.com/siddhartha-gadgil/LeanAide" @ "main"
