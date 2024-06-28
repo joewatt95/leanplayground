@@ -54,6 +54,8 @@ export OneDia (one_dia)
 export DiaInv (dia_inv)
 export InvDia (inv_dia)
 
+export DiaComm (dia_comm)
+
 class Semigroup₁ (α : Type u) extends DiaAssoc α
 
 class Monoid₁ (α : Type u) extends Semigroup₁ α, OneDia α, DiaOne α
@@ -74,8 +76,6 @@ extends Semigroup₁ α, DiaOne α, OneDia α, DiaComm α
 where
   dia_one {a} := show a ⋄ 𝟙 = a by egg [dia_comm, one_dia]
   one_dia {a} := show 𝟙 ⋄ a = a by egg [dia_comm, dia_one]
-
-export CommMonoid₁ (dia_comm)
 
 class CommGroup₁ (α : Type u)
 extends CommMonoid₁ α, Group₁ α, DiaInv α, InvDia α
