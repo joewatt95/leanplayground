@@ -25,17 +25,23 @@ class Dia₁ (α : Type u) where
 
 infixl:70 " ⋄ "   => Dia₁.dia
 
-class DiaAssoc (α : Type u) extends Dia₁ α where
+class Semigroup₁ (α : Type u) extends Dia₁ α where
   /-- Diamond is associative -/
   dia_assoc : ∀ {a b c : α}, a ⋄ b ⋄ c = a ⋄ (b ⋄ c)
 
-class OneDia (α : Type u) extends One₁ α, Dia₁ α where
+class DiaOne (α : Type u) extends Dia₁ α, One₁ α where
+  /-- One is a right neutral element for diamond -/
+  dia_one : ∀ {a : α}, a ⋄ 𝟙 = a
+
+class OneDia (α : Type u) extends Dia₁ α, One₁ α where
   /-- One is a left neutral element for diamond. -/
   one_dia : ∀ {a : α}, 𝟙 ⋄ a = a
 
-class DiaOne (α : Type u) extends One₁ α, Dia₁ α where
-  /-- One is a right neutral element for diamond -/
-  dia_one : ∀ {a : α}, a ⋄ 𝟙 = a
+class Monoid₁ (α : Type u) extends Semigroup₁ α, DiaOne α, OneDia α
+
+-- class Group₁ (α : Type u) extends Monoid₁ α, Inv α where
+--   inv_dia : ∀ {a : α}, a⁻¹ ⋄ a = 𝟙
+--   dia_inv : ∀ {a : α}, a ⋄ a⁻¹ = 𝟙
 
 class DiaComm (α : Type u) extends Dia₁ α where
   dia_comm : ∀ {a b : α}, a ⋄ b = b ⋄ a
@@ -46,7 +52,7 @@ class InvDia (α : Type u) extends Dia₁ α, One₁ α, Inv₁ α where
 class DiaInv (α : Type u) extends Dia₁ α, One₁ α, Inv₁ α where
   dia_inv : ∀ {a : α}, a ⋄ a⁻¹ = 𝟙
 
-export DiaAssoc (dia_assoc)
+export Semigroup₁ (dia_assoc)
 
 export DiaOne (dia_one)
 export OneDia (one_dia)
@@ -56,44 +62,53 @@ export InvDia (inv_dia)
 
 export DiaComm (dia_comm)
 
-class Semigroup₁ (α : Type u) extends DiaAssoc α
-
-class Monoid₁ (α : Type u) extends Semigroup₁ α, OneDia α, DiaOne α
-
-class Group₁ (α : Type u) extends Monoid₁ α, InvDia α, DiaInv α where
-  dia_inv {a} :=
-    show a ⋄ a⁻¹ = 𝟙 by
-      duper [one_dia, inv_dia, dia_assoc] {portfolioInstance := 1}
+class Group₁ (α : Type u) extends DiaInv α, Monoid₁ α, InvDia α where
   inv_dia {a} :=
-    show a⁻¹ ⋄ a = 𝟙 by
-      duper [dia_one, dia_inv, dia_assoc] {portfolioInstance := 1}
+    show a⁻¹ ⋄ a = 𝟙 by duper [dia_one, dia_inv, dia_assoc]
+  one_dia {a} :=
+    have : 𝟙 ⋄ a = a ⋄ 𝟙 := by duper [dia_one, dia_inv, dia_assoc]
+    show 𝟙 ⋄ a = a by duper [this, dia_one]
 
-lemma inv_eq_of_dia [Group₁ G] {a b : G} (_ : a ⋄ b = 𝟙) : a⁻¹ = b := by
-  egg [*, one_dia, dia_one, inv_dia, dia_assoc]
+class Group₁' (α : Type u) extends InvDia α, Monoid₁ α, DiaInv α where
+  dia_inv {a} := show a ⋄ a⁻¹ = 𝟙 by duper [one_dia, inv_dia, dia_assoc]
+  dia_one {a} :=
+    have : 𝟙 ⋄ a = a ⋄ 𝟙 := by duper [one_dia, inv_dia, dia_assoc]
+    show a ⋄ 𝟙 = a by duper [this, one_dia]
 
-class CommMonoid₁ (α : Type u)
-extends Semigroup₁ α, DiaOne α, OneDia α, DiaComm α
-where
-  dia_one {a} := show a ⋄ 𝟙 = a by egg [dia_comm, one_dia]
-  one_dia {a} := show 𝟙 ⋄ a = a by egg [dia_comm, dia_one]
+instance [inst : Group₁' α] : Group₁ α := { inst with }
 
-class CommGroup₁ (α : Type u)
-extends CommMonoid₁ α, Group₁ α, DiaInv α, InvDia α
+-- lemma inv_eq_of_dia [Group₁ G] {a b : G} (_ : a ⋄ b = 𝟙) : a⁻¹ = b := by
+--   duper [*, one_dia, dia_one, inv_dia, dia_assoc]
 
-instance [inst : CommMonoid₁ α] : Monoid₁ α := { inst with }
--- instance [inst : CommGroup₁ α] : Group₁ α := { inst with }
+class CommMonoid₁ (α : Type u) extends DiaComm α, Monoid₁ α where
+  dia_one {a : α} := show a ⋄ 𝟙 = a by duper [dia_comm, one_dia]
 
-instance : CommGroup₁ ℝˣ where
-  dia x y := x * y
-  inv x := x⁻¹
-  one := 1
-  dia_assoc {a b c} := show a * b * c = a * (b * c) from mul_assoc _ _ _
-  dia_comm {a b} := show a * b = b * a from mul_comm _ _
-  one_dia {a} := show 1 * a = a from one_mul _
-  -- dia_one {a} := show a * 1 = a from mul_one _
-  inv_dia {a} := show a⁻¹ * a = 1 from inv_mul_self _
-  dia_inv {a} := show a * a⁻¹ = 1 from mul_inv_self _
+class CommGroup₁ (α : Type u) extends Group₁ α, CommMonoid₁ α
 
--- #check (inferInstance : Monoid₁ ℝ)
+-- instance [inst : CommMonoid₁ α] : Monoid₁ α := { inst with }
+
+instance : CommGroup₁ ℝˣ :=
+  have {a b : ℝˣ} : a * b = b * a := mul_comm _ _
+  -- have {a : ℝˣ} : 1 * a = a := one_mul _
+  have {a : ℝˣ} : a⁻¹ * a = 1 := inv_mul_self _
+  { dia := (. * .),
+    inv := λ x ↦ x⁻¹,
+    one := 1,
+    dia_assoc := λ {a b c} ↦ show a * b * c = a * (b * c) from mul_assoc _ _ _,
+    dia_comm := ‹_›,
+    dia_inv := λ {a} ↦ show a * a⁻¹ = 1 by duper [*],
+    dia_one := λ {a} ↦ show a * 1 = a from mul_one _
+  }
+
+instance : CommMonoid₁ ℤ :=
+  have {a b : ℤ} : a * b = b * a := by smt
+  have {a : ℤ} : a * 1 = a := by smt
+  { dia := (. * .),
+    one := 1,
+    dia_assoc := by simp; smt,
+    dia_comm := ‹_›,
+    one_dia := λ {a} ↦ show 1 * a = a by egg [*] }
+
+-- #check (inferInstance : Monoid₁ ℝˣ)
 
 end Hierarchies
