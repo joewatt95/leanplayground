@@ -26,8 +26,8 @@ require mathlib from git
     @ "v4.8.0"
 
 require Duper from git
-  "https://github.com/dranov/duper"
-    @ "64441b020a41cf6c17288b830d1a685fe1fec44c"
+  "https://github.com/leanprover-community/duper"
+    @ "2ab4c5b83a58de84ed3eaf0b1fc9f396de21b864"
 
 require smt from git
   "https://github.com/ufmg-smite/lean-smt"
