@@ -4,7 +4,6 @@ import Mathlib.Data.Nat.Prime
 import Mathlib.Order.Interval.Finset.Defs
 import Mathlib.Order.Interval.Finset.Nat
 
-import Leanplayground.MathInLean.Utils.Logic
 import Leanplayground.MathInLean.Utils.Tactic
 
 namespace NumberTheory
@@ -111,9 +110,9 @@ private lemma exists_prime_factor_mod_4_eq_3 {n : ℕ}
     | .inr (_ : n / m % 4 = 3) =>
       -- This is needed to justify the following well-founded recursion on n / m.
       have : n / m < n :=
-        suffices 0 < n ∧ 1 < m from Logic.uncurry Nat.div_lt_self this
+        suffices 0 < n ∧ 1 < m from And.elim Nat.div_lt_self this
         have : n % 4 = 3 ∧ m ∣ n ∧ m ≠ 1 := by tauto
-        have : m ≠ 0 := λ _ ↦ by aesop
+        have : m ≠ 0 := λ _ ↦ show ⊥ by aesop
         by omega
 
       have ⟨p, (_ : p.Prime), (_ : p ∣ n / m), (_ : p % 4 = 3)⟩ :=
@@ -146,7 +145,7 @@ theorem primes_mod_4_eq_3_infinite {n : ℕ}
     have ⟨p, (_ : p.Prime), (_ : p ∣ 4 * S_prod + 3), (_ : p % 4 = 3)⟩ :=
       exists_prime_factor_mod_4_eq_3 this
 
-    suffices p ≠ 3 ∧ p = 3 from Logic.uncurry (. <| .) this
+    suffices p ≠ 3 ∧ p = 3 from And.elim (. <| .) this
 
     have : p ≠ 3 :=
       λ _ ↦
