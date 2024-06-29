@@ -42,8 +42,8 @@ lemma piecewise_is_surj
   : Surjective <| h (f := f) (g := g) (X := X)
   | b =>
     have : b ∈ f '' X ∪ g '' Xᶜ := by aesop
-    show ∃ a, h a = b from match this with
-      | .inl _ | .inr _ => by aesop
+    match this with
+    | .inl _ | .inr _ => show ∃ a, h a = b by aesop
 
 end piecewise_inj_surj
 
