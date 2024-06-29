@@ -12,10 +12,9 @@ theorem exists_prime_factor {n : ℕ}
   (_ : 2 ≤ n)
   : ∃ p, p.Prime ∧ p ∣ n :=
   suffices ¬ n.Prime → ∃ p, p.Prime ∧ p ∣ n  by tauto
-  λ _ : ¬ n.Prime ↦
-    have : ∃ m < n, m ∣ n ∧ m ≠ 1 := by
+  λ _ ↦
+    have ⟨m, _, _, _⟩: ∃ m < n, m ∣ n ∧ m ≠ 1 := by
       duper [*, Nat.prime_def_lt] {portfolioInstance := 1}
-    have ⟨m, (_ : m < n), (_ : m ∣ n), (_ : m ≠ 1)⟩ := this
 
     have : 2 ≤ m :=
       have : m ≠ 0 := by aesop
