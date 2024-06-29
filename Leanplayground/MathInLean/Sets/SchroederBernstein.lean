@@ -69,10 +69,10 @@ theorem schroeder_bernstein
     have ⟨O, (_ : S O = lfp F)⟩ := lfp_mem_range_lfpApprox F
 
     let S₀ := S O
-    have : g '' (f '' S₀ᶜ)ᶜ = S₀ := by
-      rw [‹S₀ = lfp F›]; exact F.map_lfp
+    have : F S₀ = S₀ := by aesop
+    have : g '' (f '' S₀ᶜ)ᶜ = S₀ := this
 
-    let h a := if _ : a ∈ S₀ then invFun g a else f a
+    let h a := if a ∈ S₀ then invFun g a else f a
 
     have : LeftInverse (invFun g) g := leftInverse_invFun ‹Injective g›
     have : invFun g '' S₀ = (f '' S₀ᶜ)ᶜ := by egg [*, this.image_image]
