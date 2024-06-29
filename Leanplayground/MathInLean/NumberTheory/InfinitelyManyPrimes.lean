@@ -126,7 +126,7 @@ private lemma exists_prime_factor_mod_4_eq_3 {n : ℕ}
 theorem primes_mod_4_eq_3_infinite {n : ℕ}
   : ∃ p > n, p.Prime ∧ p % 4 = 3 :=
   -- set_option trace.profiler true in
-  suffices ¬ ∀ p > n, p.Prime → p % 4 ≠ 3 by aesop
+  suffices ¬ ∀ p > n, p.Prime → p % 4 ≠ 3 by duper [this]
   λ _ ↦
     let S := {p | p.Prime ∧ p % 4 = 3}
 
