@@ -13,7 +13,7 @@ theorem exists_prime_factor {n : ℕ}
   : ∃ p, p.Prime ∧ p ∣ n :=
   suffices ¬ n.Prime → ∃ p, p.Prime ∧ p ∣ n  by tauto
   λ _ ↦
-    have ⟨m, _, _, _⟩: ∃ m < n, m ∣ n ∧ m ≠ 1 := by
+    have ⟨m, _, _, _⟩ : ∃ m < n, m ∣ n ∧ m ≠ 1 := by
       duper [*, Nat.prime_def_lt] {portfolioInstance := 1}
 
     have : 2 ≤ m :=
