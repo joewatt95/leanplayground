@@ -33,11 +33,9 @@ lemma piecewise_is_inj
           _ = ∅                := ‹_›
 
   λ a a' (_ : h a = h a') ↦
-    show a = a' from match Classical.em _, Classical.em _ with
-      | .inl (_ : a ∈ X), .inr (_ : a' ∉ X)
-      | .inr (_ : a ∉ X), .inl (_ : a' ∈ X) => by
-        duper [*] {portfolioInstance := 7}
-      | .inl _, .inl _ | .inr _, .inr _ => by aesop
+    have : (a ∈ X ∧ a' ∈ X) ∨ (a ∉ X ∧ a' ∉ X) := by
+      duper [*] {portfolioInstance := 7}
+    show a = a' by aesop
 
 lemma piecewise_is_surj
   (f_union_g_eq_univ : f '' X ∪ g '' Xᶜ = univ)
