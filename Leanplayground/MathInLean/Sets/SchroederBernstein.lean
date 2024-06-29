@@ -74,7 +74,7 @@ theorem schroeder_bernstein
 
     let h a := if _ : a ∈ S₀ then invFun g a else f a
 
-    have : LeftInverse (invFun g) g := leftInverse_invFun g_inj
+    have : LeftInverse (invFun g) g := leftInverse_invFun ‹Injective g›
     have : invFun g '' S₀ = (f '' S₀ᶜ)ᶜ := by egg [*, this.image_image]
 
     have : Surjective h :=
