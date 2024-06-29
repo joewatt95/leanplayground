@@ -35,7 +35,8 @@ lemma piecewise_is_inj
   λ a a' (_ : h a = h a') ↦
     show a = a' from match Classical.em _, Classical.em _ with
       | .inl (_ : a ∈ X), .inr (_ : a' ∉ X)
-      | .inr (_ : a ∉ X), .inl (_ : a' ∈ X) => by duper [*]
+      | .inr (_ : a ∉ X), .inl (_ : a' ∈ X) => by
+        duper [*] {portfolioInstance := 7}
       | .inl _, .inl _ | .inr _, .inr _ => by aesop
 
 lemma piecewise_is_surj
