@@ -121,7 +121,7 @@ private lemma exists_prime_factor_mod_4_eq_3 {n : ℕ}
         _ ∣ n     := Nat.div_dvd_of_dvd ‹_›
       show φ by tauto
 
--- set_option trace.profiler true
+-- set_option trace.profiler true in
 theorem primes_mod_4_eq_3_infinite {n : ℕ}
   : ∃ p > n, p.Prime ∧ p % 4 = 3 :=
   -- set_option trace.profiler true in

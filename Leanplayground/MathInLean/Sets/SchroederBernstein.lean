@@ -47,15 +47,17 @@ lemma piecewise_is_surj
 
 end piecewise_inj_surj
 
+-- set_option trace.profiler true in
 theorem schroeder_bernstein
   {f : α → β} {g : β → α}
   (f_inj : Injective f) (g_inj : Injective g)
-  : ∃ h : α → β, Bijective h := by
+  : ∃ h : α → β, Bijective h :=
+  -- set_option trace.profiler true in
   match isEmpty_or_nonempty _ with
   -- We need to consider cases on whether β is empty because Nonempty β is
   -- required for invFun g to be well-defined.
   | .inl (_ : IsEmpty β) =>
-    exact ⟨f, ‹Injective f›, show Surjective f from surj_of_isEmpty⟩
+    ⟨f, ‹Injective f›, show Surjective f from surj_of_isEmpty⟩
 
   | .inr (_ : Nonempty β) =>
     open OrderHom OrdinalApprox in
@@ -65,7 +67,7 @@ theorem schroeder_bernstein
         monotone' := λ _ ↦ by aesop }
 
     let S : Ordinal → Set α := lfpApprox F ∅
-    have ⟨O, (_ : S O = lfp F)⟩ := lfp_mem_range_lfpApprox F
+    have ⟨O, _⟩ : ∃ O, S O = lfp F := lfp_mem_range_lfpApprox F
 
     let S₀ := S O
     have : F S₀ = S₀ := by aesop
@@ -99,6 +101,6 @@ theorem schroeder_bernstein
 
       show Injective h from piecewise_is_inj ‹_› ‹_› ‹_›
 
-    exact ⟨h, ‹Injective h›, ‹Surjective h›⟩
+    ⟨h, ‹Injective h›, ‹Surjective h›⟩
 
 end Sets
