@@ -16,7 +16,7 @@ section piecewise_inj_surj
 
 variable {f g : α → β} {X : Set α}
 
-noncomputable abbrev h a := if _ : a ∈ X then f a else g a
+private noncomputable abbrev h a := if _ : a ∈ X then f a else g a
 
 lemma piecewise_is_inj
   (f_inj : InjOn f X)
