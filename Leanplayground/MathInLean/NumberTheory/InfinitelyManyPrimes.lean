@@ -92,8 +92,7 @@ private lemma exists_prime_factor_mod_4_eq_3 {n : ℕ}
   λ _ ↦
     have ⟨m, _, _, _⟩ : ∃ m < n, m ∣ n ∧ m ≠ 1 :=
       suffices 2 ≤ n by
-        duper [this, ‹¬n.Prime›, Nat.prime_def_lt]
-          {portfolioInstance := 1}
+        duper [this, ‹¬n.Prime›, Nat.prime_def_lt] {portfolioInstance := 1}
       by omega
 
     have : m % 4 = 3 ∨ n / m % 4 = 3 := by
