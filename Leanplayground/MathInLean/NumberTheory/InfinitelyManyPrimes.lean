@@ -14,7 +14,7 @@ theorem exists_prime_factor {n : ℕ}
   suffices ¬ n.Prime → ∃ p, p.Prime ∧ p ∣ n  by tauto
   λ _ ↦
     have ⟨m, _, _, _⟩ : ∃ m < n, m ∣ n ∧ m ≠ 1 := by
-      duper [*, Nat.prime_def_lt] {portfolioInstance := 1}
+      duper [‹2 ≤ n›, ‹¬ n.Prime›, Nat.prime_def_lt] {portfolioInstance := 1}
 
     have : 2 ≤ m :=
       have : m ≠ 0 := by aesop
@@ -32,14 +32,12 @@ theorem primes_infinite {n : ℕ}
   open scoped Nat in
 
   have : 2 ≤ (n + 1)! + 1 :=
-    have : 2 ≤ n ! + 1 := have := n.factorial_pos; by omega
-    have : n ! ≤ (n + 1)! := Nat.factorial_le <| by omega
-    by omega
+    have : 0 < (n + 1)! := Nat.factorial_pos _
+    Nat.le_add_of_sub_le this
 
   have ⟨p, (_ : p.Prime), (_ : p ∣ (n + 1)! + 1)⟩ := exists_prime_factor this
 
-  suffices p > n by tauto
-  suffices ¬ p ≤ n by omega
+  suffices ¬ p ≤ n by aesop
   λ _ ↦
     have := calc
       p ∣ n !      := by duper [*, Nat.Prime.dvd_factorial] {portfolioInstance := 1}
