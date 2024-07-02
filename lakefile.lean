@@ -43,7 +43,7 @@ require egg from git
 
 require loogle from git
   "https://github.com/nomeata/loogle"
-    @ "7a57c3ebb7069f659fee729aec54b39896c1f5da"
+    @ "cd8680514b046e71b79183bf3c64de3350cd0c10"
 
 require verso from git
   "https://github.com/leanprover/verso"
