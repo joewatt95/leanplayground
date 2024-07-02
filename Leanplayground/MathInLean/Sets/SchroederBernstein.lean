@@ -34,7 +34,7 @@ lemma piecewise_is_inj
 
   λ a a' (_ : h a = h a') ↦
     have : (a ∈ X ∧ a' ∈ X) ∨ (a ∉ X ∧ a' ∉ X) := by
-      duper [*] {portfolioInstance := 7}
+      duper [this, ‹h a = h a'›] {portfolioInstance := 7}
     show a = a' by aesop
 
 lemma piecewise_is_surj
