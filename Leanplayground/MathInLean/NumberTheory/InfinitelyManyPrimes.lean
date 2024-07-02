@@ -91,11 +91,14 @@ private lemma exists_prime_factor_mod_4_eq_3 {n : ℕ}
   suffices ¬ n.Prime → φ by tauto
   λ _ ↦
     have ⟨m, _, _, _⟩ : ∃ m < n, m ∣ n ∧ m ≠ 1 :=
-      suffices 2 ≤ n by duper [*, Nat.prime_def_lt] {portfolioInstance := 1}
+      suffices 2 ≤ n by
+        duper [this, ‹¬n.Prime›, Nat.prime_def_lt]
+          {portfolioInstance := 1}
       by omega
 
     have : m % 4 = 3 ∨ n / m % 4 = 3 := by
-      duper [*, Nat.mul_div_cancel', mod_4_eq_3_or] {portfolioInstance := 1}
+      duper [‹m ∣ n›, ‹n % 4 = 3›, Nat.mul_div_cancel', mod_4_eq_3_or]
+        {portfolioInstance := 1}
 
     match this with
     | .inl (_ : m % 4 = 3) =>
