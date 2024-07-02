@@ -39,7 +39,7 @@ theorem primes_infinite {n : ℕ}
   have ⟨p, (_ : p.Prime), (_ : p ∣ (n + 1)! + 1)⟩ := exists_prime_factor this
 
   suffices p > n by tauto
-  suffices ¬ p ≤ n by aesop
+  suffices ¬ p ≤ n by omega
   λ _ ↦
     have := calc
       p ∣ n !      := by duper [*, Nat.Prime.dvd_factorial] {portfolioInstance := 1}
