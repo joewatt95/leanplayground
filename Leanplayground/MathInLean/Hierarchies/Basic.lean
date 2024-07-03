@@ -77,8 +77,8 @@ class Group₁' (α : Type u) extends InvDia α, Monoid₁ α, DiaInv α where
 
 instance [inst : Group₁' α] : Group₁ α := { inst with }
 
--- lemma inv_eq_of_dia [Group₁ G] {a b : G} (_ : a ⋄ b = 𝟙) : a⁻¹ = b := by
---   duper [*, one_dia, dia_one, inv_dia, dia_assoc]
+lemma inv_eq_of_dia [Group₁ G] {a b : G} (_ : a ⋄ b = 𝟙) : a⁻¹ = b := by
+  duper [*, one_dia, dia_one, inv_dia, dia_assoc]
 
 class CommMonoid₁ (α : Type u) extends DiaComm α, Monoid₁ α where
   dia_one {a : α} := show a ⋄ 𝟙 = a by duper [dia_comm, one_dia]
