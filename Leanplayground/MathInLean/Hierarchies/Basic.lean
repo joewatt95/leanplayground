@@ -64,24 +64,32 @@ export DiaComm (dia_comm)
 
 class Group₁ (α : Type u) extends DiaInv α, Monoid₁ α, InvDia α where
   inv_dia {a} :=
-    show a⁻¹ ⋄ a = 𝟙 by duper [dia_one, dia_inv, dia_assoc]
+    show a⁻¹ ⋄ a = 𝟙 by
+      duper [dia_one, dia_inv, dia_assoc] {portfolioInstance := 1}
+
   one_dia {a} :=
-    have : 𝟙 ⋄ a = a ⋄ 𝟙 := by duper [dia_one, dia_inv, dia_assoc]
-    show 𝟙 ⋄ a = a by duper [this, dia_one]
+    have : 𝟙 ⋄ a = a ⋄ 𝟙 := by
+      duper [dia_one, dia_inv, dia_assoc] {portfolioInstance := 1}
+    show 𝟙 ⋄ a = a by duper [this, dia_one] {portfolioInstance := 1}
 
 class Group₁' (α : Type u) extends InvDia α, Monoid₁ α, DiaInv α where
-  dia_inv {a} := show a ⋄ a⁻¹ = 𝟙 by duper [one_dia, inv_dia, dia_assoc]
+  dia_inv {a} :=
+    show a ⋄ a⁻¹ = 𝟙 by
+      duper [one_dia, inv_dia, dia_assoc] {portfolioInstance := 1}
+
   dia_one {a} :=
-    have : 𝟙 ⋄ a = a ⋄ 𝟙 := by duper [one_dia, inv_dia, dia_assoc]
-    show a ⋄ 𝟙 = a by duper [this, one_dia]
+    have : 𝟙 ⋄ a = a ⋄ 𝟙 := by
+      duper [one_dia, inv_dia, dia_assoc] {portfolioInstance := 1}
+    show a ⋄ 𝟙 = a by duper [this, one_dia] {portfolioInstance := 1}
 
 instance [inst : Group₁' α] : Group₁ α := { inst with }
 
 lemma inv_eq_of_dia [Group₁ G] {a b : G} (_ : a ⋄ b = 𝟙) : a⁻¹ = b := by
-  duper [*, one_dia, dia_one, inv_dia, dia_assoc]
+  duper [*, one_dia, dia_one, inv_dia, dia_assoc] {portfolioInstance := 1}
 
 class CommMonoid₁ (α : Type u) extends DiaComm α, Monoid₁ α where
-  dia_one {a : α} := show a ⋄ 𝟙 = a by duper [dia_comm, one_dia]
+  dia_one {a : α} :=
+    show a ⋄ 𝟙 = a by duper [dia_comm, one_dia] {portfolioInstance := 1}
 
 class CommGroup₁ (α : Type u) extends Group₁ α, CommMonoid₁ α
 
