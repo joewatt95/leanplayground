@@ -23,15 +23,15 @@ lean_lib Leanplayground where
 
 require mathlib from git
   "https://github.com/leanprover-community/mathlib4"
-    @ "v4.8.0"
+    @ "v4.9.0"
 
 require Duper from git
   "https://github.com/leanprover-community/duper"
-    @ "v0.0.14"
+    @ "d198aba058bbf37e602d68fd08903281bfe6e3a6"
 
-require smt from git
-  "https://github.com/ufmg-smite/lean-smt"
-    @ "2899f02744cc12636f71c04e200bce0b308f73b5"
+-- require smt from git
+--   "https://github.com/ufmg-smite/lean-smt"
+--     @ "2899f02744cc12636f71c04e200bce0b308f73b5"
 
 require egg from git
   "https://github.com/marcusrossel/lean-egg"

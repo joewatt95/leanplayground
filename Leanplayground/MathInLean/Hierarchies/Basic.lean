@@ -110,11 +110,11 @@ instance : CommGroup₁ ℝˣ :=
   }
 
 instance : CommMonoid₁ ℤ :=
-  have {a b : ℤ} : a * b = b * a := by smt
-  have {a : ℤ} : a * 1 = a := by smt
+  have {a b : ℤ} : a * b = b * a := Int.mul_comm _ _
+  have {a : ℤ} : a * 1 = a := Int.mul_one _
   { dia := (. * .),
     one := 1,
-    dia_assoc := by simp; smt,
+    dia_assoc := Int.mul_assoc _ _ _,
     dia_comm := ‹_›,
     one_dia := λ {a} ↦ show 1 * a = a by egg [*] }
 
