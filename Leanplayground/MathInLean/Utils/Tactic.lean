@@ -7,7 +7,7 @@ import Mathlib.Tactic.Ring
 import Auto
 import Duper
 import Egg
--- import Smt
+import Smt
 -- import Smt.Real
 
 import Loogle.Find

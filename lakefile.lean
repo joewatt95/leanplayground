@@ -2,17 +2,17 @@ import Lake
 open Lake DSL
 
 -- This is needed because we compile and link against the C++ API of cvc5.
--- private def args : Array String :=
---   #[s!"--load-dynlib={libcpp}"]
---   where
---     libcpp :=
---       if System.Platform.isWindows then "libstdc++-6.dll"
---       else if System.Platform.isOSX then "libc++.dylib"
---       else "libstdc++.so.6"
+private def args : Array String :=
+  #[s!"--load-dynlib={libcpp}"]
+  where
+    libcpp :=
+      if System.Platform.isWindows then "libstdc++-6.dll"
+      else if System.Platform.isOSX then "libc++.dylib"
+      else "libstdc++.so.6"
 
 package leanplayground where
-  -- moreLeanArgs := args
-  -- moreGlobalServerArgs := args
+  moreLeanArgs := args
+  moreGlobalServerArgs := args
 
   -- moreLinkArgs := #[
   --   "-L./.lake/packages/LeanCopilot/.lake/build/lib",
@@ -28,11 +28,11 @@ require mathlib from git
 
 require Duper from git
   "https://github.com/leanprover-community/duper"
-    @ "d198aba058bbf37e602d68fd08903281bfe6e3a6"
+    @ "d53f474c91d39d49d0d30fa8d8deca51c4559690"
 
--- require smt from git
---   "https://github.com/ufmg-smite/lean-smt"
---     @ "2899f02744cc12636f71c04e200bce0b308f73b5"
+require smt from git
+  "https://github.com/joewatt95/lean-smt"
+    @ "7c078b329b85ca3c583cf23fd536cba7520e96d0"
 
 require egg from git
   "https://github.com/marcusrossel/lean-egg"
@@ -44,11 +44,11 @@ require egg from git
 
 require loogle from git
   "https://github.com/nomeata/loogle"
-    @ "cd8680514b046e71b79183bf3c64de3350cd0c10"
+    @ "fcc2c2c7ef12039d774a89f4bfb59483243f45b6"
 
 require verso from git
   "https://github.com/leanprover/verso"
-    @ "0bb0440f81f28507ce6d142d5ff68a0623d9a69d"
+    @ "f1175fc33662f5d2f8933f931eaa204203b5973a"
 
 require verbose from git
   "https://github.com/PatrickMassot/verbose-lean4"
