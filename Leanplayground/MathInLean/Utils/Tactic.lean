@@ -1,5 +1,7 @@
 import Lean
 
+import Mathlib.Control.Traversable.Basic
+
 import Mathlib.Tactic.Common
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
@@ -27,8 +29,14 @@ macro "setup_auto" : command =>
 syntax "setup_trivial" manyIndent(tactic) : command
 
 macro_rules
-  | `(setup_trivial $[$tacs:tactic]*) => do
-    let mut cmds := #[← `(set_option linter.unreachableTactic false)]
+  | `(setup_trivial $[$tacs:tactic]*) => open Lean in do
+    let mut cmds : Array <| TSyntax `command := #[]
+
+    for opt in [`linter.unreachableTactic, `linter.unusedTactic] do
+      let cmd ← opt
+        |> mkIdent
+        |> λ id ↦ `(set_option $id false)
+      cmds := cmds.push cmd
 
     for tac in tacs do
       cmds := cmds.push <|
