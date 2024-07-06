@@ -32,7 +32,7 @@ require Duper from git
 
 require smt from git
   "https://github.com/joewatt95/lean-smt"
-    @ "7c078b329b85ca3c583cf23fd536cba7520e96d0"
+    @ "10f0a80ca5742c9d1c350553151cbfaca9d52044"
 
 require egg from git
   "https://github.com/marcusrossel/lean-egg"
