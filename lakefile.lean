@@ -32,7 +32,7 @@ require Duper from git
 
 require smt from git
   "https://github.com/joewatt95/lean-smt"
-    @ "10f0a80ca5742c9d1c350553151cbfaca9d52044"
+    @ "23723c13e48db0f80455285d5c20d8815a1c06f8"
 
 require egg from git
   "https://github.com/marcusrossel/lean-egg"
@@ -40,7 +40,7 @@ require egg from git
 
 -- require LeanCopilot from git
 --   "https://github.com/lean-dojo/LeanCopilot"
---     @ "v1.3.0"
+--     @ "v1.4.0"
 
 require loogle from git
   "https://github.com/nomeata/loogle"
