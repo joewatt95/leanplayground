@@ -42,7 +42,7 @@ macro_rules
       cmds := cmds.push <|
         ← `(macro_rules | `(tactic| trivial) => `(tactic| $tac))
 
-    return Lean.mkNullNode cmds
+    return mkNullNode cmds
 
     -- let cmd : TSyntax `command := { raw := mkNullNode cmds }
     -- `(command| $cmd)
