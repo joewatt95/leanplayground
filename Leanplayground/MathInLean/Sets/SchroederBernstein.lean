@@ -63,7 +63,7 @@ theorem schroeder_bernstein
     open OrderHom OrdinalApprox in
 
     let F : Set α →o Set α :=
-      { toFun := λ X ↦ g '' (f '' X ᶜ)ᶜ
+      { toFun := λ X ↦ g '' (f '' Xᶜ)ᶜ
         monotone' := λ _ ↦ by aesop }
 
     let S : Ordinal → Set α := lfpApprox F ∅
