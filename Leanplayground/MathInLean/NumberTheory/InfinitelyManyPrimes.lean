@@ -144,7 +144,7 @@ theorem primes_mod_4_eq_3_infinite {n : ℕ}
     have ⟨p, (_ : p.Prime), (_ : p ∣ 4 * S_prod + 3), (_ : p % 4 = 3)⟩ :=
       exists_prime_factor_mod_4_eq_3 this
 
-    suffices p ≠ 3 ∧ p = 3 from And.elim (. <| .) this
+    suffices p ≠ 3 ∧ p = 3 from And.elim id this
 
     have : p ≠ 3 :=
       λ _ ↦
