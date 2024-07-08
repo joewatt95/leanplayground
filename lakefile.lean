@@ -31,8 +31,8 @@ require Duper from git
     @ "d53f474c91d39d49d0d30fa8d8deca51c4559690"
 
 require smt from git
-  "https://github.com/joewatt95/lean-smt"
-    @ "23723c13e48db0f80455285d5c20d8815a1c06f8"
+  "https://github.com/ufmg-smite/lean-smt"
+    @ "91ac7f46c83137327715874d27851b7421a40725"
 
 require egg from git
   "https://github.com/marcusrossel/lean-egg"
