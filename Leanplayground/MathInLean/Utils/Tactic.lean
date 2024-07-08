@@ -35,7 +35,7 @@ macro_rules
     for opt in [`linter.unreachableTactic, `linter.unusedTactic] do
       let cmd ← opt
         |> mkIdent
-        |> λ id ↦ `(set_option $id false)
+        |> (`(set_option $(.) false))
       cmds := cmds.push cmd
 
     for tac in tacs do
