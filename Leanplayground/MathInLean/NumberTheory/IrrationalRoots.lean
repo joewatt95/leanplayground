@@ -3,19 +3,17 @@ import Leanplayground.MathInLean.Utils.Tactic
 
 namespace NumberTheory
 
-def even_iff_even_sqr {m : ℕ} := calc
-  2 ∣ m ^ 2 ↔ 2 ∣ m * m    := by rw [pow_two _]
-         _ ↔ 2 ∣ m ∨ 2 ∣ m := Nat.prime_two.dvd_mul
-         _ ↔ 2 ∣ m        := by rw [or_self]
+lemma even_iff_even_sqr {m : ℕ} : 2 ∣ m ^ 2 ↔ 2 ∣ m := by
+  duper [pow_two, Nat.prime_two, Nat.Prime.dvd_mul]
 
 example {m n : ℕ} (_ : m.Coprime n) : m ^ 2 ≠ 2 * n ^ 2
   | (_ : m ^ 2 = 2 * n ^ 2) =>
   have : 2 ∣ m := by rw [←even_iff_even_sqr]; omega
-  let ⟨k, (_ : m = 2 * k)⟩ := this
+  have ⟨k, (_ : m = 2 * k)⟩ := this
 
   have := calc
     2 * n ^ 2 = (2 * k) ^ 2 := by aesop
-            _ = 4 * k ^ 2   := by linarith
+            _ = 4 * k ^ 2   := by ring
 
   have : 2 ∣ n := by rw [←even_iff_even_sqr]; omega
 
@@ -25,8 +23,6 @@ example {m n : ℕ} (_ : m.Coprime n) : m ^ 2 ≠ 2 * n ^ 2
 -- #check Nat.prime_of_mem_factors
 -- #check Nat.prod_factors
 -- #check Nat.factors_unique
-
--- #find ?a * (?b - ?c) = ?a * ?b - ?a * ?c
 
 example {m n k r p : ℕ}
   (_ : n ≠ 0) (_ : m ^ k = r * n ^ k)
