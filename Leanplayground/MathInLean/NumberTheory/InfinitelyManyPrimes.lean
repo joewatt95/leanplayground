@@ -148,10 +148,11 @@ theorem primes_mod_4_eq_3_infinite {n : ℕ}
 
     have : p ≠ 3 :=
       λ _ ↦
-        have : 3 ∣ 4 * S_prod ∧ ¬ 3 ∣ 4 := ⟨by aesop, by decide⟩
-        have : 3 ∣ S_prod := by
-          duper [this, Nat.prime_three, Nat.Prime.dvd_mul]
-            {portfolioInstance := 1}
+        have : 3 ∣ 4 * S_prod := by aesop
+        have : 3 ∣ S_prod :=
+          have : ¬ 3 ∣ 4 := by decide
+          by duper [this, ‹3 ∣ 4 * S_prod›, Nat.prime_three, Nat.Prime.dvd_mul]
+              {portfolioInstance := 1}
 
         have ⟨p', _, _⟩ : ∃ p' ∈ S.erase 3, 3 ∣ p' :=
           have : Prime 3 :=  Nat.prime_iff.mp Nat.prime_three
@@ -168,7 +169,7 @@ theorem primes_mod_4_eq_3_infinite {n : ℕ}
 
       have := calc
         p ∣ S_prod     := dvd_prod_of_mem _ this
-        _ ∣ 4 * S_prod := by aesop
+        _ ∣ 4 * S_prod := Nat.dvd_mul_left _ _
 
       have : p ∣ 3 := by
         duper [this, ‹p ∣ 4 * S_prod + 3›, Nat.dvd_add_iff_right]
