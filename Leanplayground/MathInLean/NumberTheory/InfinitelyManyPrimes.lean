@@ -155,7 +155,7 @@ theorem primes_mod_4_eq_3_infinite {n : ℕ}
               {portfolioInstance := 1}
 
         have ⟨p', _, _⟩ : ∃ p' ∈ S.erase 3, 3 ∣ p' :=
-          have : Prime 3 :=  Nat.prime_iff.mp Nat.prime_three
+          have : Prime 3 := Nat.prime_iff.mp Nat.prime_three
           Prime.exists_mem_finset_dvd this ‹3 ∣ S_prod›
           -- by duper
           --   [this, Prime.exists_mem_finset_dvd, Nat.prime_iff, Nat.prime_three]
