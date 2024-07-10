@@ -24,7 +24,7 @@ lean_lib Leanplayground where
 
 require mathlib from git
   "https://github.com/leanprover-community/mathlib4"
-    @ "v4.9.0"
+    @ "v4.9.1"
 
 require Duper from git
   "https://github.com/leanprover-community/duper"
