@@ -32,7 +32,7 @@ require Duper from git
 
 require smt from git
   "https://github.com/ufmg-smite/lean-smt"
-    @ "91ac7f46c83137327715874d27851b7421a40725"
+    @ "b332ae49450b88c5ead40d66e4d786cb5d991ea9"
 
 require egg from git
   "https://github.com/marcusrossel/lean-egg"
@@ -48,7 +48,7 @@ require loogle from git
 
 require verso from git
   "https://github.com/leanprover/verso"
-    @ "6b008b15d9c319252c99066f1162157694f64e8c"
+    @ "032caeaa9852a3b0fa94eb61a1a9cca15dd228b4"
 
 require verbose from git
   "https://github.com/PatrickMassot/verbose-lean4"
