@@ -1,12 +1,10 @@
 import Mathlib.Algebra.Group.Subgroup.Basic
 import Mathlib.GroupTheory.Coset
--- import Mathlib.GroupTheory.Exponent
--- import Mathlib.GroupTheory.OrderOfElement
 
 import Mathlib.Data.Fintype.Card
 
-import Mathlib.Tactic.Group
-import Mathlib.Tactic.Abel
+-- import Mathlib.Tactic.Group
+-- import Mathlib.Tactic.Abel
 
 import Leanplayground.MathInLean.Utils.Tactic
 
@@ -37,25 +35,25 @@ lemma eq_bot_iff_card {H : Subgroup G} [Fintype H] :
         _ ↔ Fintype.card H ≤ 1 := by egg [Fintype.card_le_one_iff]
         _ ↔ Fintype.card H = 1 := by omega
   where
-    go : (∀ g ∈ H, g = 1) → ∀ h h' : H, h = h' :=
-      λ _ ⟨h, (_ : h ∈ H)⟩ ⟨h', (_ : h' ∈ H)⟩ ↦ by
-        ext; duper [*] {portfolioInstance := 1}
+    go : (∀ g ∈ H, g = 1) → ∀ h h' : {g | g ∈ H}, h = h' :=
+      λ _ ⟨h, (_ : h ∈ H)⟩ ⟨h', (_ : h' ∈ H)⟩ ↦
+        Subtype.ext <| show h = h' by duper [*] {portfolioInstance := 1}
 
 lemma inf_bot_of_coprime {H K : Subgroup G} [Fintype H] [Fintype K]
   (h : Fintype.card H |>.Coprime (Fintype.card K))
   : H ⊓ K = ⊥ :=
-  let HK : Type u := ↑(H ⊓ K)
+  let HK := ↑(H ⊓ K)
   have : Fintype HK := Fintype.ofFinite _
 
-  suffices Nat.card HK = 1 by
-    simpa only [eq_bot_iff_card, Nat.card_eq_fintype_card]
+  suffices Fintype.card HK = 1 by simpa [eq_bot_iff_card]
 
   have : Nat.card HK ∣ (Nat.card H).gcd (Nat.card K) := by
     duper [go, Subgroup.card_dvd_of_le, Nat.dvd_gcd_iff]
       {portfolioInstance := 1}
 
-  show Nat.card HK = 1 by aesop
+  show Fintype.card HK = 1 by
+    simp_all only [Nat.card_eq_fintype_card, Nat.dvd_one]
   where
-    go : H ⊓ K ≤ H ∧ H ⊓ K ≤ K := by aesop
+    go : H ⊓ K ≤ H ∧ H ⊓ K ≤ K := le_inf_iff.mp <| le_refl _
 
 end Algebra
