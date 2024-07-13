@@ -35,7 +35,7 @@ lemma eq_bot_iff_card {H : Subgroup G} [Fintype H]
         _ ↔ Fintype.card H ≤ 1 := by egg [Fintype.card_le_one_iff]
         _ ↔ Fintype.card H = 1 := by omega
   where
-    go : (∀ g ∈ H, g = 1) → ∀ h h' : {g | g ∈ H}, h = h' :=
+    go : (∀ g ∈ H, g = 1) → ∀ h h' : {g // g ∈ H}, h = h' :=
       λ _ ⟨h, (_ : h ∈ H)⟩ ⟨h', (_ : h' ∈ H)⟩ ↦
         Subtype.ext <| show h = h' by duper [*] {portfolioInstance := 1}
 
