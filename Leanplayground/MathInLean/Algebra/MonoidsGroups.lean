@@ -26,8 +26,7 @@ def conjugate (g : G) (H : Subgroup G) : Subgroup G :=
       let y := g * h⁻¹ * g⁻¹
       suffices x⁻¹ = y by aesop
       have : x * y = 1 := by aesop
-      by duper [this, eq_inv_of_mul_eq_one_right]
-  }
+      by duper [this, eq_inv_of_mul_eq_one_right] }
 
 lemma eq_bot_iff_card {H : Subgroup G} [Fintype H] :
   H = ⊥ ↔ Fintype.card H = 1 :=
