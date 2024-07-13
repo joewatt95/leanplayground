@@ -26,8 +26,8 @@ def conjugate (g : G) (H : Subgroup G) : Subgroup G :=
       have : x * y = 1 := by aesop
       by duper [this, eq_inv_of_mul_eq_one_right] }
 
-lemma eq_bot_iff_card {H : Subgroup G} [Fintype H] :
-  H = ⊥ ↔ Fintype.card H = 1 :=
+lemma eq_bot_iff_card {H : Subgroup G} [Fintype H]
+  : H = ⊥ ↔ Fintype.card H = 1 :=
   have : 0 < Fintype.card H := Fintype.card_pos
   calc
     H = ⊥ ↔ ∀ g ∈ H, g = 1     := by exact Subgroup.eq_bot_iff_forall _
