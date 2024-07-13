@@ -45,7 +45,7 @@ lemma inf_bot_of_coprime {H K : Subgroup G} [Fintype H] [Fintype K]
   let HK := ↑(H ⊓ K)
   have : Fintype HK := Fintype.ofFinite _
 
-  suffices Fintype.card HK = 1 by simpa [eq_bot_iff_card]
+  suffices Fintype.card HK = 1 from eq_bot_iff_card.mpr this
 
   have : Nat.card HK ∣ (Nat.card H).gcd (Nat.card K) := by
     duper [go, Subgroup.card_dvd_of_le, Nat.dvd_gcd_iff]
