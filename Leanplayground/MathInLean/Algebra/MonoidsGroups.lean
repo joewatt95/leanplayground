@@ -23,9 +23,8 @@ def conjugate (g : G) (H : Subgroup G) : Subgroup G :=
     one_mem' := by aesop
     inv_mem' := λ {x} (_ : φ x) ↦
       have ⟨h, (_ : h ∈ H), (_ : x = g * h * g⁻¹)⟩ := ‹φ x›
-      let y := g * h⁻¹ * g⁻¹
-      have : x * y = 1 := by aesop
-      have : x⁻¹ = y := DivisionMonoid.inv_eq_of_mul _ _ this
+      have : x⁻¹ = g * h⁻¹ * g⁻¹ := by
+        simp only [‹x = _›, mul_inv_rev, inv_inv, mul_assoc]
       show φ x⁻¹ by aesop }
 
 example {φ : G →* H} {S T : Subgroup H} (hST : S ≤ T)
