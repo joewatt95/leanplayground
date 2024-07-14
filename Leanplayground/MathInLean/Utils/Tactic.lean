@@ -50,8 +50,8 @@ macro_rules
 setup_trivial
   decide
   tauto aesop
-  omega linarith
-  ring abel group
+  linarith omega
+  group abel ring
 
 -- macro_rules | `(tactic| trivial) => `(tactic| simp <;> trivial)
 -- macro_rules | `(tactic| trivial) => `(tactic| simp_all)
