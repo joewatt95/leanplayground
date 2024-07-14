@@ -4,6 +4,8 @@ import Mathlib.Control.Traversable.Basic
 
 import Mathlib.Tactic.Common
 import Mathlib.Tactic.Linarith
+import Mathlib.Tactic.Abel
+import Mathlib.Tactic.Group
 import Mathlib.Tactic.Ring
 
 import Auto
@@ -33,10 +35,8 @@ macro_rules
     let mut cmds : Array <| TSyntax `command := #[]
 
     for opt in [`linter.unreachableTactic, `linter.unusedTactic] do
-      let cmd ← opt
-        |> mkIdent
-        |> (`(set_option $(.) false))
-      cmds := cmds.push cmd
+      cmds := cmds.push <|
+        ← opt |> mkIdent |> (`(set_option $(.) false))
 
     for tac in tacs do
       cmds := cmds.push <|
@@ -49,9 +49,9 @@ macro_rules
 
 setup_trivial
   decide
-  tauto
-  aesop
+  tauto aesop
   omega linarith
+  ring abel group
 
 -- macro_rules | `(tactic| trivial) => `(tactic| simp <;> trivial)
 -- macro_rules | `(tactic| trivial) => `(tactic| simp_all)
