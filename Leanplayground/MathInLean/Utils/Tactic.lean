@@ -4,8 +4,8 @@ import Mathlib.Control.Traversable.Basic
 
 import Mathlib.Tactic.Common
 import Mathlib.Tactic.Linarith
-import Mathlib.Tactic.Abel
 import Mathlib.Tactic.Group
+import Mathlib.Tactic.Abel
 import Mathlib.Tactic.Ring
 
 import Auto
