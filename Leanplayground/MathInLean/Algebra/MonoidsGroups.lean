@@ -16,7 +16,7 @@ variable {G : Type u} [Group G]
 
 def conjugate (g : G) (H : Subgroup G) : Subgroup G :=
   let φ x := ∃ h ∈ H, x = g * h * g⁻¹
-  { carrier := {x | φ x}
+  { carrier := setOf φ
     mul_mem' := by aesop
     one_mem' := by aesop
     inv_mem' := λ {x} (_ : φ x) ↦
