@@ -22,9 +22,9 @@ def conjugate (g : G) (H : Subgroup G) : Subgroup G :=
     inv_mem' := λ {x} (_ : φ x) ↦
       have ⟨h, (_ : h ∈ H), (_ : x = g * h * g⁻¹)⟩ := ‹φ x›
       let y := g * h⁻¹ * g⁻¹
-      suffices x⁻¹ = y by aesop
       have : x * y = 1 := by aesop
-      by duper [this, eq_inv_of_mul_eq_one_right] }
+      have : x⁻¹ = y := DivisionMonoid.inv_eq_of_mul _ _ this
+      show φ x⁻¹ by aesop }
 
 lemma eq_bot_iff_card {H : Subgroup G} [Fintype H]
   : H = ⊥ ↔ Fintype.card H = 1 :=
