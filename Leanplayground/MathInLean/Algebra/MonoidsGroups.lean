@@ -59,7 +59,7 @@ lemma eq_bot_iff_card {H : Subgroup G} [Fintype H]
 lemma inf_bot_of_coprime {H K : Subgroup G} [Fintype H] [Fintype K]
   (h : Fintype.card H |>.Coprime (Fintype.card K))
   : H ⊓ K = ⊥ :=
-  let HK := ↑(H ⊓ K)
+  let HK := H ⊓ K
   have : Fintype HK := Fintype.ofFinite _
 
   suffices Fintype.card HK = 1 from eq_bot_iff_card.mpr this
