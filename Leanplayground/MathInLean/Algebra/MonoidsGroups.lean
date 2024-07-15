@@ -24,7 +24,9 @@ def conjugate (g : G) (H : Subgroup G) : Subgroup G :=
     inv_mem' := λ {x} (_ : φ x) ↦
       have ⟨h, (_ : h ∈ H), (_ : x = g * h * g⁻¹)⟩ := ‹φ x›
       have : x⁻¹ = g * h⁻¹ * g⁻¹ := by rw [‹x = _›]; group
-      show φ x⁻¹ by aesop }
+      show φ x⁻¹ by
+        duper [this, ‹h ∈ H›, Subgroup.inv_mem] {portfolioInstance := 1}
+  }
 
 example {φ : G →* H} {S T : Subgroup H} (hST : S ≤ T)
   : S.comap φ ≤ T.comap φ :=
@@ -70,5 +72,24 @@ lemma inf_bot_of_coprime {H K : Subgroup G} [Fintype H] [Fintype K]
     simp_all only [Nat.card_eq_fintype_card, Nat.dvd_one]
   where
     go : H ⊓ K ≤ H ∧ H ⊓ K ≤ K := le_inf_iff.mp <| le_refl _
+
+instance : MulAction G (Subgroup G) where
+  smul := conjugate
+
+  one_smul (H : Subgroup G) :=
+    show conjugate 1 H = H by simp only [conjugate]; aesop
+
+  mul_smul g g' (H : Subgroup G) :=
+    let lhs := conjugate (g * g') H
+    let rhs := conjugate g (conjugate g' H)
+
+    suffices ∀ x : G, x ∈ lhs ↔ x ∈ rhs from Subgroup.ext this
+
+    have : ∀ h ∈ H, (g * g') * h * (g * g')⁻¹ = g * (g' * h * g'⁻¹) * g⁻¹ :=
+      λ _ _ ↦ by group
+
+    λ x ↦ show x ∈ lhs ↔ x ∈ rhs by
+      simp_all [lhs, rhs, conjugate]
+      duper [this, iff_def] {portfolioInstance := 1}
 
 end Algebra
