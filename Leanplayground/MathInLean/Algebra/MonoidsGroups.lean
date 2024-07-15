@@ -80,8 +80,8 @@ instance : MulAction G (Subgroup G) where
     show conjugate 1 H = H by simp only [conjugate]; aesop
 
   mul_smul g g' (H : Subgroup G) :=
-    let lhs := conjugate (g * g') H
-    let rhs := conjugate g (conjugate g' H)
+    let lhs := H |> conjugate (g * g')
+    let rhs := H |> conjugate g' |> conjugate g
 
     suffices ∀ x : G, x ∈ lhs ↔ x ∈ rhs from Subgroup.ext this
 
