@@ -85,7 +85,7 @@ instance : MulAction G (Subgroup G) where
 
     suffices ∀ x : G, x ∈ lhs ↔ x ∈ rhs from Subgroup.ext this
 
-    have : ∀ h : H, (g * g') * h * (g * g')⁻¹ = g * (g' * h * g'⁻¹) * g⁻¹ :=
+    have : ∀ h, (g * g') * h * (g * g')⁻¹ = g * (g' * h * g'⁻¹) * g⁻¹ :=
       λ _ ↦ by group
 
     λ x ↦ show x ∈ lhs ↔ x ∈ rhs by
