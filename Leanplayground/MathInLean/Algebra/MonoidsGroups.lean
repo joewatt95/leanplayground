@@ -85,13 +85,11 @@ instance : MulAction G (Subgroup G) where
 
     suffices ∀ x : G, x ∈ lhs ↔ x ∈ rhs from Subgroup.ext this
 
-    have : ∀ h, (g * g') * h * (g * g')⁻¹ = g * (g' * h * g'⁻¹) * g⁻¹ :=
-      λ _ ↦ by group
+    have : ∀ {h}, (g * g') * h * (g * g')⁻¹ = g * (g' * h * g'⁻¹) * g⁻¹ :=
+      λ {_} ↦ by group
 
     λ x ↦ show x ∈ lhs ↔ x ∈ rhs by
-      simp_all only
-        [ mul_inv_rev, Subtype.forall, conjugate, Subgroup.mem_mk,
-          Set.mem_setOf_eq, lhs, rhs ]
-      duper [this, iff_def] {portfolioInstance := 1}
+      simp_all [lhs, rhs, conjugate]
+      duper [this] {portfolioInstance := 1}
 
 end Algebra
