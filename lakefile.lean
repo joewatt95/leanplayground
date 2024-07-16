@@ -46,6 +46,10 @@ require loogle from git
   "https://github.com/nomeata/loogle"
     @ "ebafe0c213faa28d8c6ccfab38ee8b93ef8d760b"
 
+require leanses from git
+  "https://github.com/VCA-EPFL/leanses"
+    @ "95bc5ddd93553ae416ced18839cccbcff6b2a01c"
+
 require verso from git
   "https://github.com/leanprover/verso"
     @ "45206f1f4fceb41fd5c324f1a6148b0fed9db33b"
