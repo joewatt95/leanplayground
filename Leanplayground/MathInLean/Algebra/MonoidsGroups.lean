@@ -89,8 +89,7 @@ instance : MulAction G (Subgroup G) where
       λ _ ↦ by group
 
     λ x ↦ show x ∈ lhs ↔ x ∈ rhs by
-      simp_all only
-        [conjugate, Subgroup.mem_mk, Set.mem_setOf_eq, lhs, rhs]
+      simp only [conjugate, Subgroup.mem_mk, Set.mem_setOf_eq, lhs, rhs]
       duper [this] {portfolioInstance := 1}
 
 end Algebra
