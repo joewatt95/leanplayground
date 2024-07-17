@@ -43,10 +43,11 @@ lemma eq_bot_iff_card {H : Subgroup G} [Fintype H]
   : H = ⊥ ↔ Fintype.card H = 1 :=
   have : 0 < Fintype.card H := Fintype.card_pos
   calc
-    H = ⊥ ↔ ∀ g ∈ H, g = 1     := by exact Subgroup.eq_bot_iff_forall _
-        _ ↔ ∀ h h' : H, h = h' := ⟨go, by aesop⟩
-        _ ↔ Fintype.card H ≤ 1 := by rw [Fintype.card_le_one_iff]
-        _ ↔ Fintype.card H = 1 := by omega
+        H = ⊥
+    _ ↔ ∀ g ∈ H, g = 1     := Subgroup.eq_bot_iff_forall _
+    _ ↔ ∀ h h' : H, h = h' := ⟨go, by aesop⟩
+    _ ↔ Fintype.card H ≤ 1 := by rw [Fintype.card_le_one_iff]
+    _ ↔ Fintype.card H = 1 := by omega
   where
     go : (∀ g ∈ H, g = 1) → ∀ h h' : {g // g ∈ H}, h = h' :=
       λ _ ⟨h, (_ : h ∈ H)⟩ ⟨h', (_ : h' ∈ H)⟩ ↦
