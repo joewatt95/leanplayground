@@ -97,28 +97,29 @@ variable {H K : Subgroup G}
 -- - `G ⧸ H ⟶βδ* Quotient (MulAction.orbitRel H.op G)`
 --   This is the quotient type formed by quotiening out the Setoid `orbitRel`,'
 --   which is the equivalence relation of being in the same orbit.
---   Thanks to `orbot_subgroup_eq_rightCoset`, `orbitRel H.op G` is equivalent
---   to saying that the elements in each partition belong the same coset.
+--   Thanks to `orbit_subgroup_eq_rightCoset`, `orbitRel H.op G` is equivalent
+--   to saying that the elements in each partition belong to the same coset.
+--   In other words, `G ⧸ H` is the type of equivalence classes of orbits of
+--   the action of H (= left cosets of H in G).
 
 open MulAction
 
-noncomputable def lagrange
-  : G ≃ (G ⧸ H) × H :=
-  let «⟦H⟧» : G ⧸ H := (1 : G)
+noncomputable def lagrange : G ≃ (G ⧸ H) × H :=
+  let H' : G ⧸ H := (1 : G)
 
-  have : G ≃ orbit G «⟦H⟧» × stabilizer G «⟦H⟧» :=
+  have : G ≃ orbit G H' × stabilizer G H' :=
     orbitProdStabilizerEquivGroup _ _ |>.symm
 
-  have : orbit G «⟦H⟧» ≃ G ⧸ H :=
+  have : orbit G H' ≃ G ⧸ H :=
     Equiv.subtypeUnivEquiv <| by
-      simp only [mem_orbit_iff, Quotient.smul_mk, smul_eq_mul, mul_one, «⟦H⟧»]
+      simp only [mem_orbit_iff, Quotient.smul_mk, smul_eq_mul, mul_one, H']
       exact Quotient.exists_rep
 
-  have : stabilizer G «⟦H⟧» = H := stabilizer_quotient _
+  have : stabilizer G H' = H := stabilizer_quotient _
 
   calc
-     G ≃ orbit G «⟦H⟧» × stabilizer G «⟦H⟧» := by assumption
-     _ ≃ (G ⧸ H) × H                       := by rw [this]; exact Equiv.prodCongrLeft <| λ _ ↦ ‹_›
+     G ≃ orbit G H' × stabilizer G H' := by assumption
+     _ ≃ (G ⧸ H) × H                  := by rw [this]; exact Equiv.prodCongrLeft <| λ _ ↦ ‹_›
 
 theorem lagrange'
   : Nat.card G = Nat.card (G ⧸ H) * Nat.card H := by
