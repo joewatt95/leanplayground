@@ -45,7 +45,7 @@ lemma eq_bot_iff_card {H : Subgroup G} [Fintype H]
   calc
     H = ⊥ ↔ ∀ g ∈ H, g = 1     := by exact Subgroup.eq_bot_iff_forall _
         _ ↔ ∀ h h' : H, h = h' := ⟨go, by aesop⟩
-        _ ↔ Fintype.card H ≤ 1 := by egg [Fintype.card_le_one_iff]
+        _ ↔ Fintype.card H ≤ 1 := by rw [Fintype.card_le_one_iff]
         _ ↔ Fintype.card H = 1 := by omega
   where
     go : (∀ g ∈ H, g = 1) → ∀ h h' : {g // g ∈ H}, h = h' :=
@@ -116,10 +116,11 @@ noncomputable def lagrange : G ≃ (G ⧸ H) × H :=
       exact Quotient.exists_rep
 
   have : stabilizer G H' = H := stabilizer_quotient _
+  have : stabilizer G H' ≃ H := Equiv.setCongr <| by rw [this]
 
   calc
      G ≃ orbit G H' × stabilizer G H' := by assumption
-     _ ≃ (G ⧸ H) × H                  := by rw [this]; exact Equiv.prodCongrLeft <| λ _ ↦ ‹_›
+     _ ≃ (G ⧸ H) × H                  := Equiv.prodCongr ‹_› ‹_›
 
 theorem lagrange'
   : Nat.card G = Nat.card (G ⧸ H) * Nat.card H := by
