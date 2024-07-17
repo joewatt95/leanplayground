@@ -120,8 +120,8 @@ noncomputable def lagrange : G ≃ (G ⧸ H) × H :=
   have : stabilizer G H' ≃ H := Equiv.setCongr <| by rw [this]
 
   calc
-     G ≃ orbit G H' × stabilizer G H' := ‹_›
-     _ ≃ (G ⧸ H) × H                  := Equiv.prodCongr ‹_› ‹_›
+    G ≃ orbit G H' × stabilizer G H' := ‹_›
+    _ ≃ (G ⧸ H) × H                  := Equiv.prodCongr ‹_› ‹_›
 
 theorem lagrange'
   : Nat.card G = Nat.card (G ⧸ H) * Nat.card H := by
