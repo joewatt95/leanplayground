@@ -95,18 +95,15 @@ variable {H K : Subgroup G}
 --   ie the coset gH is the orbit of the left action of Hᵒᵖ (ie right actions of H)
 --   on g.
 -- - `G ⧸ H ⟶βδ* Quotient (MulAction.orbitRel H.op G)`
---   This is the quotient type formed by quotiening out the equivalence relation
---   `orbitRel`, which is the relation of being in the same orbit, which in this
---   instance, is equivalent to saying that the elements in each partition belong
---   the same coset.
-
--- #find |- Mul (_ × _)
+--   This is the quotient type formed by quotiening out the Setoid `orbitRel`,'
+--   which is the equivalence relation of being in the same orbit.
+--   Thanks to `orbot_subgroup_eq_rightCoset`, `orbitRel H.op G` is equivalent
+--   to saying that the elements in each partition belong the same coset.
 
 open MulAction
 
 noncomputable def lagrange
   : G ≃ (G ⧸ H) × H :=
-
   let «⟦H⟧» : G ⧸ H := (1 : G)
 
   have : G ≃ orbit G «⟦H⟧» × stabilizer G «⟦H⟧» :=
@@ -123,11 +120,11 @@ noncomputable def lagrange
      G ≃ orbit G «⟦H⟧» × stabilizer G «⟦H⟧» := by assumption
      _ ≃ (G ⧸ H) × H                       := by rw [this]; exact Equiv.prodCongrLeft <| λ _ ↦ ‹_›
 
-variable [Fintype G]
-
 theorem lagrange'
   : Nat.card G = Nat.card (G ⧸ H) * Nat.card H := by
   rw [←Nat.card_prod, Nat.card_congr lagrange]
+
+variable [Fintype G]
 
 lemma aux_card_eq
   (h' : Nat.card G = Nat.card H * Nat.card K)
