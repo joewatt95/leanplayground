@@ -1,10 +1,6 @@
-import Mathlib.Algebra.Group.Subgroup.Basic
-import Mathlib.GroupTheory.Coset
-
-import Mathlib.Data.Fintype.Card
-
--- import Mathlib.Tactic.Group
--- import Mathlib.Tactic.Abel
+import Mathlib.Algebra.Group.Prod
+import Mathlib.GroupTheory.GroupAction.Quotient
+import Mathlib.GroupTheory.QuotientGroup
 
 import Leanplayground.MathInLean.Utils.Tactic
 
@@ -90,6 +86,76 @@ instance : MulAction G (Subgroup G) where
 
     λ x ↦ show x ∈ lhs ↔ x ∈ rhs by
       simp only [conjugate, Subgroup.mem_mk, Set.mem_setOf_eq, lhs, rhs]
-      duper [this] {portfolioInstance := 1}
+      aesop
+
+variable {H K : Subgroup G}
+
+-- Note that:
+-- - `orbit_subgroup_eq_rightCoset` says that for `g : G`, `g • H = orbit H g`,
+--   ie the coset gH is the orbit of the left action of Hᵒᵖ (ie right actions of H)
+--   on g.
+-- - `G ⧸ H ⟶βδ* Quotient (MulAction.orbitRel H.op G)`
+--   This is the quotient type formed by quotiening out the equivalence relation
+--   `orbitRel`, which is the relation of being in the same orbit, which in this
+--   instance, is equivalent to saying that the elements in each partition belong
+--   the same coset.
+
+-- #find |- Mul (_ × _)
+
+open MulAction
+
+noncomputable def lagrange
+  : G ≃ (G ⧸ H) × H :=
+
+  let «⟦H⟧» : G ⧸ H := (1 : G)
+
+  have : G ≃ orbit G «⟦H⟧» × stabilizer G «⟦H⟧» :=
+    orbitProdStabilizerEquivGroup _ _ |>.symm
+
+  have : orbit G «⟦H⟧» ≃ G ⧸ H :=
+    Equiv.subtypeUnivEquiv <| by
+      simp only [mem_orbit_iff, Quotient.smul_mk, smul_eq_mul, mul_one, «⟦H⟧»]
+      exact Quotient.exists_rep
+
+  have : stabilizer G «⟦H⟧» = H := stabilizer_quotient _
+
+  calc
+     G ≃ orbit G «⟦H⟧» × stabilizer G «⟦H⟧» := by assumption
+     _ ≃ (G ⧸ H) × H                       := by rw [this]; exact Equiv.prodCongrLeft <| λ _ ↦ ‹_›
+
+variable [Fintype G]
+
+theorem lagrange'
+  : Nat.card G = Nat.card (G ⧸ H) * Nat.card H := by
+  rw [←Nat.card_prod, Nat.card_congr lagrange]
+
+lemma aux_card_eq
+  (h' : Nat.card G = Nat.card H * Nat.card K)
+  : Nat.card (G ⧸ H) = Nat.card K :=
+  have : Nat.card H * Nat.card (G ⧸ H) = Nat.card H * Nat.card K := by
+    duper [h', lagrange', Nat.mul_comm] {portfolioInstance := 1}
+  by aesop
+
+variable
+  [H.Normal] [K.Normal]
+  (h : Disjoint H K)
+  (h' : Nat.card G = Nat.card H * Nat.card K)
+
+-- #check Fintype.bijective_iff_injective_and_card
+-- #check MonoidHom.ker_eq_bot_iff
+-- #check MonoidHom.restrict
+-- #check MonoidHom.ker_restrict
+
+noncomputable def iso₁ : K ≃* G ⧸ H where
+  toFun k :=
+    sorry
+
+  invFun := sorry
+
+  left_inv := sorry
+
+  right_inv := sorry
+
+  map_mul' := sorry
 
 end Algebra
