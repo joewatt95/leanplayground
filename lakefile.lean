@@ -26,6 +26,10 @@ require mathlib from git
   "https://github.com/leanprover-community/mathlib4"
     @ "v4.9.1"
 
+require auto from git
+  "https://github.com/leanprover-community/lean-auto"
+    @ "0831a6eff8cbb456e90c616bd2f4db51aefea3d0"
+
 require Duper from git
   "https://github.com/leanprover-community/duper"
     @ "d53f474c91d39d49d0d30fa8d8deca51c4559690"
@@ -52,11 +56,11 @@ require leanses from git
 
 require verso from git
   "https://github.com/leanprover/verso"
-    @ "9e93fcd4315693211743874a35f279190a0083ac"
+    @ "7a64272fd5516e3deeeb206175bcf9e6932e170e"
 
 require verbose from git
   "https://github.com/PatrickMassot/verbose-lean4"
-    @ "213cffdee33ad52a134e40964ef88cef35314162"
+    @ "dd9bf4b3a70cecc52d630d9576b933a9ba1bb550"
 
 -- require LeanCodePrompts from git
 --   "https://github.com/siddhartha-gadgil/LeanAide" @ "main"
