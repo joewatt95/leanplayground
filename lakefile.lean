@@ -26,13 +26,9 @@ require mathlib from git
   "https://github.com/leanprover-community/mathlib4"
     @ "v4.9.1"
 
-require auto from git
-  "https://github.com/leanprover-community/lean-auto"
-    @ "0831a6eff8cbb456e90c616bd2f4db51aefea3d0"
-
 require Duper from git
   "https://github.com/leanprover-community/duper"
-    @ "d53f474c91d39d49d0d30fa8d8deca51c4559690"
+    @ "v0.0.15"
 
 require smt from git
   "https://github.com/ufmg-smite/lean-smt"
