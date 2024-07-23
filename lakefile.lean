@@ -56,7 +56,7 @@ require verso from git
 
 require verbose from git
   "https://github.com/PatrickMassot/verbose-lean4"
-    @ "ebd48b3fcedc572e6f31806b4ad589235fca56cd"
+    @ "fdec6265a45997f99044900925921349de0ca73a"
 
 -- require LeanCodePrompts from git
 --   "https://github.com/siddhartha-gadgil/LeanAide" @ "main"
