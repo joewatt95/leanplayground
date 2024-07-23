@@ -117,7 +117,7 @@ noncomputable def lagrange : G ≃ (G ⧸ H) × H :=
       exact Quotient.exists_rep
 
   have : stabilizer G H' = H := stabilizer_quotient _
-  have : stabilizer G H' ≃ H := Equiv.setCongr <| by rw [this]
+  have : stabilizer G H' ≃ H := by rw [this]
 
   calc
     G ≃ orbit G H' × stabilizer G H' := ‹_›
