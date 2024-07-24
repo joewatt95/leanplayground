@@ -1,23 +1,26 @@
 import Mathlib.Data.Nat.Factorization.Basic
+
 import Leanplayground.MathInLean.Utils.Tactic
 
 namespace NumberTheory
 
 lemma even_iff_even_sqr {m : ℕ} : 2 ∣ m ^ 2 ↔ 2 ∣ m := by
-  duper [pow_two, Nat.prime_two, Nat.Prime.dvd_mul]
+  duper [pow_two, Nat.prime_two, Nat.Prime.dvd_mul] {portfolioInstance := 1}
 
-example {m n : ℕ} (_ : m.Coprime n) : m ^ 2 ≠ 2 * n ^ 2
-  | (_ : m ^ 2 = 2 * n ^ 2) =>
-  have : 2 ∣ m := by rw [←even_iff_even_sqr]; omega
-  have ⟨k, (_ : m = 2 * k)⟩ := this
+example {m n : ℕ} (_ : m.Coprime n) : m ^ 2 ≠ 2 * n ^ 2 :=
+  λ _ ↦
+    have : 2 ∣ m ^ 2 := by omega
+    have : 2 ∣ m := even_iff_even_sqr.mp this
+    have ⟨k, (_ : m = 2 * k)⟩ := this
 
-  have := calc
-    2 * n ^ 2 = (2 * k) ^ 2 := by aesop
-            _ = 4 * k ^ 2   := by ring
+    have := calc
+      2 * n ^ 2 = (2 * k) ^ 2 := by egg [*]
+              _ = 4 * k ^ 2   := by ring
 
-  have : 2 ∣ n := by rw [←even_iff_even_sqr]; omega
+    have : 2 ∣ n ^ 2 := by omega
+    have : 2 ∣ n := even_iff_even_sqr.mp this
 
-  show ⊥ by duper [*, Nat.dvd_gcd] {portfolioInstance := 7}
+    show ⊥ by duper [*, Nat.dvd_gcd] {portfolioInstance := 7}
 
 -- #check Nat.factors
 -- #check Nat.prime_of_mem_factors
