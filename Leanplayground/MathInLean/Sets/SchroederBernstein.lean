@@ -38,9 +38,9 @@ lemma piecewise_is_inj
 
 lemma piecewise_is_surj
   (f_union_g_eq_univ : f '' X ∪ g '' Xᶜ = univ)
-  : Surjective <| h (f := f) (g := g) (X := X)
-  | b =>
-    have : b ∈ f '' X ∪ g '' Xᶜ := by aesop
+  : Surjective <| h (f := f) (g := g) (X := X) :=
+  λ b ↦
+    have : b ∈ f '' X ∪ g '' Xᶜ := by simp_all only [mem_univ]
     match this with
     | .inl _ | .inr _ => show ∃ a, h a = b by aesop
 
