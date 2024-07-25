@@ -11,7 +11,7 @@ namespace NumberTheory
 theorem exists_prime_factor {n : ℕ}
   (_ : 2 ≤ n)
   : ∃ p, p.Prime ∧ p ∣ n :=
-  suffices ¬ n.Prime → ∃ p, p.Prime ∧ p ∣ n  by tauto
+  suffices ¬ n.Prime → ∃ p, p.Prime ∧ p ∣ n by tauto
   λ _ ↦
     have ⟨m, _, _, _⟩ : ∃ m < n, m ∣ n ∧ m ≠ 1 := by
       duper [‹2 ≤ n›, ‹¬ n.Prime›, Nat.prime_def_lt] {portfolioInstance := 1}
@@ -37,7 +37,7 @@ theorem primes_infinite {n : ℕ}
 
   have ⟨p, (_ : p.Prime), (_ : p ∣ (n + 1)! + 1)⟩ := exists_prime_factor this
 
-  suffices ¬ p ≤ n by aesop
+  suffices ¬ p ≤ n by rw [not_le] at this; tauto
   λ _ ↦
     have := calc
       p ∣ n !      := by duper [*, Nat.Prime.dvd_factorial] {portfolioInstance := 1}
