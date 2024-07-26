@@ -18,9 +18,9 @@ section CRT
 universe w
 variable {ι : Type w}
 
-#check Ideal.quotientInfToPiQuotient
-#check Pi.ringHom
-#check Ideal.ker_Pi_Quotient_mk
+-- #check Ideal.quotientInfToPiQuotient
+-- #check Pi.ringHom
+-- #check Ideal.ker_Pi_Quotient_mk
 
 -- The homomorphism from ``R ⧸ ⨅ i, I i`` to ``Π i, R ⧸ I i`` featured in the Chinese
 -- Remainder Theorem.
