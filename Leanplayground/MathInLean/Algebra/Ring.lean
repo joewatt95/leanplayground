@@ -19,11 +19,19 @@ universe w
 variable {ι : Type w}
 
 #check Ideal.quotientInfToPiQuotient
+#check Pi.ringHom
+#check Ideal.ker_Pi_Quotient_mk
 
 -- The homomorphism from ``R ⧸ ⨅ i, I i`` to ``Π i, R ⧸ I i`` featured in the Chinese
 -- Remainder Theorem.
 def crtMap (I : ι → Ideal R) : (R ⧸ ⨅ i, I i) →+* Π i, R ⧸ I i where
-  toFun := sorry
+  toFun :=
+    -- let f : R → Π i, R ⧸ I i :=
+    --   λ r i ↦ (r : R ⧸ I i)
+
+    let f : R →+* Π i, R ⧸ I i := Pi.ringHom (Ideal.Quotient.mk <| I .)
+
+    sorry
 
   map_one' := sorry
 
