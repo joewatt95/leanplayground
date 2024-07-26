@@ -48,12 +48,12 @@ def crtMap (I : ι → Ideal R) : (R ⧸ ⨅ i, I i) →+* ∀ i, R ⧸ I i :=
 
 private lemma crtMap_mk {I : ι → Ideal R} {r : R} :
   crtMap I ⟦r⟧ = λ i ↦ (⟦r⟧ : R ⧸ I i):= by
-  simp [crtMap, RingHom.kerLift]
+  simp [crtMap]
   sorry
 
 private lemma crtMap_mk' {I : ι → Ideal R} {r : R} {i : ι} :
   crtMap I ⟦r⟧ i = (⟦r⟧ : R ⧸ I i) := by
-  simp [crtMap, RingHom.kerLift]
+  simp [crtMap]
   sorry
 
 end CRT
