@@ -51,11 +51,13 @@ def crtMap (I : ι → Ideal R) : (R ⧸ ⨅ i, I i) →+* ∀ i, R ⧸ I i :=
 --   Ideal.quotientInfToPiQuotient _
 
 private lemma crtMap_mk {I : ι → Ideal R} {x : R} :
-  crtMap I (Quotient.mk _ x) = fun i : ι ↦ Ideal.Quotient.mk (I i) x :=
-  by simp [crtMap]; sorry
+  crtMap I ⟦x⟧ = λ i ↦ Ideal.Quotient.mk (I i) x := by
+  simp [crtMap]
+  sorry
 
 private lemma crtMap_mk' {I : ι → Ideal R} {x : R} {i : ι} :
-  crtMap I (Quotient.mk _ x) i = Ideal.Quotient.mk (I i) x :=
+  crtMap I ⟦x⟧ i = Ideal.Quotient.mk (I i) x := by
+  simp [crtMap]
   sorry
 
 end CRT
