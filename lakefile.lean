@@ -52,7 +52,7 @@ require leanses from git
 
 require verso from git
   "https://github.com/leanprover/verso"
-    @ "e223cfcc12428144130fd2b20e5801675d29de6b"
+    @ "4f7dd81334d58cfd33b31d0b8f8bf42b7fe4ad32"
 
 require verbose from git
   "https://github.com/PatrickMassot/verbose-lean4"
