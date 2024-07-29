@@ -111,7 +111,7 @@ private lemma exists_prime_factor_mod_4_eq_3 {n : ℕ}
       have : n / m < n :=
         suffices 0 < n ∧ 1 < m from And.elim Nat.div_lt_self this
         have : n % 4 = 3 ∧ m ∣ n ∧ m ≠ 1 := by tauto
-        have : m ≠ 0 := λ _ ↦ show ⊥ by aesop
+        have : m ≠ 0 := by aesop
         by omega
 
       have ⟨p, (_ : p.Prime), (_ : p ∣ n / m), (_ : p % 4 = 3)⟩ :=
@@ -125,7 +125,7 @@ private lemma exists_prime_factor_mod_4_eq_3 {n : ℕ}
 theorem primes_mod_4_eq_3_infinite {n : ℕ}
   : ∃ p > n, p.Prime ∧ p % 4 = 3 :=
   -- set_option trace.profiler true in
-  suffices ¬ ∀ p > n, p.Prime → p % 4 ≠ 3 by duper [this]
+  suffices ¬ ∀ p > n, p.Prime → p % 4 ≠ 3 by aesop
   λ _ ↦
     let S := {p | p.Prime ∧ p % 4 = 3}
 
