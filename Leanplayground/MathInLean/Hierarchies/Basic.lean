@@ -100,22 +100,22 @@ instance : CommGroup₁ ℝˣ :=
   have {a b : ℝˣ} : a * b = b * a := mul_comm _ _
   -- have {a : ℝˣ} : 1 * a = a := one_mul _
   have {a : ℝˣ} : a⁻¹ * a = 1 := inv_mul_self _
-  { dia := (. * .),
-    inv := λ x ↦ x⁻¹,
-    one := 1,
-    dia_assoc := λ {a b c} ↦ show a * b * c = a * (b * c) from mul_assoc _ _ _,
-    dia_comm := ‹_›,
-    dia_inv := λ {a} ↦ show a * a⁻¹ = 1 by duper [*],
+  { dia := (. * .)
+    inv := λ x ↦ x⁻¹
+    one := 1
+    dia_assoc := λ {a b c} ↦ show a * b * c = a * (b * c) from mul_assoc _ _ _
+    dia_comm := ‹_›
+    dia_inv := λ {a} ↦ show a * a⁻¹ = 1 by duper [*]
     dia_one := λ {a} ↦ show a * 1 = a from mul_one _
   }
 
 instance : CommMonoid₁ ℤ :=
   have {a b : ℤ} : a * b = b * a := Int.mul_comm _ _
   have {a : ℤ} : a * 1 = a := Int.mul_one _
-  { dia := (. * .),
-    one := 1,
-    dia_assoc := Int.mul_assoc _ _ _,
-    dia_comm := ‹_›,
+  { dia := (. * .)
+    one := 1
+    dia_assoc := Int.mul_assoc _ _ _
+    dia_comm := ‹_›
     one_dia := λ {a} ↦ show 1 * a = a by egg [*] }
 
 -- #check (inferInstance : Monoid₁ ℝˣ)
