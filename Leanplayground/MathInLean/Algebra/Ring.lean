@@ -55,26 +55,26 @@ section
 variable  {I : Ideal R} {J : ι → Ideal R}
 
 open Classical in
-theorem add_Inf_eq_top_of_forall_add_eq_top {s : Finset ι}
-  (_ : ∀ j ∈ s, I + J j = ⊤)
-  : I + ⨅ j ∈ s, J j = ⊤ :=
+theorem add_Inf_eq_one_of_forall_add_eq_one {s : Finset ι}
+  (_ : ∀ j ∈ s, I + J j = 1)
+  : I + ⨅ j ∈ s, J j = 1 :=
   -- set_option trace.profiler true in
-  suffices ⊤ ≤ I + ⨅ j ∈ s, J j by
-    simp_all only [Submodule.add_eq_sup, top_le_iff]
+  suffices 1 ≤ I + ⨅ j ∈ s, J j by
+    simp_all only [Submodule.add_eq_sup, Ideal.one_eq_top, top_le_iff]
 
   match s.eq_empty_or_nonempty with
   | .inl (_ : s = ∅) => by simp [‹s = ∅›]
   | .inr ⟨i, (_ : i ∈ s)⟩ =>
-    have : I + J i = ⊤ := ‹∀ j ∈ s, I + J j = ⊤› _ ‹_›
+    have : I + J i = 1 := ‹∀ j ∈ s, I + J j = 1› _ ‹_›
 
     let s' := s.erase i
     let K := ⨅ j ∈ s', J j
 
     -- Well-founded recusion on s', via the ordering induced by finset cardinality.
-    have : I + K = ⊤ :=
+    have : I + K = 1 :=
       have : s'.card < s.card := Finset.card_erase_lt_of_mem ‹i ∈ s›
-      have : ∀ j ∈ s', I + J j = ⊤ := by simp_all [s']
-      add_Inf_eq_top_of_forall_add_eq_top this
+      have : ∀ j ∈ s', I + J j = 1 := by simp_all [s']
+      add_Inf_eq_one_of_forall_add_eq_one this
 
     have : ⨅ j ∈ s, J j = K ⊓ J i :=
       have : ⨅ j ∈ insert i s', J j = J i ⊓ K := Finset.iInf_insert _ _ _
@@ -83,8 +83,8 @@ theorem add_Inf_eq_top_of_forall_add_eq_top {s : Finset ι}
       by rwa [inf_comm, this]
 
     calc
-      ⊤ = I + K                 := Eq.symm ‹_›
-      _ = I + K * (I + J i)     := by simp [‹I + J i = ⊤›]
+      1 = I + K                 := Eq.symm ‹_›
+      _ = I + K * (I + J i)     := by simp [‹I + J i = 1›]
       _ = (I + K * I) + K * J i := by ring
       _ = I + K * J i           := by simp_all only [Submodule.add_eq_sup, Ideal.sup_mul_left_self]
       _ ≤ I + K ⊓ J i           := by gcongr; exact Ideal.mul_le_inf
@@ -94,8 +94,8 @@ termination_by s.card
 
 theorem isCoprime_Inf {s : Finset ι}
   : (∀ j ∈ s, IsCoprime I <| J j) → IsCoprime I (⨅ j ∈ s, J j) := by
-  simp only [Ideal.isCoprime_iff_add, Submodule.add_eq_sup, Ideal.one_eq_top]
-  exact add_Inf_eq_top_of_forall_add_eq_top
+  simp only [Ideal.isCoprime_iff_add]
+  exact add_Inf_eq_one_of_forall_add_eq_one
 
 end
 
