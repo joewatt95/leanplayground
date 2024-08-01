@@ -55,7 +55,7 @@ section
 variable  {I : Ideal R} {J : ι → Ideal R}
 
 open Classical in
-theorem add_Inf_of_forall_add {s : Finset ι}
+theorem add_Inf_eq_top_of_forall_add_eq_top {s : Finset ι}
   (_ : ∀ j ∈ s, I + J j = ⊤)
   : I + ⨅ j ∈ s, J j = ⊤ :=
   -- set_option trace.profiler true in
@@ -74,7 +74,7 @@ theorem add_Inf_of_forall_add {s : Finset ι}
     have : I + K = ⊤ :=
       have : s'.card < s.card := Finset.card_erase_lt_of_mem ‹i ∈ s›
       have : ∀ j ∈ s', I + J j = ⊤ := by simp_all [s']
-      add_Inf_of_forall_add this
+      add_Inf_eq_top_of_forall_add_eq_top this
 
     have : ⨅ j ∈ s, J j = K ⊓ J i :=
       have : ⨅ j ∈ insert i s', J j = J i ⊓ K := Finset.iInf_insert _ _ _
@@ -95,7 +95,7 @@ termination_by s.card
 theorem isCoprime_Inf {s : Finset ι}
   : (∀ j ∈ s, IsCoprime I <| J j) → IsCoprime I (⨅ j ∈ s, J j) := by
   simp only [Ideal.isCoprime_iff_add, Submodule.add_eq_sup, Ideal.one_eq_top]
-  exact add_Inf_of_forall_add
+  exact add_Inf_eq_top_of_forall_add_eq_top
 
 end
 
