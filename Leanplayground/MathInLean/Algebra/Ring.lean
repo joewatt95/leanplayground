@@ -71,9 +71,10 @@ theorem add_Inf_of_forall_add {s : Finset ι}
     let K := ⨅ j ∈ s', J j
 
     -- Well-founded recusion on s', via the ordering induced by finset cardinality.
-    have : s'.card < s.card := Finset.card_erase_lt_of_mem ‹i ∈ s›
-    have : ∀ j ∈ s', I + J j = ⊤ := by simp_all [s']
-    have : I + K = ⊤ := add_Inf_of_forall_add this
+    have : I + K = ⊤ :=
+      have : s'.card < s.card := Finset.card_erase_lt_of_mem ‹i ∈ s›
+      have : ∀ j ∈ s', I + J j = ⊤ := by simp_all [s']
+      add_Inf_of_forall_add this
 
     have : ⨅ j ∈ s, J j = K ⊓ J i :=
       have : ⨅ j ∈ insert i s', J j = J i ⊓ K := Finset.iInf_insert _ _ _
