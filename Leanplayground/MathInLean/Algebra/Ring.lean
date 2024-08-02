@@ -1,6 +1,7 @@
 import Mathlib.RingTheory.Ideal.QuotientOperations
 
-import Leanplayground.MathInLean.Utils.Tactic
+import Leanplayground.MathInLean.Utils.Finite
+import Leanplayground.MathInLean.Utils.Subtype
 
 namespace Ring
 
@@ -65,6 +66,8 @@ theorem add_Inf_eq_one_of_forall_add_eq_one {s : Finset ι}
   match s.eq_empty_or_nonempty with
   | .inl (_ : s = ∅) => by simp [‹s = ∅›]
   | .inr ⟨i, (_ : i ∈ s)⟩ =>
+    let i : s := ↓i
+
     have : I + J i = 1 := ‹∀ j ∈ s, I + J j = 1› _ ‹_›
 
     let s' := s.erase i
@@ -72,23 +75,16 @@ theorem add_Inf_eq_one_of_forall_add_eq_one {s : Finset ι}
 
     -- Well-founded recusion on s', via the ordering induced by finset cardinality.
     have : I + K = 1 :=
-      have : s'.card < s.card := Finset.card_erase_lt_of_mem ‹i ∈ s›
+      have : s'.card < s.card := Finset.card_erase_lt_of_mem ‹_›
       have : ∀ j ∈ s', I + J j = 1 := by simp_all [s']
       add_Inf_eq_one_of_forall_add_eq_one this
 
-    have : ⨅ j ∈ s, J j = K ⊓ J i :=
-      have : ⨅ j ∈ insert i s', J j = J i ⊓ K := Finset.iInf_insert _ _ _
-      have : s = insert i (s.erase i) := by
-        simp_all only [Submodule.add_eq_sup, Finset.insert_erase]
-      by rwa [inf_comm, this]
-
     calc
-      1 = I + K                 := Eq.symm ‹_›
-      _ = I + K * (I + J i)     := by simp [‹I + J i = 1›]
+      1 = I + K * (I + J i)     := by simp [‹I + K = 1›, ‹I + J i = 1›]
       _ = (I + K * I) + K * J i := by ring
-      _ = I + K * J i           := by simp_all only [Submodule.add_eq_sup, Ideal.sup_mul_left_self]
+      _ = I + K * J i           := by simp only [Submodule.add_eq_sup, Ideal.sup_mul_left_self]
       _ ≤ I + K ⊓ J i           := by gcongr; exact Ideal.mul_le_inf
-      _ = I + ⨅ j ∈ s, J j      := by rw [this]
+      _ = I + ⨅ j ∈ s, J j      := by rw [Finite.Finset.iInf_erase _, inf_comm]
 
 termination_by s.card
 

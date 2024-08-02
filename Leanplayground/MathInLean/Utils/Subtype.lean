@@ -1,4 +1,5 @@
 import Lean
+
 import Leanplayground.MathInLean.Utils.Tactic
 
 namespace Subtype
@@ -19,7 +20,7 @@ elab_rules : term <= expectedType
     | some (_, pred) =>
       let pred ← delab pred
       elabTerm
-        (← `(⟨$term, show $pred $term by aesop⟩))
+        (← `(⟨$term, show $pred $term from ‹_›⟩))
         (expectedType? := expectedType)
     | _ => throwUnsupportedSyntax
 

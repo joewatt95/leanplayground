@@ -1,7 +1,5 @@
 import Lean
 
-import Mathlib.Control.Traversable.Basic
-
 import Mathlib.Tactic.Common
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Group
