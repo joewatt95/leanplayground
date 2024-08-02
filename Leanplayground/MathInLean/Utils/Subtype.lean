@@ -20,7 +20,7 @@ elab_rules : term <= expectedType
     | some (_, pred) =>
       let pred ← delab pred
       elabTerm
-        (← `(⟨$term, show $pred $term from ‹_›⟩))
+        (← `(⟨$term, show $pred $term by aesop⟩))
         (expectedType? := expectedType)
     | _ => throwUnsupportedSyntax
 
