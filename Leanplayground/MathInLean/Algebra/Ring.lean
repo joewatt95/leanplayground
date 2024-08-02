@@ -96,9 +96,9 @@ lemma crtMap_surj [Fintype ι] {I : ι → Ideal R}
   (hI : ∀ i j, i ≠ j → IsCoprime (I i) (I j))
   : Function.Surjective <| crtMap I :=
   λ g : ∀ i : ι, R ⧸ I i ↦
-    have : ∀ i, ∃ r, Ideal.Quotient.mk (I i) r = g i :=
+    have : ∀ i, ∃ r, ⟦r⟧ = g i :=
       (Ideal.Quotient.mk_surjective <| g .)
-    have ⟨(f : ι → R), (_ : ∀ i, Ideal.Quotient.mk (I i) (f i) = g i)⟩ :=
+    have ⟨(f : ι → R), (_ : ∀ i, ⟦f i⟧ = g i)⟩ :=
       -- TODO: Weaken to finite Choice because this is a bit of an eyesore.
       Classical.axiomOfChoice this
     sorry
