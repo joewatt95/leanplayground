@@ -17,11 +17,8 @@ example {I J : Ideal R} (h : I = J) : R ⧸ I ≃+* R ⧸ J :=
 section CRT
 
 universe w
-variable {ι : Type w}
 
--- #check Ideal.quotientInfToPiQuotient
--- #check Pi.ringHom
--- #check Ideal.keor_Pi_Quotient_mk
+variable {ι : Type w}
 
 -- The homomorphism from ``R ⧸ ⨅ i, I i`` to ``∀ i, R ⧸ I i`` featured in the
 -- Chinese Remainder Theorem.
@@ -97,7 +94,7 @@ end
 
 lemma crtMap_surj [Fintype ι] {I : ι → Ideal R}
   (hI : ∀ i j, i ≠ j → IsCoprime (I i) (I j))
-  : Function.Surjective (crtMap I) :=
+  : Function.Surjective <| crtMap I :=
   λ g : ∀ i : ι, R ⧸ I i ↦
     have : ∀ i, ∃ r, Ideal.Quotient.mk (I i) r = g i :=
       (Ideal.Quotient.mk_surjective <| g .)
