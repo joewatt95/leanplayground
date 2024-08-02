@@ -83,8 +83,8 @@ theorem add_Inf_eq_one_of_forall_add_eq_one {s : Finset ι}
       1 = I + K * (I + J i)     := by simp [‹I + K = 1›, ‹I + J i = 1›]
       _ = (I + K * I) + K * J i := by ring
       _ = I + K * J i           := by simp only [Submodule.add_eq_sup, Ideal.sup_mul_left_self]
-      _ ≤ I + K ⊓ J i           := by gcongr; exact Ideal.mul_le_inf
-      _ = I + ⨅ j ∈ s, J j      := by rw [Finite.Finset.iInf_erase _, inf_comm]
+      _ ≤ I + K ⊓ J i           := add_le_add_left Ideal.mul_le_inf _
+      _ = I + ⨅ j ∈ s, J j      := by rw [inf_comm, Finite.Finset.iInf_erase]
 
 termination_by s.card
 
