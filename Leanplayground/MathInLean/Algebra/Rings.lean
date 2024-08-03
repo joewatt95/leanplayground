@@ -101,10 +101,10 @@ end
 open Classical in
 -- set_option trace.profiler true in
 lemma crtMap_surj [Fintype ι] {I : ι → Ideal R}
-  (hI : ∀ i j, i ≠ j → IsCoprime (I i) (I j))
+  (hI : ∀ i, ∀ j ≠ i, IsCoprime (I i) (I j))
   : Function.Surjective <| crtMap I :=
   -- set_option trace.profiler true in
-  λ _ : ∀ i : ι, R ⧸ I i ↦
+  λ _ : ∀ i, R ⧸ I i ↦
     have : ∀ i, ∃ r : R, r = ‹∀ i, R ⧸ I i› i :=
       (Ideal.Quotient.mk_surjective <| ‹∀ i, R ⧸ I i› .)
     have ⟨
@@ -159,8 +159,7 @@ lemma crtMap_surj [Fintype ι] {I : ι → Ideal R}
 
     λ i ↦ calc
           crtMap _ (r : R ⧸ ⨅ i, I i) i
-      _ = (∑ i', choiceFn i' * choiceFn' i' : _) := rfl
-      _ = ∑ i', (choiceFn i' : R ⧸ I i) * choiceFn' i' := by simp_all only [map_sum, map_mul, Finset.sum_apply, r]
+      _ = ∑ i', (choiceFn i' : R ⧸ I i) * choiceFn' i' := by simp_all only [map_sum, map_mul, Finset.sum_apply, r]; rfl
       _ = (choiceFn i : R ⧸ I i) * choiceFn' i         := Fintype.sum_eq_single _ this
       _ = ‹∀ i, R ⧸ I i› i * 1                         := by simp_all only
       _ = ‹∀ i, R ⧸ I i› i                             := mul_one _
