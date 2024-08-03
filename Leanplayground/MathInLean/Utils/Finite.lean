@@ -17,7 +17,7 @@ lemma Finset.iInf_erase
   let s' := s.erase a
   calc
         ⨅ x ∈ s, I x
-    _ = ⨅ x ∈ insert a s', I x := by simp_all only [Finset.insert_erase, s']
+    _ = ⨅ x ∈ insert a s', I x := by rw [Finset.insert_erase ‹a ∈ s›]
     _ = I a ⊓ ⨅ x ∈ s', I x    := Finset.iInf_insert _ _ _
 
 end Finite
