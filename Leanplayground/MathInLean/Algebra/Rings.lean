@@ -35,11 +35,9 @@ def crtMap (I : ι → Ideal R) : (R ⧸ ⨅ i, I i) →+* ∀ i, R ⧸ I i :=
   have : ∀ r ∈ ⨅ i, I i, f r = 0 := by aesop
   Ideal.Quotient.lift _ _ this
 
-@[simp]
 lemma crtMap_mk {I : ι → Ideal R} {r : R} :
   crtMap I ⟦r⟧ = λ i ↦ (⟦r⟧ : R ⧸ I i) := rfl
 
-@[simp]
 lemma crtMap_mk' {I : ι → Ideal R} {r : R} {i : ι} :
   crtMap I ⟦r⟧ i = (⟦r⟧ : R ⧸ I i) := rfl
 
@@ -101,19 +99,18 @@ end
 -- #check Ideal.quotientInfToPiQuotient_surj
 
 open Classical in
+-- set_option trace.profiler true in
 lemma crtMap_surj [Fintype ι] {I : ι → Ideal R}
   (hI : ∀ i j, i ≠ j → IsCoprime (I i) (I j))
   : Function.Surjective <| crtMap I :=
-  λ coset_i : ∀ i : ι, R ⧸ I i ↦
-    have : ∀ i, ∃ r, ⟦r⟧ = coset_i i :=
-      (Ideal.Quotient.mk_surjective <| coset_i .)
-    have ⟨(choiceFn : ι → R), (_ : ∀ i, ⟦choiceFn i⟧ = coset_i i)⟩ :=
+  -- set_option trace.profiler true in
+  λ _ : ∀ i : ι, R ⧸ I i ↦
+    have : ∀ i, ∃ r : R, r = ‹∀ i, R ⧸ I i› i :=
+      (Ideal.Quotient.mk_surjective <| ‹∀ i, R ⧸ I i› .)
+    have ⟨(choiceFn : ι → R), (_ : ∀ i, (choiceFn i : R ⧸ I i) = ‹∀ i, R ⧸ I i › i)⟩ :=
       axiomOfChoice this
 
-    let zero i := (0 : R ⧸ I i)
-    let one i := (1 : R ⧸ I i)
-
-    have : ∀ i, ∃ r, ⟦r⟧ = one i ∧ ∀ j ≠ i, ⟦r⟧ = zero j :=
+    have : ∀ i, ∃ r : R, (r : R ⧸ I i) = 1 ∧ ∀ j ≠ i, (r : R ⧸ I j) = 0 :=
       λ i ↦
         let s := Finset.univ.erase i
 
@@ -125,30 +122,46 @@ lemma crtMap_surj [Fintype ι] {I : ι → Ideal R}
           (_ : r' + r = 1)
         ⟩ := Ideal.isCoprime_iff_exists.mp this
 
-        have : ⟦r'⟧ = zero i := Submodule.Quotient.mk_eq_zero _ |>.mpr ‹_›
-
+        have : (r' : R ⧸ I i) = 0 := Submodule.Quotient.mk_eq_zero _ |>.mpr ‹_›
         have := calc
-              (⟦r⟧ : R ⧸ I i)
-          _ = ⟦1 - r'⟧        := by egg [eq_sub_of_add_eq' ‹_›]
-          _ = one i - ⟦r'⟧    := by rfl
-          _ = one i          := by simp [‹⟦r'⟧ = zero i›]
+              (r' : R ⧸ I i) + r
+          _ = ⟦r' + r⟧             := rfl
+          _ = (1 : R ⧸ I i)       := by congr
+        have : r = (1 : R ⧸ I i) := by simp_all only [zero_add]
 
-        have : ∀ j ≠ i, ⟦r⟧ = zero j :=
-          λ j (_ : j ≠ i) ↦
-            have : r ∈ I j := by aesop
-            show ⟦r⟧ = zero j from Submodule.Quotient.mk_eq_zero _ |>.mpr this
+        have : ∀ j ≠ i, r ∈ I j := by
+          intros; simp_all only
+            [ ne_eq, Finset.mem_erase, Finset.mem_univ, and_true,
+              Ideal.mem_iInf, zero_add, not_false_eq_true, s ]
+        have : ∀ j ≠ i, (r : R ⧸ I j) = 0 :=
+          have : ∀ {j}, (r : R ⧸ I j) = 0 ↔ r ∈ I j :=
+            Submodule.Quotient.mk_eq_zero _
+          by simp_all only [ne_eq, not_false_eq_true, implies_true]
 
-        ⟨r, ‹_›, ‹_›⟩
+        ⟨r, ‹(r : R ⧸ I i) = 1›, ‹∀ j ≠ i, (r : R ⧸ I j) = 0›⟩
 
     have ⟨
       (choiceFn' : ι → R),
-      (_ : ∀ i, ⟦choiceFn' i⟧ = one i ∧ ∀ j ≠ i, ⟦choiceFn' i⟧ = zero j)
+      (_ : ∀ i,
+        choiceFn' i = (1 : R ⧸ I i) ∧
+        ∀ j ≠ i, choiceFn' i = (0 : R ⧸ I j))
     ⟩ := axiomOfChoice this
 
     let r := ∑ i, choiceFn i * choiceFn' i
-    suffices ∀ i, crtMap I r i = coset_i i from ⟨r, funext this⟩
-    λ i ↦
-      sorry
+
+    suffices ∀ i, crtMap I (r : R ⧸ ⨅ i, I i) i = ‹∀ i, R ⧸ I i› i from
+      ⟨r, funext this⟩
+
+    have : ∀ {i}, ∀ j ≠ i, (choiceFn j : R ⧸ I i) * choiceFn' j = 0 := by
+      simp_all only [ne_eq, not_false_eq_true, Ne.symm, mul_zero, implies_true]
+
+    λ i ↦ calc
+          crtMap I (r : R ⧸ ⨅ i, I i) i
+      _ = (∑ i', choiceFn i' * choiceFn' i' : _) := rfl
+      _ = ∑ i', (choiceFn i' : R ⧸ I i) * choiceFn' i' := by simp_all only [map_sum, map_mul, Finset.sum_apply, r]
+      _ = (choiceFn i : R ⧸ I i) * choiceFn' i         := Fintype.sum_eq_single _ this
+      _ = ‹∀ i, R ⧸ I i› i * 1                         := by simp_all only
+      _ = ‹∀ i, R ⧸ I i› i                             := mul_one _
 
 end CRT
 
