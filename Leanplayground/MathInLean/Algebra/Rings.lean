@@ -3,7 +3,7 @@ import Mathlib.RingTheory.Ideal.QuotientOperations
 import Leanplayground.MathInLean.Utils.Finite
 import Leanplayground.MathInLean.Utils.Subtype
 
-namespace Ring
+namespace Rings
 
 universe u v
 
@@ -105,4 +105,4 @@ lemma crtMap_surj [Fintype ι] {I : ι → Ideal R}
 
 end CRT
 
-end Ring
+end Rings
