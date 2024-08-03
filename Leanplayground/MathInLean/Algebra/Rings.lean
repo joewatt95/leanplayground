@@ -159,10 +159,10 @@ lemma crtMap_surj [Fintype ι] {I : ι → Ideal R}
 
     λ i ↦ calc
           crtMap _ (r : R ⧸ ⨅ i, I i) i
-      _ = ∑ i', (choiceFn i' : R ⧸ I i) * choiceFn' i' := by simp_all only [map_sum, map_mul, Finset.sum_apply, r]; rfl
-      _ = (choiceFn i : R ⧸ I i) * choiceFn' i         := Fintype.sum_eq_single _ this
-      _ = ‹∀ i, R ⧸ I i› i * 1                         := by simp_all only
-      _ = ‹∀ i, R ⧸ I i› i                             := mul_one _
+      _ = ∑ j, (choiceFn j : R ⧸ I i) * choiceFn' j := by simp_all only [map_sum, map_mul, Finset.sum_apply, r]; rfl
+      _ = (choiceFn i : R ⧸ I i) * choiceFn' i      := Fintype.sum_eq_single _ this
+      _ = ‹∀ i, R ⧸ I i› i * 1                      := by simp_all only
+      _ = ‹∀ i, R ⧸ I i› i                          := mul_one _
 
 end CRT
 
