@@ -131,8 +131,8 @@ lemma crtMap_surj [Fintype ι] {I : ι → Ideal R}
           _ = (1 : R ⧸ I i)       := by congr
         have : r = (1 : R ⧸ I i) := by simp_all only [zero_add]
 
-        have : ∀ j ≠ i, r ∈ I j := by
-          intros; simp_all only
+        have : ∀ j ≠ i, r ∈ I j :=
+          λ _ _ ↦ by simp_all only
             [ ne_eq, Finset.mem_erase, Finset.mem_univ, and_true,
               Ideal.mem_iInf, zero_add, not_false_eq_true, s ]
         have : ∀ j ≠ i, (r : R ⧸ I j) = 0 :=
