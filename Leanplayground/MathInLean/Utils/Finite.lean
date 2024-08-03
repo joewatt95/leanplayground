@@ -16,7 +16,8 @@ lemma Finset.iInf_erase
   let ⟨a, (_ : a ∈ s)⟩ := a
   let s' := s.erase a
   calc
-    ⨅ x ∈ s, I x = ⨅ x ∈ insert a s', I x := by aesop
-               _ = I a ⊓ ⨅ x ∈ s', I x    := Finset.iInf_insert _ _ _
+        ⨅ x ∈ s, I x
+    _ = ⨅ x ∈ insert a s', I x := by simp_all only [Finset.insert_erase, s']
+    _ = I a ⊓ ⨅ x ∈ s', I x    := Finset.iInf_insert _ _ _
 
 end Finite
