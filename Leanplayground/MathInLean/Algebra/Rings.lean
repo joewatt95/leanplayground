@@ -107,8 +107,10 @@ lemma crtMap_surj [Fintype ι] {I : ι → Ideal R}
   λ _ : ∀ i : ι, R ⧸ I i ↦
     have : ∀ i, ∃ r : R, r = ‹∀ i, R ⧸ I i› i :=
       (Ideal.Quotient.mk_surjective <| ‹∀ i, R ⧸ I i› .)
-    have ⟨(choiceFn : ι → R), (_ : ∀ i, (choiceFn i : R ⧸ I i) = ‹∀ i, R ⧸ I i › i)⟩ :=
-      axiomOfChoice this
+    have ⟨
+      (choiceFn : ι → R),
+      (_ : ∀ i, (choiceFn i : R ⧸ I i) = ‹∀ i, R ⧸ I i › i)
+    ⟩ := axiomOfChoice this
 
     have : ∀ i, ∃ r : R, (r : R ⧸ I i) = 1 ∧ ∀ j ≠ i, (r : R ⧸ I j) = 0 :=
       λ i ↦
@@ -149,14 +151,14 @@ lemma crtMap_surj [Fintype ι] {I : ι → Ideal R}
 
     let r := ∑ i, choiceFn i * choiceFn' i
 
-    suffices ∀ i, crtMap I (r : R ⧸ ⨅ i, I i) i = ‹∀ i, R ⧸ I i› i from
+    suffices ∀ i, crtMap _ (r : R ⧸ ⨅ i, I i) i = ‹∀ i, R ⧸ I i› i from
       ⟨r, funext this⟩
 
     have : ∀ {i}, ∀ j ≠ i, (choiceFn j : R ⧸ I i) * choiceFn' j = 0 := by
       simp_all only [ne_eq, not_false_eq_true, Ne.symm, mul_zero, implies_true]
 
     λ i ↦ calc
-          crtMap I (r : R ⧸ ⨅ i, I i) i
+          crtMap _ (r : R ⧸ ⨅ i, I i) i
       _ = (∑ i', choiceFn i' * choiceFn' i' : _) := rfl
       _ = ∑ i', (choiceFn i' : R ⧸ I i) * choiceFn' i' := by simp_all only [map_sum, map_mul, Finset.sum_apply, r]
       _ = (choiceFn i : R ⧸ I i) * choiceFn' i         := Fintype.sum_eq_single _ this
