@@ -92,16 +92,63 @@ theorem isCoprime_Inf {s : Finset ι}
 
 end
 
+-- #check IsCoprime
+-- #check Ideal.isCoprime_iff_add
+-- #check Ideal.isCoprime_iff_exists
+-- #check Ideal.isCoprime_iff_sup_eq
+-- #check Ideal.isCoprime_iff_codisjoint
+
+-- #check Ideal.quotientInfToPiQuotient_surj
+
+open Classical in
 lemma crtMap_surj [Fintype ι] {I : ι → Ideal R}
   (hI : ∀ i j, i ≠ j → IsCoprime (I i) (I j))
   : Function.Surjective <| crtMap I :=
-  λ g : ∀ i : ι, R ⧸ I i ↦
-    have : ∀ i, ∃ r, ⟦r⟧ = g i :=
-      (Ideal.Quotient.mk_surjective <| g .)
-    have ⟨(f : ι → R), (_ : ∀ i, ⟦f i⟧ = g i)⟩ :=
-      -- TODO: Weaken to finite Choice because this is a bit of an eyesore.
-      Classical.axiomOfChoice this
-    sorry
+  λ coset_i : ∀ i : ι, R ⧸ I i ↦
+    have : ∀ i, ∃ r, ⟦r⟧ = coset_i i :=
+      (Ideal.Quotient.mk_surjective <| coset_i .)
+    have ⟨(choiceFn : ι → R), (_ : ∀ i, ⟦choiceFn i⟧ = coset_i i)⟩ :=
+      axiomOfChoice this
+
+    let zero i := (0 : R ⧸ I i)
+    let one i := (1 : R ⧸ I i)
+
+    have : ∀ i, ∃ r, ⟦r⟧ = one i ∧ ∀ j ≠ i, ⟦r⟧ = zero j :=
+      λ i ↦
+        let s := Finset.univ.erase i
+
+        have : ∀ j ∈ s, IsCoprime (I i) <| I j := by aesop
+        have : IsCoprime (I i) <| ⨅ j ∈ s, I j := isCoprime_Inf this
+        have ⟨
+          r', (_ : r' ∈ I i),
+          r, (_ : r ∈ ⨅ j ∈ s, I j),
+          (_ : r' + r = 1)
+        ⟩ := Ideal.isCoprime_iff_exists.mp this
+
+        have : ⟦r'⟧ = zero i := Submodule.Quotient.mk_eq_zero _ |>.mpr ‹_›
+
+        have := calc
+              (⟦r⟧ : R ⧸ I i)
+          _ = ⟦1 - r'⟧        := by egg [eq_sub_of_add_eq' ‹_›]
+          _ = one i - ⟦r'⟧    := by rfl
+          _ = one i          := by simp [‹⟦r'⟧ = zero i›]
+
+        have : ∀ j ≠ i, ⟦r⟧ = zero j :=
+          λ j (_ : j ≠ i) ↦
+            have : r ∈ I j := by aesop
+            show ⟦r⟧ = zero j from Submodule.Quotient.mk_eq_zero _ |>.mpr this
+
+        ⟨r, ‹_›, ‹_›⟩
+
+    have ⟨
+      (choiceFn' : ι → R),
+      (_ : ∀ i, ⟦choiceFn' i⟧ = one i ∧ ∀ j ≠ i, ⟦choiceFn' i⟧ = zero j)
+    ⟩ := axiomOfChoice this
+
+    let r := ∑ i, choiceFn i * choiceFn' i
+    suffices ∀ i, crtMap I r i = coset_i i from ⟨r, funext this⟩
+    λ i ↦
+      sorry
 
 end CRT
 
