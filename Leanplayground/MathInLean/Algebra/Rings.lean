@@ -20,9 +20,10 @@ universe w
 
 variable {ι : Type w}
 
--- The homomorphism from ``R ⧸ ⨅ i, I i`` to ``∀ i, R ⧸ I i`` featured in the
+-- The homomorphism from `R ⧸ ⨅ i, I i` to `∀ i, R ⧸ I i` featured in the
 -- Chinese Remainder Theorem.
--- This follows naturally from the universal properties of products and coequalisers.
+-- This follows naturally from the universal properties of products and
+-- coequalisers, ie Pi and quotient types.
 def crtMap (I : ι → Ideal R) : (R ⧸ ⨅ i, I i) →+* ∀ i, R ⧸ I i :=
   -- `Pi.ringHom` allows us to use the universal property of Pi types to
   -- construct a ring morphism into a Pi type.
@@ -31,8 +32,10 @@ def crtMap (I : ι → Ideal R) : (R ⧸ ⨅ i, I i) →+* ∀ i, R ⧸ I i :=
 
   -- Lift the morphism to the quotient ring via the corresponding universal
   -- property.
-  have : ⨅ i, I i = RingHom.ker f := by rw [Ideal.ker_Pi_Quotient_mk _]
-  have : ∀ r ∈ ⨅ i, I i, f r = 0 := by aesop
+  have : ⨅ i, I i = RingHom.ker f := by rw [Ideal.ker_Pi_Quotient_mk]
+  have : ∀ r ∈ ⨅ i, I i, f r = 0 :=
+    λ _ _ ↦ by simp_all only [f, f_i]; exact ‹_›
+
   Ideal.Quotient.lift _ _ this
 
 lemma crtMap_mk {I : ι → Ideal R} {r : R} :
