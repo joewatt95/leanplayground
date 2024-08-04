@@ -100,19 +100,21 @@ end
 
 open Classical in
 -- set_option trace.profiler true in
-lemma crtMap_surj [Fintype ι] {I : ι → Ideal R}
+theorem crtMap_surj [Fintype ι] {I : ι → Ideal R}
   (hI : ∀ i, ∀ j ≠ i, IsCoprime (I i) (I j))
   : Function.Surjective <| crtMap I :=
   -- set_option trace.profiler true in
   λ _ : ∀ i, R ⧸ I i ↦
     have : ∀ i, ∃ r : R, r = ‹∀ i, R ⧸ I i› i :=
-      (Ideal.Quotient.mk_surjective <| ‹∀ i, R ⧸ I i› .)
+      λ _ ↦ by apply Submodule.Quotient.mk_surjective
     have ⟨
       (choiceFn : ι → R),
       (_ : ∀ i, (choiceFn i : R ⧸ I i) = ‹∀ i, R ⧸ I i › i)
     ⟩ := axiomOfChoice this
 
-    have : ∀ i, ∃ r : R, (r : R ⧸ I i) = 1 ∧ ∀ j ≠ i, (r : R ⧸ I j) = 0 :=
+    have : ∀ i,
+      ∃ r : R, (r : R ⧸ I i) = 1 ∧
+      ∀ j ≠ i, (r : R ⧸ I j) = 0 :=
       λ i ↦
         let s := Finset.univ.erase i
 
@@ -127,9 +129,9 @@ lemma crtMap_surj [Fintype ι] {I : ι → Ideal R}
         have : (r' : R ⧸ I i) = 0 := Submodule.Quotient.mk_eq_zero _ |>.mpr ‹_›
         have := calc
               (r' : R ⧸ I i) + r
-          _ = ⟦r' + r⟧             := rfl
-          _ = (1 : R ⧸ I i)       := by congr
-        have : r = (1 : R ⧸ I i) := by simp_all only [zero_add]
+          _ = ⟦r' + r⟧           := rfl
+          _ = (1 : R ⧸ I i)     := by congr
+        have : (r : R ⧸ I i) = 1 := by simp_all only [zero_add]
 
         have : ∀ j ≠ i, r ∈ I j :=
           λ _ _ ↦ by simp_all only
@@ -145,8 +147,8 @@ lemma crtMap_surj [Fintype ι] {I : ι → Ideal R}
     have ⟨
       (choiceFn' : ι → R),
       (_ : ∀ i,
-        choiceFn' i = (1 : R ⧸ I i) ∧
-        ∀ j ≠ i, choiceFn' i = (0 : R ⧸ I j))
+        (choiceFn' i : R ⧸ I i) = 1 ∧
+        ∀ j ≠ i, (choiceFn' i : R ⧸ I j) = 0)
     ⟩ := axiomOfChoice this
 
     let r := ∑ i, choiceFn i * choiceFn' i
