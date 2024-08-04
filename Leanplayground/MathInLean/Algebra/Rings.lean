@@ -121,7 +121,10 @@ theorem crtMap_surj [Fintype ι] {I : ι → Ideal R}
       λ i ↦
         let s := Finset.univ.erase i
 
-        have : ∀ j ∈ s, IsCoprime (I i) <| I j := by aesop
+        have : ∀ j ∈ s, IsCoprime (I i) <| I j :=
+          λ _ _ ↦ by simp_all only
+            [ ne_eq, Finset.mem_erase, Finset.mem_univ, and_true,
+              not_false_eq_true, s ]
         have : IsCoprime (I i) <| ⨅ j ∈ s, I j := isCoprime_Inf this
         have ⟨
           r', (_ : r' ∈ I i),
