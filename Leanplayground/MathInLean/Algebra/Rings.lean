@@ -108,8 +108,8 @@ theorem crtMap_surj [Fintype ι] {I : ι → Ideal R}
   : Function.Surjective <| crtMap I :=
   -- set_option trace.profiler true in
   λ _ : ∀ i, R ⧸ I i ↦
-    have : ∀ i, ∃ r : R, r = ‹∀ i, R ⧸ I i› i :=
-      λ _ ↦ Submodule.Quotient.mk_surjective _ _
+    have : ∀ i, ∃ r : R, (r : R ⧸ I i) = ‹∀ i, R ⧸ I i› i :=
+      λ _ ↦ Quot.exists_rep _
     have ⟨
       (choiceFn : ι → R),
       (_ : ∀ i, (choiceFn i : R ⧸ I i) = ‹∀ i, R ⧸ I i › i)
