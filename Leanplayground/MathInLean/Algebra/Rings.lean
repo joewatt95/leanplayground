@@ -112,7 +112,7 @@ theorem crtMap_surj [Fintype ι] {I : ι → Ideal R}
       λ _ ↦ Quot.exists_rep _
     have ⟨
       (choiceFn : ι → R),
-      (_ : ∀ i, (choiceFn i : R ⧸ I i) = ‹∀ i, R ⧸ I i › i)
+      (_ : ∀ i, (choiceFn i : R ⧸ I i) = ‹∀ i, R ⧸ I i› i)
     ⟩ := axiomOfChoice this
 
     have : ∀ i,
