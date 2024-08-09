@@ -132,7 +132,8 @@ theorem crtMap_surj [Fintype ι] {I : ι → Ideal R}
           (_ : r' + r = 1)
         ⟩ := Ideal.isCoprime_iff_exists.mp this
 
-        have : (r' : R ⧸ I i) = 0 := Submodule.Quotient.mk_eq_zero _ |>.mpr ‹_›
+        have : (r' : R ⧸ I i) = 0 :=
+          ‹r' ∈ I i› |> (Submodule.Quotient.mk_eq_zero _).mpr
         have := calc
               (r' : R ⧸ I i) + r
           _ = ⟦r' + r⟧           := rfl
