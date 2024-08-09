@@ -19,7 +19,7 @@ example : s ∩ t = t ∩ s := by
 example (_ : s ⊆ t) : s ∩ u ⊆ t ∩ u :=
   λ x ⟨(_ : x ∈ s), (_ : x ∈ u)⟩ ↦
     have : x ∈ t := ‹s ⊆ t› ‹x ∈ s›
-    show x ∈ t ∧ x ∈ u by aesop
+    show x ∈ t ∧ x ∈ u by simp_all only [and_self]
 
 example : s ∩ (t ∪ u) ⊆ s ∩ t ∪ s ∩ u :=
   λ x ⟨(_ : x ∈ s), (_ : x ∈ t ∪ u)⟩ ↦
@@ -36,7 +36,7 @@ example : s \ (t ∪ u) ⊆ (s \ t) \ u :=
 example : f '' s ⊆ v ↔ s ⊆ f ⁻¹' v
 where
   mp (_ : f '' s ⊆ v) x (_ : x ∈ s) :=
-    suffices f x ∈ v by aesop
+    suffices f x ∈ v by simp_all only [Set.mem_preimage]
     have : f x ∈ f '' s := by aesop
     show f x ∈ v from ‹f '' s ⊆ v› this
 
@@ -44,8 +44,8 @@ where
     have : ∀ x ∈ s, f x ∈ v
     | x, (_ : x ∈ s) =>
       have : x ∈ f ⁻¹' v := ‹s ⊆ f ⁻¹' v› ‹x ∈ s›
-      by aesop
-    have : ∃ x ∈ s, f x = y := by aesop
+      by simp_all only [Set.mem_preimage]
+    have : ∃ x ∈ s, f x = y := by simp_all only [Set.mem_image]
     show y ∈ v by aesop
 
 end Sets

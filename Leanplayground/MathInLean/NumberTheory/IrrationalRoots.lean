@@ -31,19 +31,20 @@ example {m n k r p : ℕ}
   (_ : n ≠ 0) (_ : m ^ k = r * n ^ k)
   : k ∣ r.factorization p :=
   match em _ with
-  | .inl (_ : r = 0) => by aesop
+  | .inl (_ : r = 0) => by simp_all only
+    [Nat.factorization_zero, Finsupp.coe_zero, Pi.zero_apply, dvd_zero]
   | .inr (_ : r ≠ 0) =>
     have := calc
           k * m.factorization p
       _ = (m ^ k).factorization p                   := by simp only [Nat.factorization_pow, Finsupp.coe_smul, Pi.smul_apply, smul_eq_mul]
-      _ = (r * n ^ k).factorization p               := by aesop
-      _ = r.factorization p + k * n.factorization p := by aesop
+      _ = (r * n ^ k).factorization p               := by simp_all only [Nat.factorization_pow]
+      _ = r.factorization p + k * n.factorization p := by simp_all
 
     have := calc
           r.factorization p
-      _ = k * m.factorization p - k * n.factorization p := by aesop
+      _ = k * m.factorization p - k * n.factorization p := by  simp_all only [add_tsub_cancel_right]
       _ = k * (m.factorization p - n.factorization p)   := by rw [Nat.mul_sub_left_distrib]
 
-    show k ∣ r.factorization p by aesop
+    show k ∣ r.factorization p by  simp_all only [dvd_mul_right]
 
 end NumberTheory

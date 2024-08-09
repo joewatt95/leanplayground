@@ -17,7 +17,7 @@ theorem exists_prime_factor {n : ℕ}
       duper [‹2 ≤ n›, ‹¬ n.Prime›, Nat.prime_def_lt] {portfolioInstance := 1}
 
     have : 2 ≤ m :=
-      have : m ≠ 0 := by aesop
+      have : m ≠ 0 := λ _ ↦ by simp_all only [zero_dvd_iff, nonpos_iff_eq_zero]
       by omega
 
     have ⟨p, (_ : p.Prime), (_ : p ∣ m)⟩ := exists_prime_factor this
@@ -71,7 +71,8 @@ private lemma mod_4_eq_3_or {m n : ℕ}
   : m % 4 = 3 ∨ n % 4 = 3 :=
   have : (m % 4) * (n % 4) % 4 = 3 := by
     duper [*, Nat.mul_mod] {portfolioInstance := 1}
-  have : m % 4 ≠ 0 ∧ n % 4 ≠ 0 := ⟨λ _ ↦ by aesop, λ _ ↦ by aesop⟩
+  have : m % 4 ≠ 0 ∧ n % 4 ≠ 0 :=
+    ⟨λ _ ↦ by simp_all only [zero_mul], λ _ ↦ by simp_all only [mul_zero]⟩
 
   suffices ¬ ((m % 4 = 1 ∨ m % 4 = 2) ∧ (n % 4 = 1 ∨ n % 4 = 2)) by omega
   (by rcases . with ⟨_ | _, _ | _⟩; all_goals simp_all)
@@ -111,7 +112,7 @@ private lemma exists_prime_factor_mod_4_eq_3 {n : ℕ}
       have : n / m < n :=
         suffices 0 < n ∧ 1 < m from And.elim Nat.div_lt_self this
         have : n % 4 = 3 ∧ m ∣ n ∧ m ≠ 1 := by tauto
-        have : m ≠ 0 := by aesop
+        have : m ≠ 0 := λ _ ↦ by simp_all only [Nat.div_zero]
         by omega
 
       have ⟨p, (_ : p.Prime), (_ : p ∣ n / m), (_ : p % 4 = 3)⟩ :=
@@ -148,7 +149,7 @@ theorem primes_mod_4_eq_3_infinite {n : ℕ}
 
     have : p ≠ 3 :=
       λ _ ↦
-        have : 3 ∣ 4 * S_prod := by aesop
+        have : 3 ∣ 4 * S_prod := by simp_all only [Nat.dvd_add_self_right]
         have : 3 ∣ S_prod :=
           have : ¬ 3 ∣ 4 := by decide
           by duper [this, ‹3 ∣ 4 * S_prod›, Nat.prime_three, Nat.Prime.dvd_mul]

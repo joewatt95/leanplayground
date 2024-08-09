@@ -63,13 +63,15 @@ theorem schroeder_bernstein
 
     let F : Set α →o Set α :=
       { toFun := λ X ↦ g '' (f '' Xᶜ)ᶜ
-        monotone' := λ _ ↦ by aesop }
+        monotone' := λ _ _ _ ↦ by simp_all only
+          [ le_eq_subset, image_subset_iff, preimage_image_eq,
+            compl_subset_compl ] }
 
     let S : Ordinal → Set α := lfpApprox F ∅
     have ⟨O, _⟩ : ∃ O, S O = lfp F := lfp_mem_range_lfpApprox F
 
     let S₀ := S O
-    have : F S₀ = S₀ := by aesop
+    have : F S₀ = S₀ := by simp_all only [bot_eq_empty, map_lfp, F, S₀, S]
     have : g '' (f '' S₀ᶜ)ᶜ = S₀ := this
 
     let h a := if a ∈ S₀ then invFun g a else f a
@@ -84,7 +86,7 @@ theorem schroeder_bernstein
     have : Injective h :=
       have : invFun g '' S₀ ∩ f '' S₀ᶜ = ∅ := by egg [*, compl_inter_self]
 
-      have : InjOn f S₀ᶜ := λ _ ↦ by aesop
+      have : InjOn f S₀ᶜ := λ _ _ _ _ _ ↦ f_inj <| by simp_all only
 
       have : InjOn (invFun g) S₀ :=
         λ a _ a' _ (_ : invFun g a = invFun g a') ↦
