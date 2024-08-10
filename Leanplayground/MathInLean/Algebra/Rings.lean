@@ -101,11 +101,15 @@ end
 
 -- #check Ideal.quotientInfToPiQuotient_surj
 
+section
+
+variable
+  [Fintype ι] {I : ι → Ideal R}
+  (hI_pairwise_coprime : ∀ i j, i ≠ j → IsCoprime (I i) (I j))
+
 open Classical in
 -- set_option trace.profiler true in
-theorem crtMap_surj [Fintype ι] {I : ι → Ideal R}
-  (hI : ∀ i, ∀ j ≠ i, IsCoprime (I i) (I j))
-  : Function.Surjective <| crtMap I :=
+theorem crtMap_surj : Function.Surjective <| crtMap I :=
   -- set_option trace.profiler true in
   λ _ : ∀ i, R ⧸ I i ↦
     have : ∀ i, ∃ r : R, (r : R ⧸ I i) = ‹∀ i, R ⧸ I i› i :=
@@ -123,7 +127,7 @@ theorem crtMap_surj [Fintype ι] {I : ι → Ideal R}
 
         have : ∀ j ∈ s, IsCoprime (I i) <| I j :=
           λ _ _ ↦ by simp_all only
-            [ ne_eq, Finset.mem_erase, Finset.mem_univ, and_true,
+            [ Ne.symm, ne_eq, Finset.mem_erase, Finset.mem_univ, and_true,
               not_false_eq_true, s ]
         have : IsCoprime (I i) <| ⨅ j ∈ s, I j := isCoprime_Inf this
         have ⟨
@@ -172,6 +176,16 @@ theorem crtMap_surj [Fintype ι] {I : ι → Ideal R}
       _ = (choiceFn i : R ⧸ I i) * choiceFn' i      := Fintype.sum_eq_single _ this
       _ = ‹∀ i, R ⧸ I i› i * 1                      := by simp_all only
       _ = ‹∀ i, R ⧸ I i› i                          := mul_one _
+
+theorem crtMap_bij : Function.Bijective <| crtMap I :=
+  ⟨crtMap_inj, crtMap_surj hI_pairwise_coprime⟩
+
+noncomputable def crtIso : R ⧸ ⨅ i, I i ≃+* Π i, R ⧸ I i :=
+  let equiv : R ⧸ ⨅ i, I i ≃ Π i, R ⧸ I i :=
+    Equiv.ofBijective _ <| crtMap_bij hI_pairwise_coprime
+  { crtMap I, equiv with }
+
+end
 
 end CRT
 
