@@ -180,7 +180,7 @@ theorem crtMap_surj : Function.Surjective <| crtMap I :=
 theorem crtMap_bij : Function.Bijective <| crtMap I :=
   ⟨crtMap_inj, crtMap_surj hI_pairwise_coprime⟩
 
-noncomputable def crtIso : R ⧸ ⨅ i, I i ≃+* Π i, R ⧸ I i :=
+noncomputable def crtIso : R ⧸ ⨅ i, I i ≃+* ∀ i, R ⧸ I i :=
   let crtEquiv : R ⧸ ⨅ i, I i ≃ Π i, R ⧸ I i :=
     Equiv.ofBijective _ <| crtMap_bij hI_pairwise_coprime
   { crtMap I, crtEquiv with }
