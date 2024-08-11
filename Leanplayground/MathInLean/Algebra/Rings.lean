@@ -24,7 +24,7 @@ variable {ι : Type w}
 -- Chinese Remainder Theorem.
 -- This follows naturally from the universal properties of products and
 -- coequalisers, ie Pi and quotient types.
-def crtMap (I : ι → Ideal R) : (R ⧸ ⨅ i, I i) →+* ∀ i, R ⧸ I i :=
+def crtHom (I : ι → Ideal R) : (R ⧸ ⨅ i, I i) →+* ∀ i, R ⧸ I i :=
   -- `Pi.ringHom` allows us to use the universal property of Pi types to
   -- construct a ring morphism into a Pi type.
   let f_i : ∀ i, R →+* R ⧸ I i := (. |> I |> Ideal.Quotient.mk)
@@ -38,16 +38,16 @@ def crtMap (I : ι → Ideal R) : (R ⧸ ⨅ i, I i) →+* ∀ i, R ⧸ I i :=
 
   Ideal.Quotient.lift _ _ this
 
-lemma crtMap_mk {I : ι → Ideal R} {r : R} :
-  crtMap I ⟦r⟧ = λ i ↦ (⟦r⟧ : R ⧸ I i) := rfl
+lemma crtHom_mk {I : ι → Ideal R} {r : R} :
+  crtHom I ⟦r⟧ = λ i ↦ (⟦r⟧ : R ⧸ I i) := rfl
 
-lemma crtMap_mk' {I : ι → Ideal R} {r : R} {i : ι} :
-  crtMap I ⟦r⟧ i = (⟦r⟧ : R ⧸ I i) := rfl
+lemma crtHom_mk' {I : ι → Ideal R} {r : R} {i : ι} :
+  crtHom I ⟦r⟧ i = (⟦r⟧ : R ⧸ I i) := rfl
 
-lemma crtMap_inj {I : ι → Ideal R}
-  : Function.Injective <| crtMap I :=
-  Ideal.injective_lift_iff (crtMap.proof_3 _ <| crtMap.proof_2 _)
-    |>.mpr <| by rw [crtMap.proof_2]
+lemma crtHom_inj {I : ι → Ideal R}
+  : Function.Injective <| crtHom I :=
+  Ideal.injective_lift_iff (crtHom.proof_3 _ <| crtHom.proof_2 _)
+    |>.mpr <| by rw [crtHom.proof_2]
 
 section
 
@@ -109,7 +109,7 @@ variable
 
 open Classical in
 -- set_option trace.profiler true in
-theorem crtMap_surj : Function.Surjective <| crtMap I :=
+theorem crtMap_surj : Function.Surjective <| crtHom I :=
   -- set_option trace.profiler true in
   λ _ : ∀ i, R ⧸ I i ↦
     have : ∀ i, ∃ r : R, (r : R ⧸ I i) = ‹∀ i, R ⧸ I i› i :=
@@ -164,26 +164,26 @@ theorem crtMap_surj : Function.Surjective <| crtMap I :=
 
     let r := ∑ i, choiceFn i * choiceFn' i
 
-    suffices ∀ i, crtMap _ (r : R ⧸ ⨅ i, I i) i = ‹∀ i, R ⧸ I i› i from
+    suffices ∀ i, crtHom _ (r : R ⧸ ⨅ i, I i) i = ‹∀ i, R ⧸ I i› i from
       ⟨r, funext this⟩
 
     have : ∀ {i}, ∀ j ≠ i, (choiceFn j : R ⧸ I i) * choiceFn' j = 0 := by
       simp_all only [ne_eq, not_false_eq_true, Ne.symm, mul_zero, implies_true]
 
     λ i ↦ calc
-          crtMap _ (r : R ⧸ ⨅ i, I i) i
+          crtHom _ (r : R ⧸ ⨅ i, I i) i
       _ = ∑ j, (choiceFn j : R ⧸ I i) * choiceFn' j := by simp_all only [map_sum, map_mul, Finset.sum_apply, r]; rfl
       _ = (choiceFn i : R ⧸ I i) * choiceFn' i      := Fintype.sum_eq_single _ this
       _ = ‹∀ i, R ⧸ I i› i * 1                      := by simp_all only
       _ = ‹∀ i, R ⧸ I i› i                          := mul_one _
 
-theorem crtMap_bij : Function.Bijective <| crtMap I :=
-  ⟨crtMap_inj, crtMap_surj hI_pairwise_coprime⟩
+theorem crtHom_bij : Function.Bijective <| crtHom I :=
+  ⟨crtHom_inj, crtMap_surj hI_pairwise_coprime⟩
 
 noncomputable def crtIso : R ⧸ ⨅ i, I i ≃+* ∀ i, R ⧸ I i :=
   let crtEquiv : R ⧸ ⨅ i, I i ≃ Π i, R ⧸ I i :=
-    Equiv.ofBijective _ <| crtMap_bij hI_pairwise_coprime
-  { crtMap I, crtEquiv with }
+    Equiv.ofBijective _ <| crtHom_bij hI_pairwise_coprime
+  { crtHom I, crtEquiv with }
 
 end
 
