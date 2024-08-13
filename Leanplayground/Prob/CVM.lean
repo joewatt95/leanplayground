@@ -24,7 +24,7 @@ noncomputable def estimate
     let {p, χ, thresh, i} ← get
     if h : i = m
     then pure $ χ.card / p
-    else do
+    else
       modify ({ . with χ := χ.erase i })
       sorry
 
