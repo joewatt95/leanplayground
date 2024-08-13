@@ -138,11 +138,12 @@ theorem crtMap_surj : Function.Surjective <| crtHom I :=
 
         have : (r' : R ⧸ I i) = 0 :=
           ‹r' ∈ I i› |> (Submodule.Quotient.mk_eq_zero _).mpr
-        have := calc
-              (r' : R ⧸ I i) + r
-          _ = ⟦r' + r⟧           := rfl
-          _ = (1 : R ⧸ I i)     := by congr
-        have : (r : R ⧸ I i) = 1 := by simp_all only [zero_add]
+        have : (r : R ⧸ I i) = 1 :=
+          have := calc
+                (r' : R ⧸ I i) + r
+            _ = ⟦r' + r⟧           := rfl
+            _ = (1 : R ⧸ I i)     := by congr
+          by simp_all only [zero_add]
 
         have : ∀ j ≠ i, r ∈ I j :=
           λ _ _ ↦ by simp_all only
