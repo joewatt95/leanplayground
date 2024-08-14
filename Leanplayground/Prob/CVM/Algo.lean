@@ -33,7 +33,9 @@ noncomputable def estimateSize
   (stream : List <| Fin m)
   : Prob.ProbM (State m) <| Fin m:= do
   match _h_stream_eq : stream with
-  | [] => get >>= λ state ↦ return ⌊state.χ.card / state.p.val.toReal⌋
+  | [] =>
+    let state ← get
+    pure <| Nat.floor <| state.χ.card / state.p.val.toReal
 
   | elem :: stream =>
     modify λ state ↦ { state with χ := state.χ.erase elem }
