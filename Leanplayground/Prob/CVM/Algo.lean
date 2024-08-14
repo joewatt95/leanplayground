@@ -45,6 +45,7 @@ noncomputable def estimateSize
       modify λ state ↦ { state with χ := insert elem state.χ }
 
     let state ← get
+    let ⟨p, _, _⟩ := state.p
 
     if h_card_eq_thresh : state.χ.card = thresh then
       _ ← state.χ.toList.traverse λ elem ↦ do
