@@ -1,3 +1,5 @@
+import Batteries.Classes.SatisfiesM
+
 import Mathlib.Control.Traversable.Lemmas
 import Mathlib.Data.Finset.Functor
 import Mathlib.Probability.ProbabilityMassFunction.Constructions
@@ -66,9 +68,9 @@ noncomputable def runEstimateSize
     |>.run                   -- Run ExceptT
     |>.run' (initialState _) -- Run StateT
 
-attribute [simp]
-  runEstimateSize estimateSize initialState
-  ExceptT.run StateT.run
+-- attribute [simp]
+--   runEstimateSize estimateSize initialState
+  -- ExceptT.run StateT.run
 
   -- Functor.map
   -- bind ExceptT.bind StateT.bind
@@ -80,8 +82,23 @@ attribute [simp]
   -- StateT.run' StateT.get
   -- ExceptT.run ExceptT.lift ExceptT.mk
 
-example : runEstimateSize m ε δ [] = return return 0 := by
-  simp_all
-  sorry
+-- set_option pp.proofs true
+
+-- example :
+--   SatisfiesM (. = .ok 0) <| runEstimateSize m ε δ [] := by
+--   simp [runEstimateSize, estimateSize, initialState]
+--   apply SatisfiesM.map_pre
+--   apply SatisfiesM.bind_pre
+--   apply SatisfiesM.map_pre
+--   apply SatisfiesM.pure
+--   simp only [ExceptT.bindCont]
+--   sorry
+
+example :
+  ∀ xs : List <| Fin m, xs = [] → SatisfiesM (. = 0) (estimateSize m ε δ xs) :=
+  λ xs (_ : xs = []) ↦ by
+    unfold estimateSize
+    simp
+    sorry
 
 end Prob
