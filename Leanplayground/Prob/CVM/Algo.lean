@@ -26,13 +26,13 @@ noncomputable def initialState : State m where
   p := ⟨1, zero_lt_one, Preorder.le_refl _⟩
   χ := ∅
 
-noncomputable abbrev thresh := ⌈(12 / ε^2) * Real.log2 ((8*m) / δ)⌉
+noncomputable abbrev thresh := Nat.ceil <| (12 / ε^2) * Real.log2 ((8*m) / δ)
 
 open Classical in
 noncomputable def estimateSize
   (stream : List <| Fin m)
   : Prob.ProbM (State m) <| Fin m:= do
-  match h_stream_eq : stream with
+  match _h_stream_eq : stream with
   | [] => get >>= λ state ↦ return ⌊state.χ.card / state.p.val.toReal⌋
 
   | elem :: stream =>
@@ -47,7 +47,7 @@ noncomputable def estimateSize
     let state ← get
     let ⟨p, _, _⟩ := state.p
 
-    if h_card_eq_thresh : state.χ.card = thresh then
+    if _h_card_eq_thresh : state.χ.card = thresh then
       _ ← state.χ.toList.traverse λ elem ↦ do
         if ← PMF.bernoulli _ ‹p ≤ 1› then
           modify λ state ↦ { state with χ := state.χ.erase elem }
@@ -58,7 +58,7 @@ noncomputable def estimateSize
               _ ≤ 1 := ‹_›
         (state.χ, { state with p := ⟨p / 2, by aesop, this⟩ })
 
-      if h_card_eq_thresh : χ.card = thresh then throw default
+      if _h_card_eq_thresh : χ.card = thresh then throw default
 
     estimateSize stream
 
