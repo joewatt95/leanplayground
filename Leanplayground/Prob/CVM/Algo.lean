@@ -50,7 +50,7 @@ noncomputable def estimateSize
         else χ
 
       let state ←
-        if χ.card = thresh then
+        if _h_card_eq_thresh : χ.card = thresh then
           have : (1 : ℝ≥0∞) / 2 ≤ 1 := ENNReal.half_le_self
 
           let χ ← χ.toList.filterM λ _ ↦ PMF.bernoulli _ this
@@ -69,7 +69,7 @@ noncomputable def estimateSize
         else
           pure state
 
-      if state.χ.card = thresh then throw default
+      if state.χ.card = thresh then throw ()
 
       pure state
 
