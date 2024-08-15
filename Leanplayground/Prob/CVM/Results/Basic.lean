@@ -25,23 +25,21 @@ example :
     SatisfiesM_estimateSize_empty_list
   by simp_all [SatisfiesM]
 
+attribute [simp]
+  ExceptT.run StateT.run
+  get getThe MonadStateOf.get StateT.get
+  liftM monadLift MonadLift.monadLift ExceptT.lift
+  ExceptT.mk
+  Functor.map StateT.map ExceptT.map
+  bind StateT.bind ExceptT.bind ExceptT.bindCont
+  pure ExceptT.pure StateT.pure
+
+example : runEstimateSize m ε δ [] = PMF.pure (Except.ok 0) := by
+  simp [estimateSize, runEstimateSize]
+
 -- lemma SatisfiesM_estimateSize_error {stream : List <| Fin m} :
 --   SatisfiesM (. = .error default) <| runEstimateSize m ε δ stream := by
 --   sorry
-
--- attribute [simp]
---   runEstimateSize estimateSize initialState
-  -- ExceptT.run StateT.run
-
-  -- Functor.map
-  -- bind ExceptT.bind StateT.bind
-  -- pure ExceptT.pure StateT.pure
-  -- ExceptT.mk ExceptT.run ExceptT.bindCont
-  -- StateT.run
-
-  -- get getThe MonadStateOf.get liftM monadLift MonadLift.monadLift
-  -- StateT.run' StateT.get
-  -- ExceptT.run ExceptT.lift ExceptT.mk
 
 -- example :
 --   ∀ xs : List <| Fin m, xs = [] → SatisfiesM (. = 0) (estimateSize m ε δ xs) :=
