@@ -14,8 +14,8 @@ attribute [simp]
   bind ExceptT.bind
   pure ExceptT.pure
 
-example : runEstimateSize m ε δ [] = PMF.pure (Except.ok 0) := by
-  simp [runEstimateSize, estimateSize, estimateSize.result, initialState]
+example : estimateSize m ε δ [] = return 0 := by
+  simp [estimateSize, estimateSize.result, initialState]
 
 -- lemma SatisfiesM_estimateSize_empty_list :
 --   SatisfiesM (. = .ok 0) <| runEstimateSize m ε δ [] := by
