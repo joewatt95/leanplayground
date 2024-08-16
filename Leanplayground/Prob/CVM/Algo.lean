@@ -44,7 +44,7 @@ open Classical in
 noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
   xs |>.foldlM step (initialState m ε δ) |>.map result
   where
-    step (state : State m ε δ) (elem : Fin m)
+    step (state : State m ε δ) (x : Fin m)
       : ExceptT Unit PMF <| State m ε δ := do
       let ⟨p, (_ : 0 < p), (_ : p ≤ 1)⟩ := state.p
       let χ := state.χ
@@ -54,7 +54,7 @@ noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
         then χ
         else
           let ⟨χ, (_ : χ.card ≤ thresh _ _ _)⟩ := χ
-          let χ' := χ.erase elem
+          let χ' := χ.erase x
           have := calc
             χ'.card ≤ χ.card       := by exact Finset.card_erase_le
                   _ ≤ thresh _ _ _ := ‹_›
