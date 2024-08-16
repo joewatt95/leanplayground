@@ -83,15 +83,15 @@ noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
 
       let χ' : {S : Finset <| Fin m // S.card ≤ thresh m ε δ} := ⟨χ', this⟩
 
-      if _h_card_eq_thresh : χ.val.card = thresh m ε
-      then throw () else
-
       let p' : Set.Ioc (α := ℝ≥0∞) 0 1 :=
         have := calc
           p / 2 ≤ p := by exact ENNReal.half_le_self
               _ ≤ 1 := ‹_›
         ⟨p / 2, by aesop⟩
-      return { state with p := p', χ := χ' }
+
+      if _h_card_eq_thresh : χ.val.card = thresh m ε
+      then throw ()
+      else return { state with p := p', χ := χ' }
 
     result (state : State m ε δ) : Fin m :=
       Nat.floor <| state.χ.val.card / state.p.val.toReal
