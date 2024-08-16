@@ -63,20 +63,17 @@ noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
       if _h_card_eq_thresh : χ.val.card < thresh m ε δ
       then return state else
 
-      let χ'bundled : Finset {x : Fin m // x ∈ χ.val} ← χ
+      let χ'attached : Finset {x : Fin m // x ∈ χ.val} ← χ
         |>.val
         |>.attach
         |> Finset.filterM λ _ ↦
             have : ((1 : ℝ≥0∞) / 2) ≤ 1 := ENNReal.half_le_self
             PMF.bernoulli _ this
 
-      let χ' : Finset <| Fin m := χ'bundled.image Subtype.val
-      have : χ' ≤ χ.val :=
-        λ x' (_ : x' ∈ χ') ↦
-          have ⟨x'bundled, (_ : x'bundled ∈ χ'bundled), (_ : x'bundled = x')⟩ :=
-            Finset.mem_image.mp ‹x' ∈ χ'›
-          show x' ∈ χ.val by aesop
+      let χ' : Finset <| Fin m := Function.Embedding.subtype _ <$> χ'attached
 
+      have : ∀ x' ∈ χ', ∃ (pf : x' ∈ χ.val), ⟨x', pf⟩ ∈ χ'attached := by aesop
+      have : χ' ≤ χ.val := λ _ _ ↦ this _ ‹_› |>.1
       have := calc
         χ'.card ≤ χ.val.card   := by exact Finset.card_le_card this
               _ = thresh _ _ _ := by have := χ.prop; omega
