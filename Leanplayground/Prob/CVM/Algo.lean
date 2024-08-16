@@ -88,7 +88,7 @@ noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
 
       let χ'' : Finset <| Fin m := Function.Embedding.subtype _ <$> χ''attached
 
-      have : ∀ x' ∈ χ'', ∃ (pf : x' ∈ χ.val), ⟨x', pf⟩ ∈ χ''attached := by aesop
+      have : ∀ x' ∈ χ'', ∃ pf : x' ∈ χ.val, ⟨x', pf⟩ ∈ χ''attached := by aesop
       have : χ'' ≤ χ.val := λ _ _ ↦ by duper [*] {portfolioInstance := 7}
 
       have := calc
