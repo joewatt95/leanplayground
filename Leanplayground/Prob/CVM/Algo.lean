@@ -71,11 +71,11 @@ noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
             PMF.bernoulli _ this
 
       let χ' : Finset <| Fin m := χ'bundled.image Subtype.val
-      have : χ' ≤ χ :=
+      have : χ' ≤ χ.val :=
         λ x' (_ : x' ∈ χ') ↦
           have ⟨x'bundled, (_ : x'bundled ∈ χ'bundled), (_ : x'bundled = x')⟩ :=
             Finset.mem_image.mp ‹x' ∈ χ'›
-          show x' ∈ ↑χ by aesop
+          show x' ∈ χ.val by aesop
 
       have := calc
         χ'.card ≤ χ.val.card   := by exact Finset.card_le_card this
