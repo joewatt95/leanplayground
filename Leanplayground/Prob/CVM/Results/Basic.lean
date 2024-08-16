@@ -8,6 +8,15 @@ variable
   {m : ℕ+}
   {ε δ : Set.Ioo (α := ℝ) 0 1}
 
+attribute [simp]
+  ExceptT.run ExceptT.mk
+  Functor.map ExceptT.map
+  bind ExceptT.bind
+  pure ExceptT.pure
+
+example : runEstimateSize m ε δ [] = PMF.pure (Except.ok 0) := by
+  simp [runEstimateSize, estimateSize, estimateSize.result, initialState]
+
 -- lemma SatisfiesM_estimateSize_empty_list :
 --   SatisfiesM (. = .ok 0) <| runEstimateSize m ε δ [] := by
 --   simp only [runEstimateSize, estimateSize, initialState]
@@ -24,15 +33,6 @@ variable
 --   have : SatisfiesM (. = .ok 0) <| runEstimateSize m ε δ [] :=
 --     SatisfiesM_estimateSize_empty_list
 --   by simp_all [SatisfiesM]
-
--- attribute [simp]
---   ExceptT.run StateT.run
---   get getThe MonadStateOf.get StateT.get
---   liftM monadLift MonadLift.monadLift ExceptT.lift
---   ExceptT.mk
---   Functor.map StateT.map ExceptT.map
---   bind StateT.bind ExceptT.bind ExceptT.bindCont
---   pure ExceptT.pure StateT.pure
 
 -- example : runEstimateSize m ε δ [] = PMF.pure (Except.ok 0) := by
 --   simp [estimateSize, runEstimateSize]

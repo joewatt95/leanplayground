@@ -16,6 +16,7 @@ open scoped Interval ENNReal
 variable
   (m : ℕ+)
   (ε δ : Set.Ioo (α := ℝ) 0 1)
+  (xs : List <| Fin m)
 
 noncomputable abbrev thresh := Nat.ceil <| (12 / ε^2) * Real.log2 ((8*m) / δ)
 
@@ -24,47 +25,29 @@ structure State where
   p : Set.Ioc (α := ℝ≥0∞) 0 1
   χ : {S : Finset <| Fin m // S.card ≤ thresh m ε δ}
 
-noncomputable abbrev initialState : State m ε δ where
+noncomputable def initialState : State m ε δ where
   p := ⟨1, zero_lt_one, Preorder.le_refl _⟩
   χ := ⟨∅, by simp_all only [Finset.card_empty, Nat.cast_zero, zero_le]⟩
 
-instance : CommApplicative PMF where
-  commutative_prod _ _ := by
-    simp [Seq.seq, Functor.map]
-    exact PMF.bind_comm _ _ _
+-- instance : CommApplicative PMF where
+--   commutative_prod _ _ := by
+--     simp [Seq.seq, Functor.map]
+--     exact PMF.bind_comm _ _ _
 
 open Classical in
 noncomputable def Finset.filterM {m : Type → Type v} [Monad m]
   (p : α → m Bool) (finset : Finset α)
   : m <| Finset α :=
-    List.toFinset <$> finset.toList.filterM p
-  -- let list : List { x // x ∈ finset } ← finset.attach.toList.filterM
-  --   λ ⟨x, (_ : x ∈ finset)⟩ ↦ p x
-
-  -- let list' := list.map Subtype.val
-
-  -- have : ∀ x ∈ list', x ∈ finset.val := by aesop
-  -- have : ∀ x ∈ list', Multiset.count x finset.val = 1 := by
-  --   duper [this, Finset.nodup, Multiset.nodup_iff_count_eq_one]
-
-  -- pure
-  --   { val := list'
-  --     nodup := sorry
-  --   }
+  List.toFinset <$> finset.toList.filterM p
 
 open Classical in
-noncomputable def estimateSize
-  (stream : List <| Fin m)
-  : ExceptT Unit PMF <| Fin m :=
-  stream
-    |>.foldlM step (initialState m ε δ)
-    |>.map result
+noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
+  xs |>.foldlM step (initialState m ε δ) |>.map result
   where
     step (state : State m ε δ) (elem : Fin m)
       : ExceptT Unit PMF <| State m ε δ := do
-      let ⟨p, _, _⟩ := state.p
+      let ⟨p, (_ : 0 < p), (_ : p ≤ 1)⟩ := state.p
       let χ := state.χ
-      -- let χ := ⟨χ.val.erase elem, sorry⟩
 
       let χ :=
         if ← PMF.bernoulli _ ‹p ≤ 1›
@@ -77,38 +60,44 @@ noncomputable def estimateSize
                   _ ≤ thresh _ _ _ := ‹_›
           ⟨χ', by aesop⟩
 
-      if _h_card_eq_thresh : χ.val.card = thresh m ε δ
-      then
-        let χ' ← χ |>.val |> Finset.filterM λ _ ↦
-          have : ((1 : ℝ≥0∞) / 2) ≤ 1 := ENNReal.half_le_self
-          PMF.bernoulli _ this
+      if _h_card_eq_thresh : χ.val.card < thresh m ε δ
+      then return state else
 
-        -- let χ'' := χ'.map Subtype.val
+      let χ'bundled : Finset {x : Fin m // x ∈ χ.val} ← χ
+        |>.val
+        |>.attach
+        |> Finset.filterM λ _ ↦
+            have : ((1 : ℝ≥0∞) / 2) ≤ 1 := ENNReal.half_le_self
+            PMF.bernoulli _ this
 
-        have : χ'.card ≤ thresh m ε δ :=
-          have : χ' ≤ χ :=
-            λ x (_ : x ∈ χ') ↦
-              sorry
-          calc
-            χ'.card ≤ χ.val.card   := by exact Finset.card_le_card this
-                  _ = thresh _ _ _ := ‹_›
+      let χ' : Finset <| Fin m := χ'bundled.image Subtype.val
+      have : χ' ≤ χ :=
+        λ x' (_ : x' ∈ χ') ↦
+          have ⟨x'bundled, (_ : x'bundled ∈ χ'bundled), (_ : x'bundled = x')⟩ :=
+            Finset.mem_image.mp ‹x' ∈ χ'›
+          show x' ∈ ↑χ by aesop
 
-        let χ' : {S : Finset <| Fin m // S.card ≤ thresh m ε δ} := ⟨χ', this⟩
+      have := calc
+        χ'.card ≤ χ.val.card   := by exact Finset.card_le_card this
+              _ = thresh _ _ _ := by have := χ.prop; omega
 
-        if _h_card_eq_thresh : χ.val.card = thresh m ε δ
-        then throw ()
-        else
-          let p' : Set.Ioc (α := ℝ≥0∞) 0 1 :=
-            have := calc
-              p / 2 ≤ p := by exact ENNReal.half_le_self
-                  _ ≤ 1 := ‹_›
-            ⟨p / 2, by aesop⟩
-          pure { state with p := p', χ := χ' }
-      else
-        pure state
+      let χ' : {S : Finset <| Fin m // S.card ≤ thresh m ε δ} := ⟨χ', this⟩
+
+      if _h_card_eq_thresh : χ.val.card = thresh m ε
+      then throw () else
+
+      let p' : Set.Ioc (α := ℝ≥0∞) 0 1 :=
+        have := calc
+          p / 2 ≤ p := by exact ENNReal.half_le_self
+              _ ≤ 1 := ‹_›
+        ⟨p / 2, by aesop⟩
+      return { state with p := p', χ := χ' }
 
     result (state : State m ε δ) : Fin m :=
       Nat.floor <| state.χ.val.card / state.p.val.toReal
+
+noncomputable def runEstimateSize : PMF <| Except Unit <| Fin m :=
+  xs |> estimateSize m ε δ |>.run
 
 -- open Classical in
 -- noncomputable def estimateSize
