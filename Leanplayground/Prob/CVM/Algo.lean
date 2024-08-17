@@ -17,18 +17,17 @@ noncomputable abbrev thresh : ℕ+ :=
   let thresh := ⌈(12 / ε ^ 2) * Real.log2 (8 * m / δ)⌉₊
 
   have : 0 < thresh :=
-    have : 0 < 12 / (ε : ℝ) ^ 2 :=  by
+    have : 0 < 12 / (ε : ℝ) ^ 2 := by
       duper [ε.prop.1, Nat.ofNat_pos, pow_pos, div_pos]
         {portfolioInstance := 1}
 
     have : 0 < Real.log2 (8 * m / δ) :=
-      suffices (δ : ℝ) < 8 * m by
-        duper [this, δ.prop.1, one_lt_div, Real.log2_pos]
-          {portfolioInstance := 1}
-      calc
+      have := calc
         (δ : ℝ) < 1     := by exact δ.prop.2
               _ ≤ m     := Nat.one_le_cast.mpr m.prop
               _ ≤ 8 * m := by simp
+      by duper [this, δ.prop.1, one_lt_div, Real.log2_pos]
+          {portfolioInstance := 1}
 
     by duper [*, Nat.ceil_pos, mul_pos] {portfolioInstance := 1}
 
@@ -80,6 +79,30 @@ noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
       if _h_card_eq_thresh : χ₀.card < thresh m ε δ
       then return { state with χ := ⟨χ₀, ‹χ₀.card < thresh m ε δ›⟩ } else
 
+      /-
+        Here, we throw away each element of χ₀ with probability 1/2.
+        This is modelled via filterM on χ₀ with a monadic function that samples
+        from a Bernoulli distribution.
+        The result of that is bound to χ₁, which we then show is contained in
+        χ₀ and hence χ₁'s cardinality is ≤ thresh.
+
+        As a technicality, this is done via an intermediate variable χ₁', which
+        we define so that its elements are exactly those of χ₁, but each
+        element x is augmented with additional info _at the type level_
+        (via a Σ type) that x ∈ χ₀.
+        χ₁ is then defined to be the image of subtype projection on χ₁.
+
+        We encode this info at the type level, because we lose all info about
+        the shape of the term being bound to a variable via monadic let binding.
+        This in turn complicates proofs about monadic let bindings.
+        To see this, observe that `let x ← t; t'` is desugared into
+        `t >>= λ x ↦ t'` so that when we work with `x` in `t'`, for instance in
+        proofs, `x` is an _arbitrary_ variable that is _not_ bound to `t`.
+        What we would like to do is to transfer information about `t` across
+        the monadic bind.
+        Since we lose all info about the term-level binding of `t` to `x`, we
+        appeal to the type-level and encode the info that we want there.
+      -/
       have : χ₀.card = thresh m ε δ := by omega
 
       let χ₁' : Finset {x : Fin m // x ∈ χ₀} ← χ₀
@@ -91,10 +114,8 @@ noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
       let χ₁ : Finset <| Fin m := Function.Embedding.subtype _ <$> χ₁'
 
       have : χ₁ ⊆ χ₀ := by simp_all [χ₁, Finset.subset_iff]
-
-      have : χ₁.card ≤ thresh m ε δ := by
-        apply Finset.card_le_card at this
-        simp_all [Finset.card_le_card]
+      have : χ₁.card ≤ χ₀.card := by gcongr
+      have : χ₁.card ≤ thresh m ε δ := by omega
 
       if _h_card_eq_thresh : χ₁.card = thresh m ε δ
       then throw () else
