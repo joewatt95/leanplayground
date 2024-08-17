@@ -87,7 +87,8 @@ noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
         This is modelled via filterM on χ₀ with a monadic function that samples
         from a Bernoulli distribution.
         The result of that is bound to χ₁, which we then show is contained in
-        χ₀ and hence χ₁'s cardinality is ≤ thresh.
+        χ₀ and hence has a cardinality upper bounded by that of χ₀, and in turn
+        by thresh.
 
         As a technicality, this is done via an intermediate variable χ₁', which
         we define so that its elements are exactly those of χ₁, but each
