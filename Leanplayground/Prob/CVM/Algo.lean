@@ -1,12 +1,8 @@
-
-import Mathlib.Control.Traversable.Lemmas
 import Mathlib.Data.Finset.Functor
 import Mathlib.Probability.ProbabilityMassFunction.Constructions
-import Mathlib.Probability.Moments
 
 import Leanplayground.Prob.ProbM
 import Leanplayground.Prob.Utils.Log
-
 import Leanplayground.MathInLean.Utils.Tactic
 
 namespace CVM
@@ -19,26 +15,24 @@ variable
   (xs : List <| Fin m)
 
 noncomputable abbrev thresh : ℕ+ :=
-  let thresh := ⌈(12 / ε^2) * Real.log2 ((8*m) / δ)⌉₊
+  let thresh := ⌈(12 / ε ^ 2) * Real.log2 (8 * m / δ)⌉₊
+
   have : 0 < thresh :=
-    have : (0 : ℝ) < (12 / ε^2) :=
-      have : (0 : ℝ) < 12 := Nat.ofNat_pos
-      have : (0 : ℝ) < ε^2 := by
-        have := ε.prop.1
-        simp_all only [Nat.ofNat_pos, gt_iff_lt, pow_pos]
-      div_pos ‹_› ‹_›
-    have : 0 < Real.log2 ((8*m) / δ) :=
-      have : (1 : ℝ) < 2 := by
-        simp_all only [gt_iff_lt, Nat.ofNat_pos, div_pos_iff_of_pos_left, Nat.one_lt_ofNat]
-      have : (1 : ℝ) < (8*m) / δ :=
-        have := calc
-          δ < (1 : ℝ) := by exact δ.prop.2
-          _ ≤ m := have := m.prop; by aesop
-          _ ≤ 8 * m := by aesop
-        have : (0 : ℝ) < δ := δ.prop.1
-        by duper [*, one_lt_div] {portfolioInstance := 1}
-      Real.logb_pos ‹_› ‹_›
+    have : 0 < 12 / (ε : ℝ) ^ 2 :=  by
+      duper [ε.prop.1, Nat.ofNat_pos, pow_pos, div_pos]
+        {portfolioInstance := 1}
+
+    have : 0 < Real.log2 (8 * m / δ) :=
+      suffices (δ : ℝ) < 8 * m by
+        duper [this, δ.prop.1, one_lt_div, Real.log2_pos]
+          {portfolioInstance := 1}
+      calc
+        (δ : ℝ) < 1     := by exact δ.prop.2
+              _ ≤ m     := Nat.one_le_cast.mpr m.prop
+              _ ≤ 8 * m := by simp_all
+
     by duper [*, Nat.ceil_pos, mul_pos] {portfolioInstance := 1}
+
   ⟨thresh, this⟩
 
 @[ext]
@@ -70,15 +64,14 @@ noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
       let ⟨p, (_ : 0 < p), (_ : p ≤ 1)⟩ := state.p
       let χ := state.χ
 
-      let b : Bool ← PMF.bernoulli _ ‹p ≤ 1›
+      let b ← PMF.bernoulli _ ‹p ≤ 1›
 
       let χ₀ := χ
         |>.val
         |>.erase x
         |> if b then id else insert x
 
-      have : χ₀.card ≤ thresh m ε δ :=
-        if _ : b
+      have := if _ : b
         then calc
           χ₀.card = (χ |>.val |>.erase x).card := by simp_all [χ₀]
                 _ ≤ χ.val.card                 := Finset.card_erase_le
@@ -102,8 +95,7 @@ noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
 
       let χ₁ : Finset <| Fin m := Function.Embedding.subtype _ <$> χ₁'
 
-      have : ∀ x ∈ χ₁, ∃ pf : x ∈ χ₀, ⟨x, pf⟩ ∈ χ₁' := by aesop
-      have : χ₁ ⊆ χ₀ := λ _ _ ↦ by duper [*] {portfolioInstance := 7}
+      have : χ₁ ≤ χ₀ := by simp_all [χ₁, Finset.subset_iff]
 
       have : χ₁.card ≤ thresh m ε δ := by
         apply Finset.card_le_card at this
@@ -124,7 +116,7 @@ noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
       return { state with p := p, χ := χ }
 
     result (state : State m ε δ) : Fin m :=
-      Nat.floor <| state.χ.val.card / state.p.val.toReal
+      ⌊state.χ.val.card / state.p.val.toReal⌋₊
 
 noncomputable def runEstimateSize : PMF <| Except Unit <| Fin m :=
   xs |> estimateSize m ε δ |>.run
