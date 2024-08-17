@@ -42,7 +42,7 @@ structure State where
 
 noncomputable def initialState : State m ε δ where
   p := ⟨1, zero_lt_one, Preorder.le_refl _⟩
-  χ := ⟨∅, have := thresh m ε δ |>.prop; by simp_all⟩
+  χ := ⟨∅, by simp_all only [Finset.card_empty, PNat.mk_coe, thresh m ε δ |>.prop]⟩
 
 -- instance : CommApplicative PMF where
 --   commutative_prod _ _ := by
