@@ -52,6 +52,9 @@ open Classical in
 noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
   xs |>.foldlM step (initialState m ε δ) |>.map result
   where
+    result (state : State m ε δ) : Fin m :=
+      ⌊state.χ.val.card / state.p.val.toReal⌋₊
+
     step (state : State m ε δ) (x : Fin m)
       : ExceptT Unit PMF <| State m ε δ := do
       let ⟨p, (_ : 0 < p), (_ : p ≤ 1)⟩ := state.p
@@ -129,9 +132,6 @@ noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
         ⟨p / 2, by aesop⟩
 
       return { state with p := p, χ := χ }
-
-    result (state : State m ε δ) : Fin m :=
-      ⌊state.χ.val.card / state.p.val.toReal⌋₊
 
 noncomputable def runEstimateSize : PMF <| Except Unit <| Fin m :=
   xs |> estimateSize m ε δ |>.run
