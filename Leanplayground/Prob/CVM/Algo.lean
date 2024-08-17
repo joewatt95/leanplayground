@@ -1,8 +1,7 @@
 import Mathlib.Data.Finset.Functor
-import Mathlib.Probability.ProbabilityMassFunction.Constructions
 
-import Leanplayground.Prob.ProbM
 import Leanplayground.Prob.Utils.Log
+import Leanplayground.Prob.Utils.PMF
 import Leanplayground.MathInLean.Utils.Tactic
 
 namespace CVM
@@ -29,25 +28,20 @@ noncomputable abbrev thresh : ℕ+ :=
       calc
         (δ : ℝ) < 1     := by exact δ.prop.2
               _ ≤ m     := Nat.one_le_cast.mpr m.prop
-              _ ≤ 8 * m := by simp_all
+              _ ≤ 8 * m := by simp
 
     by duper [*, Nat.ceil_pos, mul_pos] {portfolioInstance := 1}
 
   ⟨thresh, this⟩
 
 @[ext]
-structure State where
+structure State : Type u where
   p : Set.Ioc (α := ℝ≥0∞) 0 1
   χ : {S : Finset <| Fin m // S.card < thresh m ε δ}
 
 noncomputable def initialState : State m ε δ where
   p := ⟨1, zero_lt_one, Preorder.le_refl _⟩
   χ := ⟨∅, by simp_all only [Finset.card_empty, PNat.mk_coe, thresh m ε δ |>.prop]⟩
-
--- instance : CommApplicative PMF where
---   commutative_prod _ _ := by
---     simp [Seq.seq, Functor.map]
---     exact PMF.bind_comm _ _ _
 
 open Classical in
 noncomputable def Finset.filterM {m : Type → Type v} [Monad m]
