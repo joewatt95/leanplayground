@@ -65,13 +65,13 @@ noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
       let χ₀ := χ |>.erase x |> bif b then id else insert x
 
       have : χ₀.card ≤ thresh m ε δ :=
-        if _ : b
-        then calc
+        match _hb : b with
+        | true => calc
           χ₀.card = (χ.erase x).card := by simp [χ₀, ‹b = true›]
                 _ ≤ χ.card           := Finset.card_erase_le
                 _ ≤ thresh m ε δ     := le_of_lt ‹_›
-        else calc
-          χ₀.card = (χ |>.erase x |> insert x).card := by simp [χ₀, ‹b ≠ true›]
+        | false => calc
+          χ₀.card = (χ |>.erase x |> insert x).card := by simp [χ₀, ‹b = false›]
                 _ ≤ (χ.erase x).card + 1            := Finset.card_insert_le _ _
                 _ ≤ χ.card + 1                      := by gcongr; exact Finset.erase_subset _ _
                 _ ≤ thresh m ε δ                    := by omega
