@@ -71,7 +71,8 @@ noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
         |>.erase x
         |> if b then id else insert x
 
-      have := if _ : b
+      have : χ₀.card ≤ thresh m ε δ :=
+        if _ : b
         then calc
           χ₀.card = (χ |>.val |>.erase x).card := by simp_all [χ₀]
                 _ ≤ χ.val.card                 := Finset.card_erase_le
@@ -95,7 +96,7 @@ noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
 
       let χ₁ : Finset <| Fin m := Function.Embedding.subtype _ <$> χ₁'
 
-      have : χ₁ ≤ χ₀ := by simp_all [χ₁, Finset.subset_iff]
+      have : χ₁ ⊆ χ₀ := by simp_all [χ₁, Finset.subset_iff]
 
       have : χ₁.card ≤ thresh m ε δ := by
         apply Finset.card_le_card at this
