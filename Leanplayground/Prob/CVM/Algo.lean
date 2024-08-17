@@ -70,42 +70,58 @@ noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
       let ⟨p, (_ : 0 < p), (_ : p ≤ 1)⟩ := state.p
       let χ := state.χ
 
-      let χ' :=
-        if ← PMF.bernoulli _ ‹p ≤ 1›
-        then χ.val.erase x
-        else insert x <| χ.val.erase x
+      let b : Bool ← PMF.bernoulli _ ‹p ≤ 1›
 
-      let ⟨p, (_ : 0 < p), (_ : p ≤ 1)⟩ := state.p
-      if _h_card_eq_thresh : χ'.card < thresh m ε δ
-      then return state else
-
-      let χ''attached : Finset {x : Fin m // x ∈ χ.val} ← χ
+      let χ₀ := χ
         |>.val
+        |>.erase x
+        |> if b then id else insert x
+
+      have : χ₀.card ≤ thresh m ε δ :=
+        if _ : b
+        then calc
+          χ₀.card = (χ |>.val |>.erase x).card := by simp_all [χ₀]
+                _ ≤ χ.val.card                 := Finset.card_erase_le
+                _ ≤ thresh m ε δ               := le_of_lt χ.prop
+        else calc
+          χ₀.card = (χ |>.val |>.erase x |> insert x).card := by simp_all [χ₀]
+                _ ≤ (χ |>.val |>.erase x).card + 1         := Finset.card_insert_le _ _
+                _ ≤ χ.val.card + 1                         := by gcongr; exact Finset.erase_subset _ _
+                _ ≤ thresh m ε δ                           := by omega
+
+      if _h_card_eq_thresh : χ₀.card < thresh m ε δ
+      then return { state with χ := ⟨χ₀, ‹χ₀.card < thresh m ε δ›⟩ } else
+
+      have : χ₀.card = thresh m ε δ := by omega
+
+      let χ₁' : Finset {x : Fin m // x ∈ χ₀} ← χ₀
         |>.attach
         |> Finset.filterM λ _ ↦
             have : ((1 : ℝ≥0∞) / 2) ≤ 1 := ENNReal.half_le_self
             PMF.bernoulli _ this
 
-      let χ'' : Finset <| Fin m := Function.Embedding.subtype _ <$> χ''attached
+      let χ₁ : Finset <| Fin m := Function.Embedding.subtype _ <$> χ₁'
 
-      have : ∀ x' ∈ χ'', ∃ pf : x' ∈ χ.val, ⟨x', pf⟩ ∈ χ''attached := by aesop
-      have : χ'' ≤ χ.val := λ _ _ ↦ by duper [*] {portfolioInstance := 7}
+      have : ∀ x ∈ χ₁, ∃ pf : x ∈ χ₀, ⟨x, pf⟩ ∈ χ₁' := by aesop
+      have : χ₁ ⊆ χ₀ := λ _ _ ↦ by duper [*] {portfolioInstance := 7}
 
-      have := calc
-        χ''.card ≤ χ.val.card   := by exact Finset.card_le_card this
-               _ < thresh _ _ _ := χ.prop
+      have : χ₁.card ≤ thresh m ε δ := by
+        apply Finset.card_le_card at this
+        simp_all [Finset.card_le_card]
 
-      let χ'' : {S : Finset <| Fin m // S.card < thresh m ε δ} := ⟨χ'', this⟩
+      if _h_card_eq_thresh : χ₁.card = thresh m ε δ
+      then throw () else
 
-      let p' : Set.Ioc (α := ℝ≥0∞) 0 1 :=
+      let χ : { S : Finset <| Fin m // S.card < thresh m ε δ } :=
+        ⟨χ₁, by omega⟩
+
+      let p : Set.Ioc (α := ℝ≥0∞) 0 1 :=
         have := calc
           p / 2 ≤ p := by exact ENNReal.half_le_self
               _ ≤ 1 := ‹_›
         ⟨p / 2, by aesop⟩
 
-      if _h_card_eq_thresh : χ.val.card = thresh m ε δ
-      then throw ()
-      else return { state with p := p', χ := χ'' }
+      return { state with p := p, χ := χ }
 
     result (state : State m ε δ) : Fin m :=
       Nat.floor <| state.χ.val.card / state.p.val.toReal
