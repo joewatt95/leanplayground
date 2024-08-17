@@ -58,26 +58,23 @@ noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
     step (state : State m ε δ) (x : Fin m)
       : ExceptT Unit PMF <| State m ε δ := do
       let ⟨p, (_ : 0 < p), (_ : p ≤ 1)⟩ := state.p
-      let χ := state.χ
+      let ⟨χ, (_ : χ.card < thresh m ε δ)⟩ := state.χ
 
       let b ← PMF.bernoulli _ ‹p ≤ 1›
 
-      let χ₀ := χ
-        |>.val
-        |>.erase x
-        |> bif b then id else insert x
+      let χ₀ := χ |>.erase x |> bif b then id else insert x
 
       have : χ₀.card ≤ thresh m ε δ :=
         if _ : b
         then calc
-          χ₀.card = (χ |>.val |>.erase x).card := by simp [‹b = true›, χ₀]
-                _ ≤ χ.val.card                 := Finset.card_erase_le
-                _ ≤ thresh m ε δ               := le_of_lt χ.prop
+          χ₀.card = (χ.erase x).card := by simp [χ₀, ‹b = true›]
+                _ ≤ χ.card           := Finset.card_erase_le
+                _ ≤ thresh m ε δ     := le_of_lt ‹_›
         else calc
-          χ₀.card = (χ |>.val |>.erase x |> insert x).card := by simp [‹b ≠ true›, χ₀]
-                _ ≤ (χ |>.val |>.erase x).card + 1         := Finset.card_insert_le _ _
-                _ ≤ χ.val.card + 1                         := by gcongr; exact Finset.erase_subset _ _
-                _ ≤ thresh m ε δ                           := by omega
+          χ₀.card = (χ |>.erase x |> insert x).card := by simp [χ₀, ‹b ≠ true›]
+                _ ≤ (χ.erase x).card + 1            := Finset.card_insert_le _ _
+                _ ≤ χ.card + 1                      := by gcongr; exact Finset.erase_subset _ _
+                _ ≤ thresh m ε δ                    := by omega
 
       if _h_card_eq_thresh : χ₀.card < thresh m ε δ
       then return { state with χ := ⟨χ₀, ‹χ₀.card < thresh m ε δ›⟩ } else
