@@ -43,7 +43,7 @@ noncomputable def initialState : State m ε δ where
   χ := ⟨∅, by simp_all only [Finset.card_empty, PNat.mk_coe, thresh m ε δ |>.prop]⟩
 
 open Classical in
-noncomputable def Finset.filterM {m : Type → Type v} [Monad m]
+noncomputable def Finset.filterM {m : Type → Type u} [Monad m]
   (p : α → m Bool) (finset : Finset α)
   : m <| Finset α :=
   List.toFinset <$> finset.toList.filterM p
