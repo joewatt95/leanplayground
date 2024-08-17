@@ -92,12 +92,11 @@ noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
         (via a Σ type) that x ∈ χ₀.
         χ₁ is then defined to be the image of subtype projection on χ₁.
 
-        We encode this info at the type level, because we lose all info about
+        We encode this info at the type level because we lose all info about
         the shape of the term being bound to a variable via monadic let binding.
-        This in turn complicates proofs about monadic let bindings.
         To see this, observe that `let x ← t; t'` is desugared into
-        `t >>= λ x ↦ t'` so that when we work with `x` in `t'`, for instance in
-        proofs, `x` is an _arbitrary_ variable that is _not_ bound to `t`.
+        `t >>= λ x ↦ t'` so that when we work with `x` in `t'`, `x` is an
+        _arbitrary_ variable that is _not_ bound to `t`.
         What we would like to do is to transfer information about `t` across
         the monadic bind.
         Since we lose all info about the term-level binding of `t` to `x`, we
