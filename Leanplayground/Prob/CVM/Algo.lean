@@ -65,16 +65,16 @@ noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
       let χ₀ := χ
         |>.val
         |>.erase x
-        |> if b then id else insert x
+        |> bif b then id else insert x
 
       have : χ₀.card ≤ thresh m ε δ :=
         if _ : b
         then calc
-          χ₀.card = (χ |>.val |>.erase x).card := by simp_all [χ₀]
+          χ₀.card = (χ |>.val |>.erase x).card := by simp [‹b = true›, χ₀]
                 _ ≤ χ.val.card                 := Finset.card_erase_le
                 _ ≤ thresh m ε δ               := le_of_lt χ.prop
         else calc
-          χ₀.card = (χ |>.val |>.erase x |> insert x).card := by simp_all [χ₀]
+          χ₀.card = (χ |>.val |>.erase x |> insert x).card := by simp [‹b ≠ true›, χ₀]
                 _ ≤ (χ |>.val |>.erase x).card + 1         := Finset.card_insert_le _ _
                 _ ≤ χ.val.card + 1                         := by gcongr; exact Finset.erase_subset _ _
                 _ ≤ thresh m ε δ                           := by omega
@@ -104,6 +104,9 @@ noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
         the monadic bind.
         Since we lose all info about the term-level binding of `t` to `x`, we
         appeal to the type-level and encode the info that we want there.
+        In this case, we use `Finset.attach` to transform each element x of χ₀
+        into a Σ type containing info that x ∈ χ₀.
+        This helps us prove that χ₁ ⊆ χ₀ across the monadic let binding.
       -/
       have : χ₀.card = thresh m ε δ := by omega
 
@@ -117,12 +120,11 @@ noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
 
       have : χ₁ ⊆ χ₀ := by simp_all [χ₁, Finset.subset_iff]
       have : χ₁.card ≤ χ₀.card := by gcongr
-      have : χ₁.card ≤ thresh m ε δ := by omega
 
       if _h_card_eq_thresh : χ₁.card = thresh m ε δ
       then throw () else
 
-      let χ : { S : Finset <| Fin m // S.card < thresh m ε δ } :=
+      let χ : {S : Finset <| Fin m // S.card < thresh m ε δ} :=
         ⟨χ₁, by omega⟩
 
       let p : Set.Ioc (α := ℝ≥0∞) 0 1 :=
