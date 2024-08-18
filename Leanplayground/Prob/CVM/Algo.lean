@@ -120,8 +120,8 @@ noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
         (χ₁ ⊂ χ₀ ↔ χ₁.card < thresh m ε δ) := by
         apply And.intro
         all_goals duper
-          [ *, iff_def, Finset.subset_iff_eq_of_card_le, Finset.card_lt_card,
-            subset_iff_ssubset_or_eq ]
+          [ *, Finset.subset_iff_eq_of_card_le,
+            iff_def, Finset.card_lt_card, subset_iff_ssubset_or_eq ]
           {portfolioInstance := 1}
 
       if _h_χ₁_eq_χ₀ : χ₁ = χ₀
