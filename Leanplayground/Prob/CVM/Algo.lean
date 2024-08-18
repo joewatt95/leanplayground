@@ -62,7 +62,7 @@ noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
 
       let b ← PMF.bernoulli _ ‹p ≤ 1›
 
-      let χ₀ := χ |>.erase x |> bif b then id else insert x
+      let χ₀ := χ |>.erase x |> if b then id else insert x
 
       have : χ₀.card ≤ thresh m ε δ :=
         match _hb : b with
