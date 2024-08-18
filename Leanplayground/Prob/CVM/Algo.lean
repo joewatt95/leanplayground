@@ -80,21 +80,22 @@ noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
       then return { state with χ := ⟨χ₀, ‹χ₀.card < thresh m ε δ›⟩ } else
 
       /-
-        Here, we throw away each element of χ₀ with probability 1/2.
-        This is modelled via filterM on χ₀ with a monadic function that samples
+        Here, we throw away each element of `χ₀` with probability `1/2`.
+        This is modelled via filterM on `χ₀` with a monadic function that samples
         from a Bernoulli distribution.
-        The result of that is bound to χ₁, which we then show is contained in
-        χ₀ and hence has a cardinality upper bounded by that of χ₀, and in turn
+        The result of that is bound to `χ₁`, which we then show is contained in
+        χ₀ and hence has a cardinality upper bounded by that of `χ₀`, and in turn
         by thresh.
 
-        As a technicality, this is done via an intermediate variable χ₁', which
-        we define so that its elements are exactly those of χ₁, but each
-        element x is augmented with additional info _at the type level_
-        (via a Σ type) that x ∈ χ₀.
-        χ₁ is then defined to be the image of subtype projection on χ₁.
+        As a technicality, we first attach each element of `χ₀` with additional
+        info _at the type level_ (via a Σ type) that `x ∈ χ₀`, before performing
+        the monadic bind.
+        Across the bind, we define `χ₁` to be the image of the Σ type projection
+        on that.
 
-        We encode this info at the type level because we lose all info about
-        the shape of the term being bound to a variable via monadic let binding.
+        We do this because we lose all info about the shape of the term
+        (ie `χ₀.filterM ...`) being bound to a variable (ie `χ₁`) across a monadic
+        bind.
         To see this, observe that `let x ← t; t'` is desugared into
         `t >>= λ x ↦ t'` so that when we work with `x` in `t'`, `x` is an
         _arbitrary_ variable that is _not_ bound to `t`.
@@ -102,22 +103,21 @@ noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
         the monadic bind.
         Since we lose all info about the term-level binding of `t` to `x`, we
         appeal to the type-level and encode the info that we want there.
-        In this case, we use `Finset.attach` to transform each element x of χ₀
-        into a Σ type containing info that x ∈ χ₀.
-        This helps us prove that χ₁ ⊆ χ₀ across the monadic let binding.
+        In this case, we use `Finset.attach` to transform each element `x` of
+        `χ₀` into a Σ type containing info that `x ∈ χ₀`.
+        This helps us prove that `χ₁ ⊆ χ₀` across the monadic let binding.
       -/
-      have : χ₀.card = thresh m ε δ := by omega
+      let χ₁ : Finset {x : Fin m // x ∈ χ₀} ←
+        χ₀
+          |>.attach
+          |> Finset.filterM λ _ ↦
+              have : ((1 : ℝ≥0∞) / 2) ≤ 1 := ENNReal.half_le_self
+              PMF.bernoulli _ this
 
-      let χ₁' : Finset {x : Fin m // x ∈ χ₀} ← χ₀
-        |>.attach
-        |> Finset.filterM λ _ ↦
-            have : ((1 : ℝ≥0∞) / 2) ≤ 1 := ENNReal.half_le_self
-            PMF.bernoulli _ this
-
-      let χ₁ : Finset <| Fin m := Function.Embedding.subtype _ <$> χ₁'
+      let χ₁ : Finset <| Fin m := Function.Embedding.subtype _ <$> χ₁
 
       have : χ₁ ⊆ χ₀ := by simp_all [χ₁, Finset.subset_iff]
-      have : χ₁.card ≤ χ₀.card := by gcongr
+      have : χ₁.card ≤ χ₀.card := Finset.card_le_card this
 
       if _h_card_eq_thresh : χ₁.card = thresh m ε δ
       then throw () else
@@ -129,56 +129,11 @@ noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
         have := calc
           p / 2 ≤ p := by exact ENNReal.half_le_self
               _ ≤ 1 := ‹_›
-        ⟨p / 2, by aesop⟩
+        ⟨p / 2, show 0 < p / 2 ∧ p / 2 ≤ 1 by aesop⟩
 
       return { state with p := p, χ := χ }
 
 noncomputable def runEstimateSize : PMF <| Except Unit <| Fin m :=
   xs |> estimateSize m ε δ |>.run
-
--- open Classical in
--- noncomputable def estimateSize
---   (stream : List <| Fin m)
---   : Prob.ProbM (State m) <| Fin m:= do
---   match _h_stream_eq : stream with
---   | [] =>
---     let state ← get
---     pure <| Nat.floor <| state.χ.card / state.p.val.toReal
-
---   | elem :: stream =>
---     modify λ state ↦ { state with χ := state.χ.erase elem }
-
---     let state ← get
---     let ⟨p, _, _⟩ := state.p
-
---     if ← PMF.bernoulli _ ‹p ≤ 1› then
---       modify λ state ↦ { state with χ := insert elem state.χ }
-
---     let state ← get
---     let ⟨p, _, _⟩ := state.p
-
---     if _h_card_eq_thresh : state.χ.card = thresh then
---       let _ ← state.χ.toList.traverse λ elem ↦ do
---         if ← PMF.bernoulli _ ‹p ≤ 1› then
---           modify λ state ↦ { state with χ := state.χ.erase elem }
-
---       let χ ← modifyGet λ state ↦
---         have := calc
---           p / 2 ≤ p := by exact ENNReal.half_le_self
---               _ ≤ 1 := ‹_›
---         (state.χ, { state with p := ⟨p / 2, by aesop, this⟩ })
-
---       if _h_card_eq_thresh : χ.card = thresh then throw default
-
---     estimateSize stream
-
--- noncomputable def runEstimateSize
---   (stream : List <| Fin m)
---   (state : State m := initialState _)
---   : PMF <| Except Prob.Error <| Fin m :=
---   stream
---     |> estimateSize m ε δ
---     |>.run        -- Run ExceptT
---     |>.run' state -- Run StateT
 
 end CVM
