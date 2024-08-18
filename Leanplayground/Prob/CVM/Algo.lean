@@ -105,7 +105,7 @@ noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
         appeal to the type-level and encode the info that we want there.
         In this case, we use `Finset.attach` to transform each element `x` of
         `χ₀` into a Σ type containing info that `x ∈ χ₀`.
-        This helps us prove that `χ₁ ⊆ χ₀` across the monadic let binding.
+        This helps us prove that `χ₁ ⊆ χ₀` across the monadic bind.
       -/
       let χ₁ : Finset {x : Fin m // x ∈ χ₀} ←
         χ₀
