@@ -1,5 +1,6 @@
 import Mathlib.Data.Finset.Functor
 
+import Leanplayground.Prob.Utils.Finset
 import Leanplayground.Prob.Utils.Log
 import Leanplayground.Prob.Utils.PMF
 import Leanplayground.MathInLean.Utils.Tactic
@@ -43,12 +44,6 @@ noncomputable def initialState : State m ε δ where
   χ := ⟨∅, by simp_all only [Finset.card_empty, PNat.mk_coe, thresh m ε δ |>.prop]⟩
 
 open Classical in
-noncomputable def Finset.filterM {m : Type → Type u} [Monad m]
-  (p : α → m Bool) (finset : Finset α)
-  : m <| Finset α :=
-  List.toFinset <$> finset.toList.filterM p
-
-open Classical in
 noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
   xs |>.foldlM step (initialState m ε δ) |>.map result
   where
@@ -78,6 +73,8 @@ noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
 
       if _h_card_eq_thresh : χ₀.card < thresh m ε δ
       then return { state with χ := ⟨χ₀, ‹χ₀.card < thresh m ε δ›⟩ } else
+
+      have : χ₀.card = thresh m ε δ := by omega
 
       /-
       Here, we throw away each element of `χ₀` with probability `1/2`.
@@ -110,20 +107,27 @@ noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
       let χ₁ : Finset {x : Fin m // x ∈ χ₀} ←
         χ₀
           |>.attach
-          |> Finset.filterM λ _ ↦
+          |>.filterM λ _ ↦
               have : ((1 : ℝ≥0∞) / 2) ≤ 1 := ENNReal.half_le_self
               PMF.bernoulli _ this
 
       let χ₁ : Finset <| Fin m := Subtype.val <$> χ₁
 
       have : χ₁ ⊆ χ₀ := by simp_all [χ₁, Finset.subset_iff]
-      have : χ₁.card ≤ χ₀.card := Finset.card_le_card this
 
-      if _h_card_eq_thresh : χ₁.card = thresh m ε δ
-      then throw () else
+      if _h_χ₁_eq_χ₀ : χ₁ = χ₀
+      then
+        have : χ₁.card = thresh m ε δ := by simp_all only
+        throw ()
+      else
+
+      have : χ₁.card < χ₀.card := by
+        duper
+          [‹χ₁ ⊆ χ₀›, ‹χ₁ ≠ χ₀›, Finset.card_lt_card, ssubset_or_eq_of_subset]
+          {portfolioInstance := 1}
 
       let χ : {S : Finset <| Fin m // S.card < thresh m ε δ} :=
-        ⟨χ₁, by omega⟩
+        ⟨χ₁, by rwa [‹χ₀.card = thresh m ε δ›] at this⟩
 
       let p : Set.Ioc (α := ℝ≥0∞) 0 1 :=
         have := calc
