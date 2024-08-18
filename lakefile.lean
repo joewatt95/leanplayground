@@ -44,15 +44,15 @@ require egg from git
 
 require loogle from git
   "https://github.com/nomeata/loogle"
-    @ "ea3e51bd2452f760c97e55c887a716899d4d19e5"
+    @ "7eaed1d5ef13b7c81d71fa1f0116c93c83cc0b0c"
 
 require leanses from git
   "https://github.com/VCA-EPFL/leanses"
-    @ "95bc5ddd93553ae416ced18839cccbcff6b2a01c"
+    @ "d2e0a39bd05b0c49d9211c2b0dd5d5c62c701fe0"
 
 require verso from git
   "https://github.com/leanprover/verso"
-    @ "000647872db8486c7f520f3c411134a8a9c9868e"
+    @ "fdea7b9a3f525a632a7702edeb1c196f963f22d4"
 
 require verbose from git
   "https://github.com/PatrickMassot/verbose-lean4"
