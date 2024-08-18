@@ -80,32 +80,32 @@ noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
       then return { state with χ := ⟨χ₀, ‹χ₀.card < thresh m ε δ›⟩ } else
 
       /-
-        Here, we throw away each element of `χ₀` with probability `1/2`.
-        This is modelled via filterM on `χ₀` with a monadic function that samples
-        from a Bernoulli distribution.
-        The result of that is bound to `χ₁`, which we then show is contained in
-        χ₀ and hence has a cardinality upper bounded by that of `χ₀`, and in turn
-        by thresh.
+      Here, we throw away each element of `χ₀` with probability `1/2`.
+      This is modelled via filterM on `χ₀` with a monadic function that samples
+      from a Bernoulli distribution.
+      The result of that is bound to `χ₁`, which we then show is contained in
+      χ₀ and hence has a cardinality upper bounded by that of `χ₀`, and in turn
+      by thresh.
 
-        As a technicality, we first attach each element of `χ₀` with additional
-        info _at the type level_ (via a Σ type) that `x ∈ χ₀`, before performing
-        the monadic bind.
-        Across the bind, we define `χ₁` to be the image of the Σ type projection
-        on that.
+      As a technicality, we first attach each element of `χ₀` with additional
+      info _at the type level_ (via a Σ type) that `x ∈ χ₀`, before performing
+      the monadic bind.
+      Across the bind, we define `χ₁` to be the image of the Σ type projection
+      on that.
 
-        We do this because we lose all info about the shape of the term
-        (ie `χ₀.filterM ...`) being bound to a variable (ie `χ₁`) across a monadic
-        bind.
-        To see this, observe that `let x ← t; t'` is desugared into
-        `t >>= λ x ↦ t'` so that when we work with `x` in `t'`, `x` is an
-        _arbitrary_ variable that is _not_ bound to `t`.
-        What we would like to do is to transfer information about `t` across
-        the monadic bind.
-        Since we lose all info about the term-level binding of `t` to `x`, we
-        appeal to the type-level and encode the info that we want there.
-        In this case, we use `Finset.attach` to transform each element `x` of
-        `χ₀` into a Σ type containing info that `x ∈ χ₀`.
-        This helps us prove that `χ₁ ⊆ χ₀` across the monadic bind.
+      We do this because we lose all info about the shape of the term
+      (ie `χ₀.filterM ...`) being bound to a variable (ie `χ₁`) across a monadic
+      bind.
+      To see this, observe that `let x ← t; t'` is desugared into
+      `t >>= λ x ↦ t'` so that when we work with `x` in `t'`, `x` is an
+      _arbitrary_ variable that is _not_ bound to `t`.
+      What we would like to do is to transfer information about `t` across
+      the monadic bind.
+      Since we lose all info about the term-level binding of `t` to `x`, we
+      appeal to the type-level and encode the info that we want there.
+      In this case, we use `Finset.attach` to transform each element `x` of
+      `χ₀` into a Σ type containing info that `x ∈ χ₀`.
+      This helps us prove that `χ₁ ⊆ χ₀` across the monadic bind.
       -/
       let χ₁ : Finset {x : Fin m // x ∈ χ₀} ←
         χ₀
