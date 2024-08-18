@@ -129,7 +129,7 @@ noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
         have := calc
           p / 2 ≤ p := by exact ENNReal.half_le_self
               _ ≤ 1 := ‹_›
-        ⟨p / 2, show 0 < p / 2 ∧ p / 2 ≤ 1 by aesop⟩
+        ⟨p / 2, show 0 < p / 2 by aesop, this⟩
 
       return { state with p := p, χ := χ }
 
