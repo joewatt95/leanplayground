@@ -52,6 +52,7 @@ noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
 
     step (state : State m ε δ) (x : Fin m)
       : ExceptT Unit PMF <| State m ε δ := do
+      -- set_option trace.profiler true in do
       let ⟨p, (_ : 0 < p), (_ : p ≤ 1)⟩ := state.p
       let ⟨χ, (_ : χ.card < thresh m ε δ)⟩ := state.χ
 
@@ -113,21 +114,20 @@ noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
 
       let χ₁ : Finset <| Fin m := Subtype.val <$> χ₁
 
-      have : χ₁ ⊆ χ₀ := by simp_all [χ₁, Finset.subset_iff]
+      have : χ₁ ⊆ χ₀ := λ _ ↦ by simp_all [χ₁]
 
-      if _h_χ₁_eq_χ₀ : χ₁ = χ₀
-      then
-        have : χ₁.card = thresh m ε δ := by simp_all only
-        throw ()
-      else
-
-      have : χ₁.card < χ₀.card := by
+      have : χ₁ = χ₀ ↔ χ₁.card = thresh m ε δ := by
+        duper [*, Finset.subset_iff_eq_of_card_le] {portfolioInstance := 1}
+      have : χ₁ ⊂ χ₀ ↔ χ₁.card < thresh m ε δ := by
         duper
-          [‹χ₁ ⊆ χ₀›, ‹χ₁ ≠ χ₀›, Finset.card_lt_card, ssubset_or_eq_of_subset]
+          [*, iff_def, Finset.card_lt_card, subset_iff_ssubset_or_eq]
           {portfolioInstance := 1}
 
+      if _h_χ₁_eq_χ₀ : χ₁ = χ₀
+      then throw () else
+
       let χ : {S : Finset <| Fin m // S.card < thresh m ε δ} :=
-        ⟨χ₁, by rwa [‹χ₀.card = thresh m ε δ›] at this⟩
+        ⟨χ₁, by simp_all [ssubset_iff_subset_ne]⟩
 
       let p : Set.Ioc (α := ℝ≥0∞) 0 1 :=
         have := calc
