@@ -114,7 +114,7 @@ noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
               have : ((1 : ℝ≥0∞) / 2) ≤ 1 := ENNReal.half_le_self
               PMF.bernoulli _ this
 
-      let χ₁ : Finset <| Fin m := Function.Embedding.subtype _ <$> χ₁
+      let χ₁ : Finset <| Fin m := Subtype.val <$> χ₁
 
       have : χ₁ ⊆ χ₀ := by simp_all [χ₁, Finset.subset_iff]
       have : χ₁.card ≤ χ₀.card := Finset.card_le_card this
