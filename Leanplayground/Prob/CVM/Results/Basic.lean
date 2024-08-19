@@ -1,5 +1,8 @@
 import Batteries.Classes.SatisfiesM
+
+import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
 import Mathlib.Probability.Moments
+import Mathlib.Probability.ProbabilityMassFunction.Integrals
 
 import Leanplayground.Prob.CVM.Algo
 
