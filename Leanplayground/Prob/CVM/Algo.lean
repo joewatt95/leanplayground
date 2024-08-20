@@ -35,24 +35,36 @@ noncomputable abbrev thresh : ℕ+ :=
   ⟨thresh, this⟩
 
 @[ext]
-structure State : Type u where
+structure State where
   p : Set.Ioc (α := ℝ≥0∞) 0 1
   χ : {S : Finset <| Fin m // S.card < thresh m ε δ}
 
-noncomputable def initialState : State m ε δ where
+noncomputable def initialState {m ε δ} : State m ε δ where
   p := ⟨1, zero_lt_one, Preorder.le_refl _⟩
   χ := ⟨∅, by simp_all only [Finset.card_empty, PNat.mk_coe, thresh m ε δ |>.prop]⟩
 
+abbrev Trace := {trace : List <| State m ε δ // trace ≠ []}
+
+noncomputable def initialTrace {m ε δ} : Trace m ε δ :=
+  ⟨[initialState], by tauto⟩
+
+def Trace.update {m ε δ}
+  (trace : Trace m ε δ) (state : State m ε δ)
+  : Trace m ε δ :=
+  ⟨state :: trace, by tauto⟩
+
 open Classical in
 noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
-  xs |>.foldlM step (initialState m ε δ) |>.map result
+  xs |>.foldlM step initialTrace |>.map result
   where
-    result (state : State m ε δ) : Fin m :=
+    result (trace : Trace m ε δ) : Fin m :=
+      let ⟨state :: _, _⟩ := trace
       ⌊state.χ.val.card / state.p.val.toReal⌋₊
 
-    step (state : State m ε δ) (x : Fin m)
-      : ExceptT Unit PMF <| State m ε δ := do
+    step (trace : Trace m ε δ) (x : Fin m)
+      : ExceptT Unit PMF <| Trace m ε δ := do
       -- set_option trace.profiler true in do
+      let ⟨state :: _, _⟩ := trace
       let ⟨p, (_ : 0 < p), (_ : p ≤ 1)⟩ := state.p
       let ⟨χ, (_ : χ.card < thresh m ε δ)⟩ := state.χ
 
@@ -73,7 +85,8 @@ noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
                 _ ≤ thresh m ε δ                    := by omega
 
       if _h_card_eq_thresh : χ₀.card < thresh m ε δ
-      then return { state with χ := ⟨χ₀, ‹χ₀.card < thresh m ε δ›⟩ } else
+      then return trace.update { state with χ := ⟨χ₀, ‹χ₀.card < thresh m ε δ›⟩ }
+      else
 
       have : χ₀.card = thresh m ε δ := by omega
 
@@ -136,7 +149,7 @@ noncomputable def estimateSize : ExceptT Unit PMF <| Fin m :=
               _ ≤ 1 := ‹_›
         ⟨p / 2, show 0 < p / 2 by aesop, this⟩
 
-      return { state with p := p, χ := χ }
+      return trace.update { state with p := p, χ := χ }
 
 noncomputable def runEstimateSize : PMF <| Except Unit <| Fin m :=
   xs |> estimateSize m ε δ |>.run

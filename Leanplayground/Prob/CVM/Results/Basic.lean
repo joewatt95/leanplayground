@@ -19,7 +19,7 @@ attribute [simp]
   pure ExceptT.pure
 
 example : estimateSize m ε δ [] = return 0 := by
-  simp [estimateSize, estimateSize.result, initialState]
+  simp [estimateSize, estimateSize.result, initialState, initialTrace]
 
 -- lemma SatisfiesM_estimateSize_empty_list :
 --   SatisfiesM (. = .ok 0) <| runEstimateSize m ε δ [] := by
