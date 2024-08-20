@@ -46,6 +46,10 @@ require loogle from git
   "https://github.com/nomeata/loogle"
     @ "7eaed1d5ef13b7c81d71fa1f0116c93c83cc0b0c"
 
+require sampcert from git
+  "https://github.com/leanprover/SampCert"
+    @ "a71f5dbdc797bec25118830b976fc75f2e178a24"
+
 require leanses from git
   "https://github.com/VCA-EPFL/leanses"
     @ "d2e0a39bd05b0c49d9211c2b0dd5d5c62c701fe0"
