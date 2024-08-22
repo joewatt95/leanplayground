@@ -20,6 +20,7 @@ attribute [simp]
 
 example : estimateSize m ε δ [] = return 0 := by
   simp [estimateSize, estimateSize.result, initialState, initialTrace]
+  sorry
 
 -- lemma SatisfiesM_estimateSize_empty_list :
 --   SatisfiesM (. = .ok 0) <| runEstimateSize m ε δ [] := by
