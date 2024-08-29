@@ -58,20 +58,22 @@ example {f g : PMF ℝ} :
     PMF.bind_comm _ _ _
   by simp_all only [bind_skip, add_comm]
 
--- lemma optiont_bind
---   {f : OptionT PMF α} {g : α → OptionT PMF α}
---   : (f.bind g) = f.run.bind (Option.rec (return none) g) := by aesop
+/-
+This runs the `OptionT` transformer to invert the monad stack, so that we can
+unwrap `PMF.bind` and reason with it.
+-/
+lemma optiont_pmf_bind_run_eq
+  {p : OptionT PMF α} {f : α → OptionT PMF β}
+  : p >>= f = p.run >>= Option.rec (return none) f := by aesop
 
 lemma optiont_bind_support
-  {f : OptionT PMF α} {g : α → OptionT PMF α}
-  : (f.bind g).support = ⋃ a ∈ f.support, a.rec {none} (. |> g |>.support) :=
+  {p : OptionT PMF α} {f : α → OptionT PMF β}
+  : (p >>= f).support = ⋃ a ∈ p.support, a.rec {none} (. |> f |>.support) :=
 
-  have : (f.bind g) = f.run.bind (Option.rec (return none) g) := by aesop
-
-  have {a : Option α} :
-    (a.rec (return none) g : PMF <| Option α).support =
-    a.rec {none} (. |> g |>.support) :=
-    match a with
+  have :
+    ∀ a : Option α,
+      (a.rec (return none) f : PMF <| Option β).support =
+      a.rec {none} (. |> f |>.support)
     | some a => by simp
     | none =>
       Set.ext λ _ ↦ by
@@ -79,10 +81,10 @@ lemma optiont_bind_support
         exact PMF.mem_support_pure_iff _ _
 
   calc
-        (f.bind g).support
-    _ = (f.run.bind <| Option.rec (return none) g).support                     := by simp_all
-    _ = ⋃ a ∈ f.run.support, (a.rec (return none) g : PMF <| Option α).support := PMF.support_bind _ _
-    _ = ⋃ a ∈ f.support, a.rec {none} (. |> g |>.support)                      := by simp_all
+        (p >>= f).support
+    _ = (p.run >>= Option.rec (return none) f).support                         := by rw [optiont_pmf_bind_run_eq]
+    _ = ⋃ a ∈ p.run.support, (a.rec (return none) f : PMF <| Option β).support := PMF.support_bind _ _
+    _ = ⋃ a ∈ p.support, a.rec {none} (. |> f |>.support)                      := by simp_all
 
 -- lemma t
 --   {f : OptionT PMF α} {g : α → OptionT PMF α}
@@ -91,81 +93,60 @@ lemma optiont_bind_support
 --   sorry
 
 lemma optiont_bind_support'
-  {f : OptionT PMF α} {g : α → OptionT PMF α}
-  : (f.bind g).support =
-    {a | ∃ a' ∈ f.support, a ∈ (a'.rec {none} (. |> g |>.support) : Set <| Option α)} :=
+  {p : OptionT PMF α} {f : α → OptionT PMF β}
+  : (p >>= f).support =
+    {a | ∃ a' ∈ p.support,
+      a ∈ (a'.rec {none} (. |> f |>.support) : Set <| Option β)} := by
+  rw [optiont_bind_support]; ext; simp
 
-  Set.ext λ a ↦
-    let φ := ∃ a', a' ∈ f.support ∧ a ∈ (a'.rec {none} (. |> g |>.support) : Set <| Option α)
-    let ψ := ∃ a', a' ∈ f.support ∧ a'.rec (a = none) λ a' ↦ a ∈ (a' |> g |>.support)
-
-    suffices φ ↔ ψ by
-      rw [optiont_bind_support]
-      simp [-option_rec_eq]
-
-    have : φ → ψ :=
-      λ | ⟨some a', _, _⟩ | ⟨none, _, _⟩ => by tauto
-
-    have : ψ → φ :=
-      λ | ⟨some a', _, _⟩ | ⟨none, _ , _⟩ => by tauto
-
-    ⟨‹_›, ‹_›⟩
-
-lemma aux'
-  {f : OptionT PMF α} {g : α → OptionT PMF α}
-  (h : a ∈ (f.bind g).support)
-  : a = none ∨ ∃ a', some a' ∈ f.support ∧ a ∈ (g a').support :=
+lemma mem_optiont_pmf_bind_support
+  {p : OptionT PMF α} {f : α → OptionT PMF β}
+  (h : a ∈ (p >>= f).support)
+  : a = none ∨ ∃ a', some a' ∈ p.support ∧ a ∈ (f a').support :=
   have ⟨as, ⟨a', h⟩, (_ : a ∈ as)⟩ :
-    a ∈ ⋃ a ∈ f.support, Option.rec {none} (. |> g |>.support) a :=
+    a ∈ ⋃ a ∈ p.support, Option.rec {none} (. |> f |>.support) a :=
     by rwa [optiont_bind_support] at h
 
   match a with
   | none => Or.inl rfl
   | some a =>
-    have : a' ∈ f.support := by aesop
-    have : some a ∈ (Option.rec {none} (. |> g |>.support) a' : Set <| Option α) := by aesop
+    have : a' ∈ p.support := by aesop
+    have : some a ∈ (Option.rec {none} (. |> f |>.support) a' : Set <| Option β) := by aesop
     match a' with
     | none => by aesop
     | some a' => Or.inr ⟨a', ‹_›, by aesop⟩
 
-open Classical in
 example
   [MeasurableSpace α] [MeasurableSingletonClass α]
   -- [MeasurableSpace <| Option α] [MeasurableSingletonClass <| Option α]
-  {f : OptionT PMF α} {g : α → OptionT PMF α}
+  {p : OptionT PMF α} {f : α → OptionT PMF β}
 
-  -- `∑' a : α, f.run a * (g a).run none` is the probability that `g a` fails
-  -- (ie `none` was sampled from `g a`) given that `f` succeeds, ie
-  -- (`some a` was sampled from `f`) or equivalently, the probability that
-  -- `f.bind g` fails given that `f` succeeds
-  (h : ∑' a : α, f.run a * (g a).run none ≤ ε)
+  -- `∑' a : α, p.run a * (f a).run none` is the probability that `f a` fails
+  -- (ie `none` was sampled from `f a`) given that `p` succeeds, ie
+  -- (`some a` was sampled from `p`) or equivalently, the probability that
+  -- `p >>= f` fails given that `f` succeeds
+  (h : ∑' a : α, p.run a * (f a).run none ≤ ε)
 
-  -- `∀ a, some a ∈ f.support → (g a).run none ≤ ε` is too weak of an assumption.
+  -- `∀ a, some a ∈ p.support → (f a).run none ≤ ε` is too weak of an assumption.
   -- The conclusion bounds the probability of failure (ie sampling `none`) of a
-  -- *single* run of `g` on each input `a` that is reachable by `f` (ie in the
+  -- *single* run of `f` on each input `a` that is reachable by `p` (ie in the
   -- support of `f`) by `ε`.
   -- This alone is insufficient to bound the probability of failure
-  -- *across all runs_* by `ε`.
-  -- This could work if we change `≤ ε` to `≤ ε / f.support.card` but `h` is
-  -- likely the weakest assumption we can have.
+  -- *across all runs* by `ε`.
+  -- This could work if we change `≤ ε` to `≤ ε / p.support.card` but would
+  -- likely also require additional restrictions on `p.support.card`.
 
-  : (f.bind g).run none ≤ f.run none + ε :=
+  : (p >>= f).run none ≤ p.run none + ε :=
   calc
-        (f |>.bind g |>.run) none
-      -- This `bind` is `OptionT.bind`, *NOT* the probabilistic `PMF.bind`
-    _ = f.run.bind (Option.rec (return none) g) none
-      -- Run the `OptionT` transformer to invert the monad stack, so that we
-      -- can unwrap `PMF.bind`.
-      := by aesop
+        (p >>= f).run none
+    _ = (p.run >>= Option.rec (return none) f) none
+      := by rw [optiont_pmf_bind_run_eq]; rfl
     _ = (∑' a : Option α,
-          f.run a *
-            (match a with
-              | some a => (g a).run
-              | none => return none)
-              none) := by simp_all; rfl
-    _ = f.run none + ∑' a : α, f.run a * (g a).run none
+          p.run a * (a.rec (return none) f : PMF <| Option β) none)
+      := by simp only [OptionT.run, option_rec_eq]; rfl
+    _ = p.run none + ∑' a : α, p.run a * (f a).run none
       -- How to split sum?
       := sorry
-    _ ≤ f.run none + ε := by gcongr
+    _ ≤ p.run none + ε := by gcongr
 
 end PMF
