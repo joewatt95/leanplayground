@@ -9,19 +9,18 @@ instance : CommApplicative PMF where
     simp [Seq.seq, Functor.map]
     exact PMF.bind_comm _ _ _
 
-lemma option_rec_eq {a : Option α} {f : α → β} {x : β} :
+lemma option_rec_eq_match {a : Option α} {f : α → β} {x : β} :
   Option.rec x f a = match a with
                      | some a => f a
-                     | none => x :=
-  match a with
-  | some _ | none => by simp
+                     | none => x := by
+  cases a; all_goals simp only
 
 attribute [simp]
   OptionT.run OptionT.mk
   Functor.map
   bind OptionT.bind
   pure OptionT.pure
-  option_rec_eq
+  option_rec_eq_match
 
 lemma bind_skip {p : PMF α} {f g : α → PMF β} :
   (∀ a, f a = g a) → p.bind f = p.bind g := by aesop
@@ -143,7 +142,7 @@ example
       := by rw [optiont_pmf_bind_run_eq]; rfl
     _ = (∑' a : Option α,
           p.run a * (a.rec (return none) f : PMF <| Option β) none)
-      := by simp only [OptionT.run, option_rec_eq]; rfl
+      := by simp only [OptionT.run, option_rec_eq_match]; rfl
     _ = p.run none + ∑' a : α, p.run a * (f a).run none
       -- How to split sum?
       := sorry
