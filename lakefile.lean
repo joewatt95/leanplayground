@@ -44,7 +44,7 @@ require egg from git
 
 require loogle from git
   "https://github.com/nomeata/loogle"
-    @ "7eaed1d5ef13b7c81d71fa1f0116c93c83cc0b0c"
+    @ "f46663afcd4067a606094dda363f67922e6990a4"
 
 require sampcert from git
   "https://github.com/leanprover/SampCert"
