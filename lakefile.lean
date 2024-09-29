@@ -28,7 +28,7 @@ require mathlib from git
 
 require Duper from git
   "https://github.com/leanprover-community/duper"
-    @ "b14344189f1690bc651853b1b00d1e7b178e13d7"
+    @ "7bf250a5056a0a58937287046d06dcc2d8e1c94a"
 
 require smt from git
   "https://github.com/ufmg-smite/lean-smt"
@@ -52,11 +52,11 @@ require sampcert from git
 
 require leanses from git
   "https://github.com/VCA-EPFL/leanses"
-    @ "d2e0a39bd05b0c49d9211c2b0dd5d5c62c701fe0"
+    @ "6c99a8cfb3315f13cfcf55acf1b633fba45bc3dd"
 
 require verso from git
   "https://github.com/leanprover/verso"
-    @ "67a9c6baf788176f19a6cd0806c754fe96210577"
+    @ "06b60f9723aadb9cabf2631b90ea721d1c6ef2dd"
 
 require verbose from git
   "https://github.com/PatrickMassot/verbose-lean4"
