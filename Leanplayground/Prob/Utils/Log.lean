@@ -1,5 +1,5 @@
 import Mathlib.Analysis.SpecialFunctions.Log.Base
-import Mathlib.Analysis.SpecialFunctions.Log.ENNReal
+import Mathlib.Analysis.SpecialFunctions.Log.ENNRealLog
 
 import Leanplayground.MathInLean.Utils.Tactic
 

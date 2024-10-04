@@ -1,6 +1,7 @@
 import Mathlib.Algebra.Group.Prod
 import Mathlib.GroupTheory.GroupAction.Quotient
-import Mathlib.GroupTheory.QuotientGroup
+import Mathlib.GroupTheory.Index
+import Mathlib.GroupTheory.QuotientGroup.Finite
 
 import Leanplayground.MathInLean.Utils.Tactic
 

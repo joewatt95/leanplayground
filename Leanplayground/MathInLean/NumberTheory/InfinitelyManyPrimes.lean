@@ -1,6 +1,6 @@
 import Mathlib.Algebra.BigOperators.Associated
-import Mathlib.Algebra.BigOperators.Group.Finset
-import Mathlib.Data.Nat.Prime
+import Mathlib.Algebra.Order.BigOperators.Group.Finset
+import Mathlib.Data.Nat.Prime.Basic
 import Mathlib.Order.Interval.Finset.Defs
 import Mathlib.Order.Interval.Finset.Nat
 

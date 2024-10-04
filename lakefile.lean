@@ -24,19 +24,19 @@ lean_lib Leanplayground where
 
 require mathlib from git
   "https://github.com/leanprover-community/mathlib4"
-    @ "v4.9.1"
+    @ "v4.11.0"
 
 require Duper from git
   "https://github.com/leanprover-community/duper"
-    @ "7bf250a5056a0a58937287046d06dcc2d8e1c94a"
+    @ "v0.0.16"
 
 require smt from git
   "https://github.com/ufmg-smite/lean-smt"
-    @ "b332ae49450b88c5ead40d66e4d786cb5d991ea9"
+    @ "0b418049bf228d55c782223ce6fa53148b77cc79"
 
 require egg from git
   "https://github.com/marcusrossel/lean-egg"
-    @ "abaab85d51d33ef01ed8c757bfb49cc55abae229"
+    @ "c51f43f79a4ed5dacadc7ae2500828b6534bfab3"
 
 -- require LeanCopilot from git
 --   "https://github.com/lean-dojo/LeanCopilot"
@@ -46,21 +46,21 @@ require loogle from git
   "https://github.com/nomeata/loogle"
     @ "f46663afcd4067a606094dda363f67922e6990a4"
 
-require sampcert from git
-  "https://github.com/leanprover/SampCert"
-    @ "a71f5dbdc797bec25118830b976fc75f2e178a24"
+-- require sampcert from git
+--   "https://github.com/leanprover/SampCert"
+--     @ "a71f5dbdc797bec25118830b976fc75f2e178a24"
 
-require leanses from git
-  "https://github.com/VCA-EPFL/leanses"
-    @ "6c99a8cfb3315f13cfcf55acf1b633fba45bc3dd"
+-- require leanses from git
+--   "https://github.com/VCA-EPFL/leanses"
+--     @ "6c99a8cfb3315f13cfcf55acf1b633fba45bc3dd"
 
 require verso from git
   "https://github.com/leanprover/verso"
-    @ "06b60f9723aadb9cabf2631b90ea721d1c6ef2dd"
+    @ "33b0ed5626cf5494a96d3a51efe376bdadf9cf63"
 
-require verbose from git
-  "https://github.com/PatrickMassot/verbose-lean4"
-    @ "7241c81793e4f1439a50775bcf5e418fac7ee88d"
+-- require verbose from git
+--   "https://github.com/PatrickMassot/verbose-lean4"
+--     @ "7241c81793e4f1439a50775bcf5e418fac7ee88d"
 
 -- require LeanCodePrompts from git
 --   "https://github.com/siddhartha-gadgil/LeanAide" @ "main"

@@ -107,6 +107,8 @@ variable
   [Fintype ι] {I : ι → Ideal R}
   (hI_pairwise_coprime : ∀ i j, i ≠ j → IsCoprime (I i) (I j))
 
+include hI_pairwise_coprime
+
 open Classical in
 -- set_option trace.profiler true in
 theorem crtMap_surj : Function.Surjective <| crtHom I :=

@@ -99,7 +99,7 @@ class CommGroup₁ (α : Type u) extends Group₁ α, CommMonoid₁ α
 instance : CommGroup₁ ℝˣ :=
   have {a b : ℝˣ} : a * b = b * a := mul_comm _ _
   -- have {a : ℝˣ} : 1 * a = a := one_mul _
-  have {a : ℝˣ} : a⁻¹ * a = 1 := inv_mul_self _
+  have {a : ℝˣ} : a⁻¹ * a = 1 := inv_mul_cancel _
   { dia := (. * .)
     inv := λ x ↦ x⁻¹
     one := 1
