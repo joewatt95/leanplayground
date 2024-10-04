@@ -9,7 +9,6 @@ open Lean.Meta
 open Lean.Elab.Tactic
 open Lean.TSyntax
 
-
 @[term_parser] def «fix» :=
   leading_parser withPosition ("fix " >> many1 Term.ident >> " : " >> termParser)
   >> optSemicolon termParser
