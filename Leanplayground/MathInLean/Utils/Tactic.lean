@@ -12,6 +12,7 @@ import Egg
 import Smt
 -- import Smt.Real
 
+import LeanSearchClient
 import Loogle.Find
 
 macro "setup_auto" : command =>
