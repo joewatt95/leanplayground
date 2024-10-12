@@ -35,7 +35,7 @@ require "leanprover-community" / "LeanSearchClient" @
     "v4.11.0"
 
 require "ufmg-smite" / "smt" @
-  git "0ad8dee4b3acf04bad031a7d1528c58e68193c3d"
+  git "f80c0bc7f1474af8502bd43c31468f45e14ad3c7"
 
 require "marcusrossel" / "egg" @
   git "c51f43f79a4ed5dacadc7ae2500828b6534bfab3"
@@ -52,7 +52,7 @@ require "leanprover" / "sampcert" @
 -- require "leanses"
 
 require "leanprover" / "verso" @
-  git "33b0ed5626cf5494a96d3a51efe376bdadf9cf63"
+  git "a8ca569eaa6d5e5fa12cc9f44ba8f30aa994526d"
 
 require "PatrickMassot" / "verbose" @
   git "7241c81793e4f1439a50775bcf5e418fac7ee88d"
