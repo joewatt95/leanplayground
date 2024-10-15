@@ -26,7 +26,7 @@ require "leanprover-community" / "mathlib" @
   git "v4.11.0"
 
 require "leanprover-community" / "Duper" @
-  git "v0.0.16"
+  git "v0.0.17"
 
 require "leanprover-community" / "LeanSearchClient" @
   git "v4.11.0"
