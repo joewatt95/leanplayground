@@ -52,7 +52,7 @@ require "leanprover" / "sampcert" @
 -- require "leanses"
 
 require "leanprover" / "verso" @
-  git "e693406676e3a8bf5fe1013517ee00a0fbb3fbcc"
+  git "25b9738ead0d02fed672b2140dd6353d5325d4d9"
 
 require "PatrickMassot" / "verbose" @
   git "7241c81793e4f1439a50775bcf5e418fac7ee88d"
