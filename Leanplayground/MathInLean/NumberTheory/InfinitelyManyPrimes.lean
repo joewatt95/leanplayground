@@ -17,7 +17,9 @@ theorem exists_prime_factor {n : ℕ}
       duper [‹2 ≤ n›, ‹¬ n.Prime›, Nat.prime_def_lt] {portfolioInstance := 1}
 
     have : 2 ≤ m :=
-      have : m ≠ 0 := λ _ ↦ by simp_all only [zero_dvd_iff, nonpos_iff_eq_zero]
+      have : m ≠ 0 := λ _ ↦ by simp_all only
+        [ zero_dvd_iff, ne_eq, zero_ne_one, not_false_eq_true,
+          nonpos_iff_eq_zero, OfNat.ofNat_ne_zero ]
       by omega
 
     have ⟨p, (_ : p.Prime), (_ : p ∣ m)⟩ := exists_prime_factor this
@@ -72,7 +74,8 @@ private lemma mod_4_eq_3_or {m n : ℕ}
   have : (m % 4) * (n % 4) % 4 = 3 := by
     duper [*, Nat.mul_mod] {portfolioInstance := 1}
   have : m % 4 ≠ 0 ∧ n % 4 ≠ 0 :=
-    ⟨λ _ ↦ by simp_all only [zero_mul], λ _ ↦ by simp_all only [mul_zero]⟩
+    ⟨λ _ ↦ by simp_all only [zero_mul, Nat.zero_mod, OfNat.zero_ne_ofNat],
+      λ _ ↦ by simp_all only [mul_zero, Nat.zero_mod, OfNat.zero_ne_ofNat]⟩
 
   suffices ¬ ((m % 4 = 1 ∨ m % 4 = 2) ∧ (n % 4 = 1 ∨ n % 4 = 2)) by omega
   (by rcases . with ⟨_ | _, _ | _⟩; all_goals simp_all)
@@ -112,7 +115,9 @@ private lemma exists_prime_factor_mod_4_eq_3 {n : ℕ}
       have : n / m < n :=
         suffices 0 < n ∧ 1 < m from And.elim Nat.div_lt_self this
         have : n % 4 = 3 ∧ m ∣ n ∧ m ≠ 1 := by tauto
-        have : m ≠ 0 := λ _ ↦ by simp_all only [Nat.div_zero]
+        have : m ≠ 0 := λ _ ↦ by simp_all only
+          [ zero_dvd_iff, ne_eq, zero_ne_one, not_false_eq_true, Nat.zero_mod,
+            OfNat.zero_ne_ofNat, Nat.div_zero, or_self ]
         by omega
 
       have ⟨p, (_ : p.Prime), (_ : p ∣ n / m), (_ : p % 4 = 3)⟩ :=

@@ -54,7 +54,7 @@ lemma eq_bot_iff_card {H : Subgroup G} [Fintype H]
       λ _ ⟨h, (_ : h ∈ H)⟩ ⟨h', (_ : h' ∈ H)⟩ ↦
         Subtype.ext <| show h = h' by duper [*] {portfolioInstance := 1}
 
-lemma inf_bot_of_coprime {H K : Subgroup G} [Fintype H] [Fintype K]
+lemma inf_bot_of_coprime {H K : Subgroup G} [Fintype G] [Fintype H] [Fintype K]
   (h : Fintype.card H |>.Coprime (Fintype.card K))
   : H ⊓ K = ⊥ :=
   let HK := H ⊓ K

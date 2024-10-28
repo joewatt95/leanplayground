@@ -23,22 +23,17 @@ package leanplayground where
 lean_lib Leanplayground where
 
 require "leanprover-community" / "mathlib" @
-  git "v4.11.0"
+  git "v4.12.0"
 
 require "leanprover-community" / "Duper" @
-  git "v0.0.17"
+  git "25c3ea88da2505158998eea07f40b07c0cdfe5ba"
 
-require "leanprover-community" / "LeanSearchClient" @
-  git "v4.11.0"
-  from
-    git "https://github.com/leanprover-community/LeanSearchClient" @
-    "v4.11.0"
-
-require "ufmg-smite" / "smt" @
-  git "f80c0bc7f1474af8502bd43c31468f45e14ad3c7"
+require "joewatt95" / "smt"
+  from git "https://github.com/joewatt95/lean-smt"
+  @ "36fd08166cc76a0d1193bbb56ad66a24a98e19fc"
 
 require "marcusrossel" / "egg" @
-  git "c51f43f79a4ed5dacadc7ae2500828b6534bfab3"
+  git "e08d72aefb8a352fcb0bca2148f5392c9edca5f4"
 
 -- require "LeanCopilot" @
 --   git "v1.4.0"
@@ -52,7 +47,7 @@ require "leanprover" / "sampcert" @
 -- require "leanses"
 
 require "leanprover" / "verso" @
-  git "25b9738ead0d02fed672b2140dd6353d5325d4d9"
+  git "v4.12.0"
 
 require "PatrickMassot" / "verbose" @
   git "7241c81793e4f1439a50775bcf5e418fac7ee88d"

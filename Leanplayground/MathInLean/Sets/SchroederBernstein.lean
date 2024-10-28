@@ -27,9 +27,8 @@ lemma piecewise_is_inj
 
   have : ∀ a ∈ X, ∀ a' ∉ X, h a ≠ h a' :=
     λ a _ a' _ (_ : h a = h a') ↦
-      show ⊥ from calc
-        h a ∈ f '' X ∩ g '' Xᶜ := by exact ⟨by aesop, by aesop⟩
-          _ = ∅                := ‹_›
+      have : h a ∈ f '' X ∩ g '' Xᶜ := by exact ⟨by aesop, by aesop⟩
+      show ⊥ by simp_all only [dite_eq_ite, ↓reduceIte, mem_empty_iff_false, h]
 
   λ a a' (_ : h a = h a') ↦
     have : (a ∈ X ∧ a' ∈ X) ∨ (a ∉ X ∧ a' ∉ X) := by
