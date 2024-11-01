@@ -26,7 +26,7 @@ require "leanprover-community" / "mathlib" @
   git "v4.12.0"
 
 require "leanprover-community" / "Duper" @
-  git "25c3ea88da2505158998eea07f40b07c0cdfe5ba"
+  git "a500ea7a5b9eca0ecaa7b4a229786a61b2707d30"
 
 require "joewatt95" / "smt"
   from git "https://github.com/joewatt95/lean-smt"
