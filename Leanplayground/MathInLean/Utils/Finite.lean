@@ -1,4 +1,4 @@
-import Mathlib.Data.Finset.Lattice
+import Mathlib.Order.CompleteLattice.Finset
 
 import Leanplayground.MathInLean.Utils.Tactic
 

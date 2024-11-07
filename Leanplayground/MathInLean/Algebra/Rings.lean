@@ -1,4 +1,4 @@
-import Mathlib.RingTheory.Ideal.QuotientOperations
+import Mathlib.RingTheory.Ideal.Quotient.Operations
 
 import Leanplayground.MathInLean.Utils.Finite
 import Leanplayground.MathInLean.Utils.Subtype
