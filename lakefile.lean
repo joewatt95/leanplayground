@@ -31,9 +31,8 @@ require "leanprover-community" / "plausible" @
 require "leanprover-community" / "Duper" @
   git "v0.0.20"
 
-require "joewatt95" / "smt"
-  from git "https://github.com/joewatt95/lean-smt"
-  @ "583ba7af756cf263704a6b293ca59e3adacd39f0"
+require "ufmg-smite" / "smt" @
+  git "a02090d618a6e7a6d077dbc037b3f9e752263f76"
 
 require "marcusrossel" / "egg" @
   git "7af87123bf258490f273df28d83b26143b6e9a24"
@@ -42,7 +41,7 @@ require "marcusrossel" / "egg" @
 --   git "v1.4.0"
 
 require "nomeata" / "loogle" @
-  git "f46663afcd4067a606094dda363f67922e6990a4"
+  git "3791f4883b7f970e729b962d82976453ef1104a4"
 
 require "leanprover" / "sampcert" @
   git "9cb42e1befdf5968b61cda66355607e5571a4039"
