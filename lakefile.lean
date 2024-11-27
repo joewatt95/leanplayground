@@ -25,8 +25,8 @@ lean_lib Leanplayground where
 require "leanprover-community" / "mathlib" @
   git "v4.13.0"
 
-require "leanprover-community" / "plausible" @
-  git "v4.14.0-rc1"
+-- require "leanprover-community" / "plausible" @
+--   git "v4.14.0-rc1"
 
 require "leanprover-community" / "Duper" @
   git "v0.0.20"
