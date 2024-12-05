@@ -22,34 +22,23 @@ package leanplayground where
 @[default_target]
 lean_lib Leanplayground where
 
-require "leanprover-community" / "mathlib" @
-  git "v4.13.0"
-
--- require "leanprover-community" / "plausible" @
---   git "v4.14.0-rc1"
-
-require "leanprover-community" / "Duper" @
-  git "v0.0.20"
-
-require "ufmg-smite" / "smt" @
-  git "39b27823e47de6da73e7724c933d169dac7aac91"
-
-require "marcusrossel" / "egg" @
-  git "7af87123bf258490f273df28d83b26143b6e9a24"
-
--- require "LeanCopilot" @
---   git "v1.4.0"
-
-require "nomeata" / "loogle" @
-  git "3791f4883b7f970e729b962d82976453ef1104a4"
-
-require "leanprover" / "sampcert" @
-  git "9cb42e1befdf5968b61cda66355607e5571a4039"
-
--- require "leanses"
-
-require "leanprover" / "verso" @
-  git "v4.13.0"
-
-require "PatrickMassot" / "verbose" @
+require "PatrickMassot" / verbose @
   git "7241c81793e4f1439a50775bcf5e418fac7ee88d"
+
+require "ufmg-smite" / smt @
+  git "9ad1c39d47fe3a8af885b5c0168afda11ed8c021"
+
+require "leanprover-community" / Duper @
+  git "15bd942bfd58cc85cbce782cb80f86f1110acc61"
+
+require "marcusrossel" / egg @
+  git "3c1a713c803c08cb8be8f6adc89394441eb7fbb0"
+
+require "nomeata" / loogle @
+  git "4e1aab07fa10f263a2110787180f8f5db93ee650"
+
+require "leanprover" / verso @
+  git "v4.14.0"
+
+require "leanprover-community" / mathlib @
+  git "dde4f2ecaec222a1c7db638d7536f0b195d8e953"
