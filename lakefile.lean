@@ -32,7 +32,7 @@ require "leanprover-community" / "Duper" @
   git "v0.0.20"
 
 require "ufmg-smite" / "smt" @
-  git "0e0e28cfbe2468495ca7fbe76721b9f0ab91a0e2"
+  git "39b27823e47de6da73e7724c933d169dac7aac91"
 
 require "marcusrossel" / "egg" @
   git "7af87123bf258490f273df28d83b26143b6e9a24"
