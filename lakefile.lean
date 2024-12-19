@@ -29,7 +29,7 @@ require "ufmg-smite" / smt @
   git "9ad1c39d47fe3a8af885b5c0168afda11ed8c021"
 
 require "leanprover-community" / Duper @
-  git "15bd942bfd58cc85cbce782cb80f86f1110acc61"
+  git "v0.0.21"
 
 require "marcusrossel" / egg @
   git "3c1a713c803c08cb8be8f6adc89394441eb7fbb0"
@@ -41,4 +41,4 @@ require "leanprover" / verso @
   git "v4.14.0"
 
 require "leanprover-community" / mathlib @
-  git "dde4f2ecaec222a1c7db638d7536f0b195d8e953"
+  git "v4.14.0"

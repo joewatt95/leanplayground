@@ -17,17 +17,27 @@ import Smt.Real
 import LeanSearchClient
 import Loogle.Find
 
-macro "setup_auto" : command =>
-  `(set_option auto.smt true
-    set_option auto.smt.trust true
-    set_option auto.smt.solver.name "z3"
+open Lean Auto in
+def Auto.duperRaw (lemmas : Array Lemma) (_inhs : Array Lemma) : MetaM Expr := do
+  let lemmas : Array (Expr × Expr × Array Name × Bool) ← lemmas.mapM
+    λ ⟨⟨proof, ty, _⟩, _⟩ ↦ do
+      return (ty, ← Meta.mkAppM ``eq_true #[proof], #[], true)
+  Duper.runDuper lemmas.toList 0
 
-    set_option trace.auto.smt.printCommands true
-    set_option trace.auto.smt.result true
+attribute [rebind Auto.Native.solverFunc] Auto.duperRaw
 
-    set_option auto.tptp true
-    set_option auto.tptp.solver.name "zipperposition"
-    set_option auto.tptp.zeport.path "/home/joe/dev/zipperposition/portfolio")
+macro "setup_auto" : command => `(
+  set_option auto.smt true
+  set_option auto.smt.solver.name "z3"
+
+  set_option trace.auto.smt.printCommands true
+  set_option trace.auto.smt.result true
+
+  set_option auto.tptp true
+  set_option auto.tptp.solver.name "zipperposition"
+  set_option auto.tptp.zeport.path "/home/joe/dev/zipperposition/portfolio"
+
+  set_option auto.native true)
 
 syntax "setup_trivial" manyIndent(tactic) : command
 
