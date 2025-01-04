@@ -2,17 +2,17 @@ import Lake
 open Lake DSL
 
 -- This is needed because we compile and link against the C++ API of cvc5.
-private def args : Array String :=
-  #[s!"--load-dynlib={libcpp}"]
-  where
-    libcpp :=
-      if System.Platform.isWindows then "libstdc++-6.dll"
-      else if System.Platform.isOSX then "libc++.dylib"
-      else "libstdc++.so.6"
+-- private def args : Array String :=
+--   #[s!"--load-dynlib={libcpp}"]
+--   where
+--     libcpp :=
+--       if System.Platform.isWindows then "libstdc++-6.dll"
+--       else if System.Platform.isOSX then "libc++.dylib"
+--       else "libstdc++.so.6"
 
 package leanplayground where
-  moreLeanArgs := args
-  moreGlobalServerArgs := args
+  -- moreLeanArgs := args
+  -- moreGlobalServerArgs := args
 
   -- moreLinkArgs := #[
   --   "-L./.lake/packages/LeanCopilot/.lake/build/lib",
@@ -26,7 +26,7 @@ require "PatrickMassot" / verbose @
   git "7241c81793e4f1439a50775bcf5e418fac7ee88d"
 
 require "ufmg-smite" / smt @
-  git "b2a9bacb2c8c5b6d31537d23fa56845c0358d232"
+  git "213932fcac9c7757625cb917427d95897ea5fd1e"
 
 require "leanprover-community" / Duper @
   git "v0.0.21"
