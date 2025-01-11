@@ -35,7 +35,7 @@ require "marcusrossel" / egg @
   git "3c1a713c803c08cb8be8f6adc89394441eb7fbb0"
 
 require "nomeata" / loogle @
-  git "13bb23f43953f37864b27220a5349edef5b75c1f"
+  git "4e1aab07fa10f263a2110787180f8f5db93ee650"
 
 require "leanprover" / verso @
   git "v4.14.0"
