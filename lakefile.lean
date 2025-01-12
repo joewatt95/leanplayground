@@ -26,19 +26,19 @@ require "PatrickMassot" / verbose @
   git "7241c81793e4f1439a50775bcf5e418fac7ee88d"
 
 require "ufmg-smite" / smt @
-  git "213932fcac9c7757625cb917427d95897ea5fd1e"
+  git "61dde7027e3c0d2db1564bc73c1471e7fd3f6457"
 
 require "leanprover-community" / Duper @
-  git "v0.0.21"
+  git "v0.0.22"
 
 require "marcusrossel" / egg @
-  git "3c1a713c803c08cb8be8f6adc89394441eb7fbb0"
+  git "12971b1572720cac3116237f5383751abfb1e12a"
 
 require "nomeata" / loogle @
-  git "4e1aab07fa10f263a2110787180f8f5db93ee650"
+  git "026c9d97a9e93f53852c44a411d91a79acb4fb9c"
 
 require "leanprover" / verso @
-  git "v4.14.0"
+  git "v4.15.0"
 
 require "leanprover-community" / mathlib @
-  git "v4.14.0-patch1"
+  git "v4.15.0-patch1"

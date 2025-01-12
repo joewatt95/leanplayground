@@ -6,7 +6,7 @@ import Mathlib.Tactic.Group
 import Mathlib.Tactic.Abel
 import Mathlib.Tactic.Ring
 
-import Auto
+import Auto.Tactic
 import Duper
 import Egg
 import Smt
