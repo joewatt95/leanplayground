@@ -26,13 +26,13 @@ require "PatrickMassot" / verbose @
   git "7241c81793e4f1439a50775bcf5e418fac7ee88d"
 
 require "ufmg-smite" / smt @
-  git "7f3956d593f9d6e13e31bd7d449277665871042d"
+  git "4cdea120ba132ba0cb817e7fd516a967f1148752"
 
 require "leanprover-community" / Duper @
   git "v0.0.22"
 
 require "marcusrossel" / egg @
-  git "12971b1572720cac3116237f5383751abfb1e12a"
+  git "a8fec248bb74c4387d6e5b72a58fc263049803f8"
 
 require "nomeata" / loogle @
   git "026c9d97a9e93f53852c44a411d91a79acb4fb9c"
