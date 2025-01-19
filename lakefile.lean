@@ -32,7 +32,7 @@ require "leanprover-community" / Duper @
   git "v0.0.22"
 
 require "marcusrossel" / egg @
-  git "a8fec248bb74c4387d6e5b72a58fc263049803f8"
+  git "12971b1572720cac3116237f5383751abfb1e12a"
 
 require "nomeata" / loogle @
   git "026c9d97a9e93f53852c44a411d91a79acb4fb9c"
