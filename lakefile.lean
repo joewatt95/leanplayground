@@ -26,7 +26,7 @@ require "PatrickMassot" / verbose @
   git "7241c81793e4f1439a50775bcf5e418fac7ee88d"
 
 require "ufmg-smite" / smt @
-  git "4cdea120ba132ba0cb817e7fd516a967f1148752"
+  git "ed4185093cc1db6186778e31c5ad641fa41713b6"
 
 require "leanprover-community" / Duper @
   git "v0.0.22"
