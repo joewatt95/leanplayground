@@ -10,9 +10,9 @@ import Auto.Tactic
 import Duper
 import Egg
 import Smt
-import Smt.Auto
-import Smt.Rat
+-- import Smt.Rat
 import Smt.Real
+import Smt.Auto
 
 import LeanSearchClient
 import Loogle.Find
