@@ -25,20 +25,20 @@ lean_lib Leanplayground where
 require "PatrickMassot" / verbose @
   git "7241c81793e4f1439a50775bcf5e418fac7ee88d"
 
-require "ufmg-smite" / smt @
-  git "5e5d309c78d38f54589bda9f40e0f68332f00e2b"
+-- require "ufmg-smite" / smt @
+--   git "7b8651b39629159540430f83208fd812c6e8a0bc"
 
 require "leanprover-community" / Duper @
-  git "v0.0.22"
+  git "v0.0.23"
 
 require "marcusrossel" / egg @
-  git "12971b1572720cac3116237f5383751abfb1e12a"
+  git "6b3f40f82666b1ec6b2ea2868e8948353a075143"
 
 require "nomeata" / loogle @
-  git "026c9d97a9e93f53852c44a411d91a79acb4fb9c"
+  git "d56dbe9a1637c1160862deb9da8d621682e46013"
 
 require "leanprover" / verso @
-  git "v4.15.0"
+  git "v4.16.0"
 
 require "leanprover-community" / mathlib @
-  git "v4.15.0-patch1"
+  git "v4.16.0"

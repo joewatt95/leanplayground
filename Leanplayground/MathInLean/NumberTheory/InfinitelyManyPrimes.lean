@@ -146,7 +146,7 @@ theorem primes_mod_4_eq_3_infinite {n : ℕ}
     have : S.Finite := Set.finite_iff_bddAbove.mpr this
     let S : Finset ℕ := this.toFinset
 
-    let S_prod := ∏ m in S.erase 3, m
+    let S_prod := ∏ m ∈ S.erase 3, m
 
     have : (4 * S_prod + 3) % 4 = 3 := by omega
     have ⟨p, (_ : p.Prime), (_ : p ∣ 4 * S_prod + 3), (_ : p % 4 = 3)⟩ :=
