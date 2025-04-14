@@ -45,9 +45,9 @@ lemma crtHom_mk' {I : ι → Ideal R} {r : R} {i : ι} :
   crtHom I ⟦r⟧ i = (⟦r⟧ : R ⧸ I i) := rfl
 
 lemma crtHom_inj {I : ι → Ideal R}
-  : Function.Injective <| crtHom I :=
-  Ideal.injective_lift_iff (crtHom.proof_3 _ <| crtHom.proof_2 _)
-    |>.mpr <| by rw [crtHom.proof_2]
+  : Function.Injective <| crtHom I := by
+  refine (Ideal.injective_lift_iff ?_).mpr ?_
+  exact Ideal.ker_Pi_Quotient_mk _
 
 section
 

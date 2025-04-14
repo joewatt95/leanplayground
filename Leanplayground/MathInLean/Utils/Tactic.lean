@@ -9,22 +9,21 @@ import Mathlib.Tactic.Ring
 import Auto.Tactic
 import Duper
 import Egg
-import Smt
--- import Smt.Rat
-import Smt.Real
-import Smt.Auto
+-- import Smt
+-- import Smt.Real
+-- import Smt.Auto
 
 import LeanSearchClient
 import Loogle.Find
 
-open Lean Auto in
-def Auto.duperRaw (lemmas : Array Lemma) (_inhs : Array Lemma) : MetaM Expr := do
-  let lemmas : Array (Expr × Expr × Array Name × Bool) ← lemmas.mapM
-    λ ⟨⟨proof, ty, _⟩, _⟩ ↦ do
-      return (ty, ← Meta.mkAppM ``eq_true #[proof], #[], true)
-  Duper.runDuper lemmas.toList 0
+-- open Lean Auto in
+-- def Auto.duperRaw (lemmas : Array Lemma) (_inhs : Array Lemma) : MetaM Expr := do
+--   let lemmas : Array (Expr × Expr × Array Name × Bool) ← lemmas.mapM
+--     λ ⟨⟨proof, ty, _⟩, _⟩ ↦ do
+--       return (ty, ← Meta.mkAppM ``eq_true #[proof], #[], true)
+--   Duper.runDuper lemmas.toList 0
 
-attribute [rebind Auto.Native.solverFunc] Auto.duperRaw
+-- attribute [rebind Auto.Native.solverFunc] Auto.duperRaw
 
 macro "setup_auto" : command => `(
   set_option auto.smt true
