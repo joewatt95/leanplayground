@@ -22,7 +22,7 @@ lemma map_const_eq_replicate {α β} {xs : List α} {c : β} :
 lemma sublists_length_eq_2_pow_length {α} {xs : List α} :
   xs.sublists.length = 2 ^ xs.length :=
   match xs with
-  | [] => by aesop
+  | [] => by simp [sublists]
   | x :: xs => calc
       (x :: xs).sublists.length
   _ = 2 * xs.sublists.length := by
@@ -45,9 +45,7 @@ lemma iterate_rotateLeft_length_eq_length {α n} {xs : List α} :
   | 0 | _ + 1 => by simp [iterate_rotateLeft_length_eq_length]
 
 abbrev perms {α} : List α → List (List α) :=
-  foldr go [[]]
-  where
-    @[reducible] go x := flatMap <| rotations ∘ (x :: .)
+  foldr (init := [[]]) λ x ↦ flatMap <| rotations ∘ (x :: .)
 
 lemma length_eq_length_of_mem_perms {α} {xs ys : List α}
   (_ : ys ∈ perms xs) : ys.length = xs.length :=
