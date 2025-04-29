@@ -6,7 +6,7 @@ import Leanplayground.MathInLean.Utils.Tactic
 -- set_option trace.profiler true
 
 def gcd (m n : ℕ) : ℕ :=
-  if h : n = 0 then m
+  if _ : n = 0 then m
   else
     have : m % n < n := Nat.mod_lt _ <| by omega
     gcd n <| m % n
@@ -61,7 +61,7 @@ lemma length_eq_length_of_mem_perms {α} {xs ys : List α}
     _ = (x :: xs).length := by simp
 
 open Nat in
-lemma length_perms_eq_factorial_length {α} {xs : List α}:
+lemma length_perms_eq_factorial_length {α} {xs : List α} :
   xs.perms.length = (xs.length)! :=
   match xs with
   | [] => by simp
@@ -76,8 +76,8 @@ lemma length_perms_eq_factorial_length {α} {xs : List α}:
   _ = (xs.length + 1) * xs.perms.length := by
       aesop (add norm map_const_eq_replicate) (add norm (by ring))
 
-  _ = (xs.length + 1) * (xs.length)! := by rw [length_perms_eq_factorial_length]
+  _ = (xs.length + 1) * (xs.length)! := congrArg _ length_perms_eq_factorial_length
 
-  _ = ((x :: xs).length)! := by aesop
+  _ = (x :: xs |>.length)! := by aesop
 
 end List
