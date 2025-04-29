@@ -25,10 +25,9 @@ lemma sublists_length_eq_2_pow_length {α} {xs : List α} :
   | [] => by simp [sublists]
   | x :: xs => calc
       (x :: xs).sublists.length
-  _ = 2 * xs.sublists.length := by
-      aesop (add norm [sublists, map_const_eq_replicate]) (add norm (by ring))
+  _ = xs.sublists.length * 2 := by simp [sublists, map_const_eq_replicate]
   _ = 2 ^ (xs.length + 1) := by
-      aesop (add norm sublists_length_eq_2_pow_length) (add norm (by ring))
+      aesop (add norm sublists_length_eq_2_pow_length)
 
 abbrev rotations {α} (xs : List α) : List <| List α :=
   iterate rotateLeft xs xs.length
