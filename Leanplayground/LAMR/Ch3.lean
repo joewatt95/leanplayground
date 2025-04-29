@@ -1,3 +1,4 @@
+-- import Batteries.Data.List.Lemmas
 import Mathlib.Data.List.Iterate
 
 import Leanplayground.MathInLean.Utils.Tactic
@@ -11,6 +12,23 @@ def gcd (m n : ℕ) : ℕ :=
     gcd n <| m % n
 
 namespace List
+
+lemma map_const_eq_replicate {α β} {xs : List α} {c : β} :
+  xs.map (λ _ ↦ c) = replicate xs.length c :=
+  match xs with
+  | [] | _ :: _ => by
+    aesop (add safe map_const_eq_replicate) (add norm replicate_succ)
+
+lemma sublists_length_eq_2_pow_length {α} {xs : List α} :
+  xs.sublists.length = 2 ^ xs.length :=
+  match xs with
+  | [] => by aesop
+  | x :: xs => calc
+      (x :: xs).sublists.length
+  _ = 2 * xs.sublists.length := by
+      aesop (add norm [sublists, map_const_eq_replicate]) (add norm (by ring))
+  _ = 2 ^ (xs.length + 1) := by
+      aesop (add norm sublists_length_eq_2_pow_length) (add norm (by ring))
 
 abbrev rotations {α} (xs : List α) : List <| List α :=
   iterate rotateLeft xs xs.length
@@ -26,21 +44,15 @@ lemma iterate_rotateLeft_length_eq_length {α n} {xs : List α} :
   match n with
   | 0 | _ + 1 => by simp [iterate_rotateLeft_length_eq_length]
 
-abbrev perms {α} (xs : List α) : List <| List α :=
-  match xs with
-  | [] => [[]]
-  | x :: xs => xs.perms.flatMap (rotations ∘ (x :: .))
+abbrev perms {α} : List α → List (List α) :=
+  foldr go [[]]
+  where
+    @[reducible] go x := flatMap <| rotations ∘ (x :: .)
 
 lemma length_eq_length_of_mem_perms {α} {xs ys : List α}
   (_ : ys ∈ perms xs) : ys.length = xs.length :=
   match xs with
   | [] | _ :: _ => by aesop (add safe length_eq_length_of_mem_perms)
-
-lemma map_const_eq_replicate {α β} {xs : List α} {c : β} :
-  xs.map (λ _ ↦ c) = replicate xs.length c :=
-  match xs with
-  | [] | _ :: _ => by
-    aesop (add safe map_const_eq_replicate) (add norm replicate_succ)
 
 open Nat in
 lemma length_perms_eq_factorial_length {α} {xs : List α}:
