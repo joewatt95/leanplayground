@@ -16,8 +16,8 @@ namespace List
 lemma map_const_eq_replicate {α β} {xs : List α} {c : β} :
   xs.map (λ _ ↦ c) = replicate xs.length c :=
   match xs with
-  | [] | _ :: _ => by
-    aesop (add safe map_const_eq_replicate) (add norm replicate_succ)
+  | [] | _ :: xs => by
+    simp [replicate_succ, map_const_eq_replicate (xs := xs)]
 
 lemma sublists_length_eq_2_pow_length {α} {xs : List α} :
   xs.sublists.length = 2 ^ xs.length :=
@@ -48,9 +48,17 @@ abbrev perms {α} : List α → List (List α) :=
   foldr (init := [[]]) λ x ↦ flatMap <| rotations ∘ (x :: .)
 
 lemma length_eq_length_of_mem_perms {α} {xs ys : List α}
-  (_ : ys ∈ perms xs) : ys.length = xs.length :=
+  (_ : ys ∈ xs.perms) : ys.length = xs.length :=
   match xs with
-  | [] | _ :: _ => by aesop (add safe length_eq_length_of_mem_perms)
+  | [] => by aesop
+  | x :: xs =>
+    have ⟨zs, n, (_ : zs ∈ xs.perms), (_ : ys = rotateLeft^[n] (x :: zs))⟩ :
+      ∃ _ _ _, _ := by aesop
+    calc
+        ys.length
+    _ = zs.length + 1 := by simp_all
+    _ = xs.length + 1 := congrArg _ <| length_eq_length_of_mem_perms ‹zs ∈ xs.perms›
+    _ = (x :: xs).length := by simp
 
 open Nat in
 lemma length_perms_eq_factorial_length {α} {xs : List α}:
