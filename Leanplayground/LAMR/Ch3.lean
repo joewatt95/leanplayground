@@ -1,7 +1,8 @@
-import Mathlib.Data.List.Defs
 import Mathlib.Data.List.Iterate
 
 import Leanplayground.MathInLean.Utils.Tactic
+
+-- set_option trace.profiler true
 
 def gcd (m n : ℕ) : ℕ :=
   if h : n = 0 then m
@@ -12,49 +13,34 @@ def gcd (m n : ℕ) : ℕ :=
 namespace List
 
 abbrev rotations {α} (xs : List α) : List <| List α :=
-  iterate rotate xs xs.length
-  where
-    @[reducible] rotate
-      | [] => []
-      | x :: xs => xs ++ [x]
+  iterate rotateLeft xs xs.length
 
 @[simp]
-lemma rotate_length_eq_length {α n} {xs : List α} :
-  (rotations.rotate^[n] xs).length = xs.length :=
+lemma rotateLeft_length_eq_length {α} {xs : List α} :
+  xs.rotateLeft.length = xs.length := by
+  aesop (add norm rotateLeft) (add norm (by omega))
+
+@[simp]
+lemma iterate_rotateLeft_length_eq_length {α n} {xs : List α} :
+  (rotateLeft^[n] xs).length = xs.length :=
   match n with
-  | 0 => by simp
-  | n + 1 => calc
-      (rotations.rotate^[n + 1] xs).length
+  | 0 | _ + 1 => by simp [iterate_rotateLeft_length_eq_length]
 
-  _ = (rotations.rotate <| rotations.rotate^[n] xs).length := by
-    rw [Function.iterate_succ_apply']
-
-  _ = xs.length := go rotate_length_eq_length
-  where
-    go {xs ys : List α}
-      (_ : xs.length = ys.length) :
-      (rotations.rotate xs).length = ys.length :=
-      match xs, ys with
-      | [], [] | _ :: _, _ :: _ => by simp_all
-
--- lemma length_eq_length_of_mem_rotations {α} {xs ys : List α}
---   (_ : ys ∈ xs.rotations) : ys.length = xs.length := by
---   aesop (add unsafe rotate_length_eq_length)
-
-abbrev perms {α} : List α → List (List α)
+abbrev perms {α} (xs : List α) : List <| List α :=
+  match xs with
   | [] => [[]]
   | x :: xs => xs.perms.flatMap (rotations ∘ (x :: .))
 
 lemma length_eq_length_of_mem_perms {α} {xs ys : List α}
   (_ : ys ∈ perms xs) : ys.length = xs.length :=
   match xs with
-  | [] | _ :: _ => by aesop (add unsafe length_eq_length_of_mem_perms)
+  | [] | _ :: _ => by aesop (add safe length_eq_length_of_mem_perms)
 
-lemma map_const_eq_replicate {α} {xs : List α} :
-  xs.map (λ _ ↦ c) = replicate (length xs) c :=
+lemma map_const_eq_replicate {α β} {xs : List α} {c : β} :
+  xs.map (λ _ ↦ c) = replicate xs.length c :=
   match xs with
   | [] | _ :: _ => by
-    aesop (add unsafe map_const_eq_replicate) (add norm replicate)
+    aesop (add safe map_const_eq_replicate) (add norm replicate_succ)
 
 open Nat in
 lemma length_perms_eq_factorial_length {α} {xs : List α}:
@@ -62,12 +48,12 @@ lemma length_perms_eq_factorial_length {α} {xs : List α}:
   match xs with
   | [] => by simp
   | x :: xs => calc
-      (List.perms <| x :: xs).length
+      (x :: xs).perms.length
 
-  _ = List.sum (xs |>.perms |>.map (List.length . + 1)) := by simp
+  _ = (xs.perms.map λ ys ↦ ys.length + 1).sum := by simp
 
-  _ = List.sum (xs |>.perms |>.map λ _ ↦ xs.length + 1) :=
-      congrArg _ <| by aesop (add unsafe length_eq_length_of_mem_perms)
+  _ = (xs.perms.map λ _ ↦ xs.length + 1).sum :=
+      congrArg _ <| by aesop (add safe length_eq_length_of_mem_perms)
 
   _ = (xs.length + 1) * xs.perms.length := by
       aesop (add norm map_const_eq_replicate) (add norm (by ring))
