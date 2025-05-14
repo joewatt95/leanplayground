@@ -22,7 +22,7 @@ lemma map_const_eq_replicate {α β} {xs : List α} {c : β} :
 lemma sublists_length_eq_2_pow_length {α} {xs : List α} :
   xs.sublists.length = 2 ^ xs.length :=
   match xs with
-  | [] => by simp [sublists]
+  | [] => rfl
   | x :: xs => calc
       (x :: xs).sublists.length
   _ = xs.sublists.length * 2 := by simp [sublists, map_const_eq_replicate]
@@ -49,7 +49,7 @@ lemma iterate_rotateLeft_length_eq_length {α n} {xs : List α} :
 lemma length_eq_length_of_mem_perms {α} {xs ys : List α}
   (_ : ys ∈ xs.perms) : ys.length = xs.length :=
   match xs with
-  | [] => by aesop
+  | [] => by simp_all
   | x :: xs =>
     have ⟨zs, n, (_ : zs ∈ xs.perms), (_ : ys = rotateLeft^[n] (x :: zs))⟩ :
       ∃ _ _, _ ∧ _ := by aesop
@@ -57,7 +57,7 @@ lemma length_eq_length_of_mem_perms {α} {xs ys : List α}
         ys.length
     _ = zs.length + 1 := by simp_all
     _ = xs.length + 1 := congrArg _ <| length_eq_length_of_mem_perms ‹_›
-    _ = (x :: xs).length := by simp
+    _ = (x :: xs).length := rfl
 
 open Nat in
 lemma length_perms_eq_factorial_length {α} {xs : List α} :
@@ -77,6 +77,6 @@ lemma length_perms_eq_factorial_length {α} {xs : List α} :
 
   _ = (xs.length + 1) * (xs.length)! := congrArg _ length_perms_eq_factorial_length
 
-  _ = (x :: xs |>.length)! := by aesop
+  _ = (x :: xs |>.length)! := rfl
 
 end List
