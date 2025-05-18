@@ -57,7 +57,6 @@ lemma length_eq_length_of_mem_perms {α} {xs ys : List α}
         ys.length
     _ = zs.length + 1 := by simp_all
     _ = xs.length + 1 := congrArg _ <| length_eq_length_of_mem_perms ‹_›
-    _ = (x :: xs).length := rfl
 
 open Nat in
 lemma length_perms_eq_factorial_length {α} {xs : List α} :
@@ -76,7 +75,5 @@ lemma length_perms_eq_factorial_length {α} {xs : List α} :
       aesop (add norm map_const_eq_replicate) (add norm (by ring))
 
   _ = (xs.length + 1) * (xs.length)! := congrArg _ length_perms_eq_factorial_length
-
-  _ = (x :: xs |>.length)! := rfl
 
 end List
