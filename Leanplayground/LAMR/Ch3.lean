@@ -3,8 +3,6 @@ import Mathlib.Data.List.Iterate
 
 import Leanplayground.MathInLean.Utils.Tactic
 
-set_premise_selector Lean.PremiseSelection.Cloud.premiseSelector
-
 -- set_option trace.profiler true
 
 def gcd (m n : ℕ) : ℕ :=
