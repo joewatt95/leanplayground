@@ -109,24 +109,24 @@ lemma lfpApprox_omega0_eq_sSup_lfpApprox_Nat :
 
 theorem fix_eq_order_lfp :
   Lean.Order.fix f f.monotone' = lfp f :=
-  have : Lean.Order.fix f f.monotone' ≤ lfp f :=
+  open Lean.Order in
+  have : fix f f.monotone' ≤ lfp f :=
     -- Transfinite induction over fixpoint iteration sequence, because that's
     -- the only proof rule the Lean compiler has for its domain theoretic
     -- fixpoint constructions.
-    Lean.Order.fix_induct (motive := (. ≤ _)) (hf := f.monotone')
+    fix_induct _
       -- Successor stage
       (h := λ x (_ : x ≤ lfp f) ↦ calc
         f x ≤ f (lfp f) := by exact f.monotone' ‹_›
           _ = lfp f     := map_lfp _)
       -- Limit stage
-      (hadm := by
-        aesop (add unsafe sSup_le) (add norm [Lean.Order.admissible, Lean.Order.CCPO.csup]))
+      (hadm := by aesop (add unsafe sSup_le) (add norm [admissible, CCPO.csup]))
 
-  have : OrderHom.lfp f ≤ Lean.Order.fix f f.monotone' :=
+  have : lfp f ≤ fix f f.monotone' :=
     -- RHS is a fixed point of f
-    f |>.monotone' |> Lean.Order.fix_eq |>.symm
+    f |>.monotone' |> fix_eq |>.symm
     -- Hence it upper bounds the least fixed point of f
-      |> OrderHom.lfp_le_fixed _
+      |> lfp_le_fixed _
 
   le_antisymm ‹_› ‹_›
 
