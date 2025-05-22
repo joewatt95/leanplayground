@@ -10,6 +10,7 @@ import Auto.Tactic
 import Duper
 import Canonical
 import Egg
+import Hammer
 -- import Smt
 -- import Smt.Real
 -- import Smt.Auto

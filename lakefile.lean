@@ -28,11 +28,15 @@ require "PatrickMassot" / verbose @
 -- require "ufmg-smite" / smt @
 --   git "da4ba9acf1845fe264b2bce14923f8e09fbabf28"
 
-require "leanprover-community" / Duper @
-  git "v0.0.26"
+-- require "leanprover-community" / Duper @
+--   git "v0.0.26"
 
 require "chasenorman" / Canonical @
   git "v4.20.0-rc3"
+
+require Hammer from
+  git "https://github.com/JOSHCLUNE/LeanHammer" @
+    "7bddfbcf7181015c6488cf6621b92f6ec0839b4e"
 
 require "marcusrossel" / egg @
   git "0d83adaa4606f04bba8090105cc577fb70d6647a"
