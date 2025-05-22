@@ -117,8 +117,9 @@ theorem fix_eq_order_lfp :
     fix_induct _
       -- Successor stage
       (h := λ x (_ : x ≤ lfp f) ↦ calc
-        f x ≤ f (lfp f) := by exact f.monotone' ‹_›
-          _ = lfp f     := map_lfp _)
+          f x
+        ≤ f (lfp f) := f.monotone' ‹_›
+        _ = lfp f   := map_lfp _)
       -- Limit stage
       (hadm := by aesop (add unsafe sSup_le) (add norm [admissible, CCPO.csup]))
 
@@ -133,7 +134,7 @@ theorem fix_eq_order_lfp :
 -- The fixpoint combinator as used in the Lean compiler is denotationally equal
 -- to the transfinite iteration over ordinals up to the Hartog number of the
 -- underlying domain.
-lemma fix_mem_range_lfpApprox :
+theorem fix_mem_range_lfpApprox :
   Lean.Order.fix f f.monotone' =
     lfpApprox f ⊥ (Order.succ <| Cardinal.mk α).ord :=
   let ord := (Order.succ <| Cardinal.mk α).ord
