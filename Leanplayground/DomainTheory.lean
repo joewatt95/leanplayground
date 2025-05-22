@@ -1,8 +1,7 @@
-import Duper
-import Loogle.Find
-
 import Mathlib.Topology.Order.ScottTopology
 import Mathlib.SetTheory.Ordinal.FixedPointApproximants
+
+import Leanplayground.MathInLean.Utils.Tactic
 
 open Ordinal OrdinalApprox OmegaCompletePartialOrder OrderHom
 
@@ -116,18 +115,12 @@ theorem fix_eq_order_lfp :
     -- fixpoint constructions.
     Lean.Order.fix_induct (motive := (. ≤ _)) (hf := f.monotone')
       -- Successor stage
-      (h := λ x (h : x ≤ lfp f) ↦ calc
-        f x ≤ f (lfp f) := by exact f.monotone' h
+      (h := λ x (_ : x ≤ lfp f) ↦ calc
+        f x ≤ f (lfp f) := by exact f.monotone' ‹_›
           _ = lfp f     := map_lfp _)
       -- Limit stage
       (hadm := by
-        unfold Lean.Order.admissible
-        intros
-        -- Why does aesop refuse to apply sSup_le even when marked as a safe
-        -- intro rule?
-        -- Does it have issues resolving the typeclass hierarchy?
-        apply sSup_le
-        aesop)
+        aesop (add unsafe sSup_le) (add norm [Lean.Order.admissible, Lean.Order.CCPO.csup]))
 
   have : OrderHom.lfp f ≤ Lean.Order.fix f f.monotone' :=
     -- RHS is a fixed point of f
