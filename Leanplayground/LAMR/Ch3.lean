@@ -3,12 +3,15 @@ import Mathlib.Data.List.Iterate
 
 import Leanplayground.MathInLean.Utils.Tactic
 
+set_premise_selector Lean.PremiseSelection.Cloud.premiseSelector
+
 -- set_option trace.profiler true
 
 def gcd (m n : ℕ) : ℕ :=
   if _ : n = 0 then m
   else
-    have : m % n < n := Nat.mod_lt _ <| by omega
+    have : m % n < n := by
+      duper [*, Nat.pos_iff_ne_zero, Nat.mod_lt] {preprocessing := full}
     gcd n <| m % n
 
 namespace List
