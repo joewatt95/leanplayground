@@ -25,8 +25,8 @@ lean_lib Leanplayground where
 require "PatrickMassot" / verbose @
   git "a3331b46c2909064d247367f321c14815c34eead"
 
--- require "ufmg-smite" / smt @
---   git "da4ba9acf1845fe264b2bce14923f8e09fbabf28"
+require "ufmg-smite" / smt @
+  git "db6a7caf8685b33897ceebc9159bb1e180e2c568"
 
 -- require "leanprover-community" / Duper @
 --   git "v0.0.26"
