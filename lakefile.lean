@@ -36,7 +36,7 @@ require "chasenorman" / Canonical @
 
 require Hammer from
   git "https://github.com/JOSHCLUNE/LeanHammer" @
-    "7bddfbcf7181015c6488cf6621b92f6ec0839b4e"
+    "37d8051b857d42ee16f1bf237bba0a2046813365"
 
 require "marcusrossel" / egg @
   git "0d83adaa4606f04bba8090105cc577fb70d6647a"
