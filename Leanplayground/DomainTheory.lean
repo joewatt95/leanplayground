@@ -20,9 +20,8 @@ instance [inst : CompleteLattice α] : Lean.Order.CCPO α :=
     rel_antisymm := le_antisymm _ _
     csup := sSup
     csup_spec {x c} _ :=
-      { mp h' y (_ : c y) :=
-          have : le y <| sSup c := le_sSup _ _ ‹c y›
-          show le y x from le_trans _ _ _ this h'
+      { mp (_ : le (sSup c) x) y (_ : c y) :=
+        le_trans y (sSup (c .)) x (le_sSup (c .) y ‹_›) ‹_›
         mpr := sSup_le _ _ } }
 
 variable
