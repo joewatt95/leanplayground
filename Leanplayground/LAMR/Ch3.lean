@@ -9,7 +9,7 @@ def gcd (m n : ℕ) : ℕ :=
   if _ : n = 0 then m
   else
     have : m % n < n := by
-      duper [*, Nat.pos_iff_ne_zero, Nat.mod_lt] {preprocessing := full}
+      duper [*, Nat.pos_iff_ne_zero, Nat.mod_lt] {portfolioInstance := 1}
     gcd n <| m % n
 
 namespace List
@@ -57,7 +57,7 @@ lemma length_eq_length_of_mem_perms {α} {xs ys : List α}
     calc
         ys.length
     _ = zs.length + 1 := by simp_all
-    _ = xs.length + 1 := congrArg _ <| length_eq_length_of_mem_perms ‹_›
+    _ = xs.length + 1 := by rw [length_eq_length_of_mem_perms ‹_›]
 
 open Nat in
 lemma length_perms_eq_factorial_length {α} {xs : List α} :
@@ -75,6 +75,6 @@ lemma length_perms_eq_factorial_length {α} {xs : List α} :
   _ = (xs.length + 1) * xs.perms.length := by
       aesop (add norm map_const_eq_replicate) (add norm (by ring))
 
-  _ = (xs.length + 1) * (xs.length)! := congrArg _ length_perms_eq_factorial_length
+  _ = (xs.length + 1) * (xs.length)! := by rw [length_perms_eq_factorial_length]
 
 end List
