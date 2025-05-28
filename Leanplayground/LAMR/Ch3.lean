@@ -70,7 +70,7 @@ lemma length_perms_eq_factorial_length {α} {xs : List α} :
   _ = (xs.perms.map λ ys ↦ ys.length + 1).sum := by simp
 
   _ = (xs.perms.map λ _ ↦ xs.length + 1).sum :=
-      congrArg _ <| by aesop (add safe length_eq_length_of_mem_perms)
+      congrArg _ <| by aesop (add unsafe length_eq_length_of_mem_perms)
 
   _ = (xs.length + 1) * xs.perms.length := by
       aesop (add norm map_const_eq_replicate) (add norm (by ring))
