@@ -19,9 +19,8 @@ instance [inst : CompleteLattice α] : Lean.Order.CCPO α :=
     rel_trans := le_trans _ _ _
     rel_antisymm := le_antisymm _ _
     csup := sSup
-    csup_spec {x c} _ :=
-      { mp (_ : le (sSup c) x) y (_ : c y) :=
-        le_trans y (sSup (c .)) x (le_sSup (c .) y ‹_›) ‹_›
+    csup_spec _ :=
+      { mp a _ a_1 := le_trans _ _ _ (le_sSup _ _ a_1) a
         mpr := sSup_le _ _ } }
 
 variable
