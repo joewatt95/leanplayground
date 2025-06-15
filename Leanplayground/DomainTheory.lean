@@ -31,16 +31,15 @@ variable
 example [CompleteLattice β] {f : α → β} :
   Monotone f ↔ Lean.Order.monotone f := .rfl
 
-lemma lfpApprox_add_one_bot :
-  ∀ o, lfpApprox f ⊥ (o + 1) = f (lfpApprox f ⊥ o) :=
-  lfpApprox_add_one _ _ <| OrderBot.bot_le _
+lemma lfpApprox_add_one_bot {o} : lfpApprox f ⊥ (o + 1) = f (lfpApprox f ⊥ o) :=
+  lfpApprox_add_one _ _ (OrderBot.bot_le _) _
 
 lemma lfpApprox_ofNat_eq_Nat_iterate :
   ∀ {n : ℕ}, lfpApprox f ⊥ n = f^[n] ⊥
   | 0 => by unfold lfpApprox; simp
   | n + 1 => calc
       lfpApprox f ⊥ (n + 1)
-  _ = f (lfpApprox f ⊥ n)  := lfpApprox_add_one_bot _
+  _ = f (lfpApprox f ⊥ n)  := lfpApprox_add_one_bot
   _ = f (f^[n] ⊥)          := by rw [lfpApprox_ofNat_eq_Nat_iterate]
   _ = f^[n + 1] ⊥          := by rw [Function.iterate_succ_apply']
 
@@ -48,7 +47,7 @@ lemma lfp_eq_lfpApprox_ord_of_fixed_point
   (_ : f (lfpApprox f ⊥ o) = lfpApprox f ⊥ o) :
   lfp f = lfpApprox f ⊥ o :=
   have ⟨o', (_ : lfpApprox f ⊥ o' = lfp f)⟩ :=
-    OrdinalApprox.lfp_mem_range_lfpApprox f
+    OrdinalApprox.lfp_mem_range_lfpApprox _
   calc
       lfp f
   _ = lfpApprox f ⊥ o' := Eq.symm ‹_›
@@ -85,7 +84,7 @@ lemma lfpApprox_limit_eq_sup_lfpApprox (_ : Order.IsSuccLimit o) :
         calc
             lfpApprox f ⊥ o'
         _ ≤ lfpApprox f ⊥ (o' + 1)      := this
-        _ = f (lfpApprox f ⊥ o')        := lfpApprox_add_one_bot _
+        _ = f (lfpApprox f ⊥ o')        := lfpApprox_add_one_bot
         _ ≤ f (lfpApprox f ⊥ <| o' + 1) := f.monotone' this) <|
 
       sSup_le_sSup λ a
@@ -163,7 +162,7 @@ theorem kleene_fixed_point :
       simp_all only [coe_mk, Function.comp_apply, lfpApproxNat]
 
     _ = ⨆ n : ℕ, lfpApprox f ⊥ (n + 1) :=
-      have := lfpApprox_add_one_bot (f := f)
+      have := @lfpApprox_add_one_bot (f := f)
       by simp_all only [add_one_eq_succ, lfpApproxNat]
 
     _ = ⨆ n : ℕ, lfpApprox f ⊥ n :=
