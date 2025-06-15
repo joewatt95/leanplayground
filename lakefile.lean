@@ -32,23 +32,22 @@ require "ufmg-smite" / smt @
 --   git "v0.0.26"
 
 require "chasenorman" / Canonical @
-  git "v4.20.0-rc3"
+  git "v4.20.0"
 
-require Hammer from
-  git "https://github.com/JOSHCLUNE/LeanHammer" @
-    "37d8051b857d42ee16f1bf237bba0a2046813365"
+require "JOSHCLUNE" / Hammer @
+  git "v4.20.0"
 
 require "marcusrossel" / egg @
-  git "0d83adaa4606f04bba8090105cc577fb70d6647a"
+  git "413d984e95c04b73e25231e2754c48e03c51fe48"
 
 require "nomeata" / calcify @
   git "b89b823f26eb35a1d9ed57af2663128d6b3a35c2"
 
 require "nomeata" / loogle @
-  git "19971e9e513c648628fc733844b818d6816534c5"
+  git "07d46054dee016a7405872de0884a055c378d23f"
 
 require "leanprover" / verso @
-  git "v4.20.0-rc2"
+  git "v4.20.0"
 
 require "leanprover-community" / mathlib @
-  git "v4.20.0-rc5"
+  git "v4.20.1"
