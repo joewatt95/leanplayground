@@ -8,8 +8,7 @@ import Leanplayground.MathInLean.Utils.Tactic
 def gcd (m n : ℕ) : ℕ :=
   if _ : n = 0 then m
   else
-    have : m % n < n := by
-      duper [*, Nat.pos_iff_ne_zero, Nat.mod_lt] {portfolioInstance := 1}
+    have : m % n < n := by simp_all [Nat.pos_iff_ne_zero, Nat.mod_lt]
     gcd n <| m % n
 
 namespace List
@@ -17,8 +16,7 @@ namespace List
 lemma map_const_eq_replicate {α β} {xs : List α} {c : β} :
   xs.map (λ _ ↦ c) = replicate xs.length c :=
   match xs with
-  | [] | _ :: xs => by
-    simp [replicate_succ, map_const_eq_replicate (xs := xs)]
+  | [] | _ :: xs => by simp [replicate_succ, map_const_eq_replicate (xs := xs)]
 
 lemma sublists_length_eq_2_pow_length {α} {xs : List α} :
   xs.sublists.length = 2 ^ xs.length :=
