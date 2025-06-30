@@ -44,7 +44,7 @@ require "nomeata" / calcify @
   git "b89b823f26eb35a1d9ed57af2663128d6b3a35c2"
 
 require "nomeata" / loogle @
-  git "07d46054dee016a7405872de0884a055c378d23f"
+  git "66afee563762d3771ede4d0feae94da63a8a87b4"
 
 require "leanprover" / verso @
   git "v4.20.0"
