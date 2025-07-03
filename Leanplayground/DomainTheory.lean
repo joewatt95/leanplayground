@@ -131,12 +131,10 @@ theorem fix_eq_order_lfp :
 -- The fixpoint combinator as used in the Lean compiler is denotationally equal
 -- to the transfinite iteration over ordinals up to the Hartog number of the
 -- underlying domain.
+open Cardinal in
 theorem fix_mem_range_lfpApprox :
-  Lean.Order.fix f f.monotone' =
-    lfpApprox f ⊥ (Order.succ <| Cardinal.mk α).ord :=
-  let ord := (Order.succ <| Cardinal.mk α).ord
-  have : lfpApprox f ⊥ ord = lfp f := lfpApprox_ord_eq_lfp _
-  by simp_all only [fix_eq_order_lfp, ord]
+  Lean.Order.fix f f.monotone' = lfpApprox f ⊥ (Order.succ #α).ord := by
+  rw [fix_eq_order_lfp, lfpApprox_ord_eq_lfp]
 
 -- Kleene fixpoint theorem, via fixed point iteration over `Ordinal` up to `ω`
 -- as opposed to `ℕ`.
