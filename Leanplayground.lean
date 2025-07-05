@@ -8,6 +8,8 @@ import Leanplayground.DomainTheory
 import Leanplayground.LAMR
 -- import Leanplayground.Prob
 
+import Leanplayground.CanonicalTest
+
 -- import Leanplayground.Natural4
 -- import Leanplayground.Primes.PrimeSieve
 
