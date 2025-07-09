@@ -3,7 +3,7 @@ import Canonical
 inductive MyNat
   | zero : MyNat
   | succ : MyNat → MyNat
-  deriving Repr
+  deriving Inhabited, Repr
 
 def add (a : MyNat) : MyNat → MyNat
   | .zero => a
