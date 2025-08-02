@@ -23,7 +23,7 @@ package leanplayground where
 lean_lib Leanplayground where
 
 require "PatrickMassot" / verbose @
-  git "a3331b46c2909064d247367f321c14815c34eead"
+  git "bd3b236511d9a8929791f20f775e98a9ef81697c"
 
 -- require "ufmg-smite" / smt @
 --   git "db6a7caf8685b33897ceebc9159bb1e180e2c568"
@@ -38,13 +38,13 @@ require "JOSHCLUNE" / Hammer @
   git "v4.21.0"
 
 require "marcusrossel" / egg @
-  git "06a9373cd5a8cb1c20bbd4b8bf41d416b956b6cd"
+  git "5d6c4fedf513668335c0e29c57114f9b1e4dbdaa"
 
 require "nomeata" / calcify @
   git "b89b823f26eb35a1d9ed57af2663128d6b3a35c2"
 
 require "nomeata" / loogle @
-  git "2c2d6a298b46081fb751f971677e702d460160d4"
+  git "ff045300e699fe9e890d098b302985eb9b191410"
 
 require "leanprover" / verso @
   git "v4.21.0"
