@@ -38,7 +38,7 @@ require "JOSHCLUNE" / Hammer @
   git "v4.21.0"
 
 require "marcusrossel" / egg @
-  git "c35e80c82208a0d5802ede228039728a92f8da7c"
+  git "136ed2d95601d4b84fda05fb7afb85ebbf36492b"
 
 require "nomeata" / calcify @
   git "b89b823f26eb35a1d9ed57af2663128d6b3a35c2"
