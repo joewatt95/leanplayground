@@ -11,9 +11,8 @@ import Duper
 import Canonical
 import Egg
 import Hammer
--- import Smt
--- import Smt.Real
--- import Smt.Auto
+import Smt
+import Smt.Real
 
 import LeanSearchClient
 import Loogle.Find
