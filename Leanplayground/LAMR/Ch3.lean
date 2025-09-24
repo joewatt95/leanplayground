@@ -32,7 +32,7 @@ abbrev perms {α} : List α → List (List α) :=
 @[simp]
 lemma rotateLeft_length_eq_length {α} {xs : List α} :
   xs.rotateLeft.length = xs.length := by
-  aesop (add norm rotateLeft) (add norm (by omega))
+  aesop (add norm rotateLeft) (add norm (by grind))
 
 @[simp]
 lemma iterate_rotateLeft_length_eq_length {α n} {xs : List α} :
@@ -46,7 +46,7 @@ lemma length_eq_length_of_mem_perms {α} {xs ys : List α}
   | [] => by simp_all
   | x :: xs =>
     have ⟨zs, n, (_ : zs ∈ xs.perms), (_ : ys = rotateLeft^[n] (x :: zs))⟩ :
-      ∃ _ _, _ ∧ _ := by aesop
+      ∃ _ _ _, _ := by aesop
     calc
         ys.length
     _ = zs.length + 1 := by simp_all
