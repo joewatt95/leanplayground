@@ -113,10 +113,7 @@ theorem fix_eq_order_lfp :
     -- fixpoint constructions.
     fix_induct _
       -- Successor stage
-      (h := λ x (_ : x ≤ lfp f) ↦ calc
-          f x
-        ≤ f (lfp f) := f.monotone' ‹_›
-        _ = lfp f   := map_lfp _)
+      (h := λ x (_ : x ≤ lfp f) ↦ f.map_le_lfp ‹_›)
       -- Limit stage
       (hadm := by aesop (add unsafe sSup_le) (add norm [admissible, CCPO.csup]))
 
