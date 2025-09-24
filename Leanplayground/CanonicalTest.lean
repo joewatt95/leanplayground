@@ -17,7 +17,7 @@ theorem add_comm' {a b : MyNat} :
     (λ a a_ih ↦
       Eq.rec (motive := λ a_1 t ↦ add a.succ b = a_1.succ)
         (MyNat.rec (motive := λ t ↦ add a.succ t = (add a t).succ)
-          (by simp only [MyNat.succ.injEq, add.eq_1] <;> exact Eq.refl a)
+          (by simp only [add.eq_1] <;> exact Eq.refl a)
           (λ a_1 a_ih ↦ by simp only [MyNat.succ.injEq, add.eq_2] <;> exact a_ih) b)
         a_ih)
     a

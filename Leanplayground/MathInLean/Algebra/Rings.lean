@@ -150,7 +150,7 @@ theorem crtMap_surj : Function.Surjective <| crtHom I :=
         have : ∀ j ≠ i, r ∈ I j :=
           λ _ _ ↦ by simp_all only
             [ ne_eq, Finset.mem_erase, Finset.mem_univ, and_true,
-              Ideal.mem_iInf, zero_add, not_false_eq_true, s ]
+              Ideal.mem_iInf, not_false_eq_true, s ]
         have : ∀ j ≠ i, (r : R ⧸ I j) = 0 :=
           have : ∀ {j}, (r : R ⧸ I j) = 0 ↔ r ∈ I j :=
             Submodule.Quotient.mk_eq_zero _

@@ -37,7 +37,7 @@ example {m n k r p : ℕ}
     have := calc
           k * m.factorization p
       _ = (m ^ k).factorization p                   := by simp only [Nat.factorization_pow, Finsupp.coe_smul, Pi.smul_apply, smul_eq_mul]
-      _ = (r * n ^ k).factorization p               := by simp_all only [Nat.factorization_pow]
+      _ = (r * n ^ k).factorization p               := by simp_all only
       _ = r.factorization p + k * n.factorization p := by simp_all
 
     have := calc
