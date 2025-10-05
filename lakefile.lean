@@ -10,7 +10,7 @@ require "PatrickMassot" / verbose @
   git "bd3b236511d9a8929791f20f775e98a9ef81697c"
 
 require "ufmg-smite" / smt @
-  git "0b1647f4bce776b8d34726898810e0fa185832d7"
+  git "d6c048b99c80e93c42e7fb03ba5b14a74b00a836"
 
 require "chasenorman" / Canonical @
   git "v4.23.0"

@@ -1,5 +1,6 @@
 -- import Batteries.Data.List.Lemmas
 import Mathlib.Data.List.Iterate
+import Mathlib.Data.Nat.Factorial.Basic
 
 import Leanplayground.MathInLean.Utils.Tactic
 
@@ -52,9 +53,8 @@ lemma length_eq_length_of_mem_perms {α} {xs ys : List α}
     _ = zs.length + 1 := by simp_all
     _ = xs.length + 1 := by rw [length_eq_length_of_mem_perms ‹_›]
 
-open Nat in
 lemma length_perms_eq_factorial_length {α} {xs : List α} :
-  xs.perms.length = (xs.length)! :=
+  xs.perms.length = Nat.factorial (xs.length) :=
   match xs with
   | [] => by simp
   | x :: xs => calc
@@ -68,6 +68,6 @@ lemma length_perms_eq_factorial_length {α} {xs : List α} :
 
   _ = (xs.length + 1) * xs.perms.length := by aesop (add norm (by ring))
 
-  _ = (xs.length + 1) * (xs.length)! := by rw [length_perms_eq_factorial_length]
+  _ = (xs.length + 1) * Nat.factorial (xs.length) := by rw [length_perms_eq_factorial_length]
 
 end List
