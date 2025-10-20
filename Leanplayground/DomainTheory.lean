@@ -99,7 +99,7 @@ lemma lfpApprox_omega0_eq_sSup_lfpApprox_Nat :
   lfpApprox f ⊥ ω = ⨆ n : ℕ, lfpApprox f ⊥ n :=
   calc
       lfpApprox f ⊥ ω
-  _ = ⨆ o < ω, lfpApprox f ⊥ o := lfpApprox_limit_eq_sup_lfpApprox isLimit_omega0
+  _ = ⨆ o < ω, lfpApprox f ⊥ o := lfpApprox_limit_eq_sup_lfpApprox isSuccLimit_omega0
   _ = sSup {lfpApprox f ⊥ o | o < ω} := biSup_eq_sSup
   _ = ⨆ n : ℕ, lfpApprox f ⊥ n := by
     aesop (add unsafe congr) (add norm lt_omega0)
