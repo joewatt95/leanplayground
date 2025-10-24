@@ -1,8 +1,9 @@
-import Aesop
--- import Auto.Tactic
--- import Duper
+import Leanplayground.MathInLean.Utils.Tactic
 
 namespace Logic
+
+example {P : Prop} : P → ¬ ¬ P := flip id
+example {P : Prop} : ¬ ¬ ¬ P → ¬ P := (. ∘ flip id)
 
 example {Q : α → Prop} : (∀ a, Q a → P) ↔ (∃ a, Q a) → P
 where
