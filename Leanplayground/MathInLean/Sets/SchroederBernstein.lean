@@ -67,10 +67,10 @@ theorem schroeder_bernstein
             compl_subset_compl ] }
 
     let S : Ordinal → Set α := lfpApprox F ∅
-    have ⟨O, _⟩ : ∃ O, S O = lfp F := lfp_mem_range_lfpApprox F
+    have ⟨O, (_ : S O = lfp F)⟩ := lfp_mem_range_lfpApprox _
 
     let S₀ := S O
-    have : F S₀ = S₀ := by simp_all only [bot_eq_empty, map_lfp, F, S₀, S]
+    have : F S₀ = S₀ := by simp_all only [map_lfp, F, S₀, S]
     have : g '' (f '' S₀ᶜ)ᶜ = S₀ := this
 
     let h a := if a ∈ S₀ then invFun g a else f a
