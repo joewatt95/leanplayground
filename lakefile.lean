@@ -11,13 +11,14 @@ require "PatrickMassot" / verbose @
 
 require "Joewatt95" / smt from git
   "https://github.com/Joewatt95/lean-smt" @
-  "2fc72ca6feaefde3ca26ca3e3e69509d5c0a932d"
+  "6cb8ff6569dcbaa2c482020709237cf8a6e64fac"
 
-require "chasenorman" / Canonical @
-  git "v4.25.0"
+require "chasenorman" / Canonical @ git "v4.25.0"
 
-require "JOSHCLUNE" / Hammer @
-  git "v4.25.1"
+require "JOSHCLUNE" / Hammer @ git "v4.25.1"
+
+require Duper from
+  git "https://github.com/leanprover-community/duper" @ "v4.25.2"
 
 require "Joewatt95" / egg from git
   "https://github.com/Joewatt95/lean-egg" @
@@ -29,8 +30,6 @@ require "nomeata" / calcify @
 require "nomeata" / loogle @
   git "0ac13cd97d030b989151359429f9061c12faf0f6"
 
-require "leanprover" / verso @
-  git "v4.25.1"
+require "leanprover" / verso @ git "v4.25.1"
 
-require "leanprover-community" / mathlib @
-  git "v4.25.2"
+require "leanprover-community" / mathlib @ git "v4.25.2"
