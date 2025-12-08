@@ -11,14 +11,11 @@ require "PatrickMassot" / verbose @
 
 require "Joewatt95" / smt from git
   "https://github.com/Joewatt95/lean-smt" @
-  "6cb8ff6569dcbaa2c482020709237cf8a6e64fac"
+  "8dd8570482e02fd780a5e935d174677820f08d1e"
 
 require "chasenorman" / Canonical @ git "v4.25.0"
 
-require "JOSHCLUNE" / Hammer @ git "v4.25.1"
-
-require Duper from
-  git "https://github.com/leanprover-community/duper" @ "v4.25.2"
+require "JOSHCLUNE" / Hammer @ git "v4.25.2"
 
 require "Joewatt95" / egg from git
   "https://github.com/Joewatt95/lean-egg" @
