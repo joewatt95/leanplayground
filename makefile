@@ -1,2 +1,2 @@
 all:
-	PATH=$$PATH:~/.elan/toolchains/leanprover--lean4---v4.25.2/bin/ lake build
+	PATH=$$PATH:~/.elan/toolchains/leanprover--lean4---v4.26.0/bin/ lake build

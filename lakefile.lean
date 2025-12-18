@@ -9,17 +9,17 @@ lean_lib Leanplayground where
 require "PatrickMassot" / verbose @
   git "c978de71e0241a2cf7e6010e562ead8d508115ef"
 
-require "Joewatt95" / smt from git
-  "https://github.com/Joewatt95/lean-smt" @
-  "8dd8570482e02fd780a5e935d174677820f08d1e"
+-- require "Joewatt95" / smt from git
+--   "https://github.com/Joewatt95/lean-smt" @
+--   "e8a675569cd2fcd4b916ff173aff8a17d7682718"
 
-require "chasenorman" / Canonical @ git "v4.25.0"
+require "chasenorman" / Canonical @ git "v4.26.0"
 
-require "JOSHCLUNE" / Hammer @ git "v4.25.2"
+require "JOSHCLUNE" / Hammer @ git "v4.26.0"
 
 require "Joewatt95" / egg from git
   "https://github.com/Joewatt95/lean-egg" @
-  "1f3caba4d7504adb747215ad981be979410762be"
+  "cff704447cfdb85126d16557a9ec050b27e33b64"
 
 require "nomeata" / calcify @
   git "b89b823f26eb35a1d9ed57af2663128d6b3a35c2"
@@ -27,6 +27,6 @@ require "nomeata" / calcify @
 require "nomeata" / loogle @
   git "0ac13cd97d030b989151359429f9061c12faf0f6"
 
-require "leanprover" / verso @ git "v4.25.1"
+require "leanprover" / verso @ git "v4.26.0"
 
-require "leanprover-community" / mathlib @ git "v4.25.2"
+require "leanprover-community" / mathlib @ git "v4.26.0"

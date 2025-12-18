@@ -140,8 +140,8 @@ theorem kleene_fixed_point :
   lfp f = lfpApprox f ⊥ ω :=
   let lfpApproxNat : Nat →o α :=
     { toFun := lfpApprox f ⊥ ∘ λ n : ℕ ↦ (n : Ordinal)
-      monotone' := by aesop
-        (add unsafe [Monotone.comp, Nat.mono_cast, lfpApprox_monotone]) }
+      monotone' := by
+        aesop (add unsafe [Monotone.comp, Nat.mono_cast, lfpApprox_monotone]) }
 
   have : f (⨆ n, lfpApproxNat n) = ⨆ n, f (lfpApproxNat n) := by
     simp_all only [
