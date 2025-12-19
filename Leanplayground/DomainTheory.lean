@@ -73,22 +73,25 @@ lemma lfpApprox_limit_eq_sup_lfpApprox (_ : Order.IsSuccLimit o) :
 
   _ = sSup {f (lfpApprox f ⊥ o') | o' < o} :=
     le_antisymm
-      (sSup_le_sSup_of_forall_exists_le <| by
-        simp only [Set.mem_setOf_eq, exists_exists_and_eq_and, forall_exists_index, and_imp, forall_apply_eq_imp_iff₂]
-        refine λ o' (_ : o' < o) ↦
-          ⟨o' + 1, Order.IsSuccLimit.add_one_lt ‹_› ‹_›, ?_⟩
 
-        have : lfpApprox f ⊥ o' ≤ lfpApprox f ⊥ (o' + 1) :=
-          lfpApprox_monotone _ _ <| Ordinal.le_add_right _ _
+      (sSup_le_sSup_of_isCofinalFor <|
+        have (o') (_ : o' < o) :
+          ∃ o'' < o, lfpApprox f ⊥ o' ≤ f (lfpApprox f ⊥ o'') :=
 
-        calc
-            lfpApprox f ⊥ o'
-        _ ≤ lfpApprox f ⊥ (o' + 1)      := this
-        _ = f (lfpApprox f ⊥ o')        := lfpApprox_add_one_bot
-        _ ≤ f (lfpApprox f ⊥ <| o' + 1) := f.monotone' this) <|
+          have : lfpApprox f ⊥ o' ≤ lfpApprox f ⊥ (o' + 1) :=
+            lfpApprox_monotone _ _ le_self_add
 
-      sSup_le_sSup λ a
-        ⟨o', (_ : o' < o), (_ : f (lfpApprox f ⊥ o') = a)⟩ ↦
+          have := calc
+                lfpApprox f ⊥ o'
+            _ ≤ lfpApprox f ⊥ (o' + 1)      := this
+            _ = f (lfpApprox f ⊥ o')        := lfpApprox_add_one_bot
+            _ ≤ f (lfpApprox f ⊥ <| o' + 1) := f.monotone' this
+
+          ⟨o' + 1, Order.IsSuccLimit.add_one_lt ‹_› ‹_›, this⟩
+
+        by simpa [IsCofinalFor]) <|
+
+      sSup_le_sSup λ a ⟨o', (_ : o' < o), (_ : f (lfpApprox f ⊥ o') = a)⟩ ↦
         ⟨o' + 1, Order.IsSuccLimit.add_one_lt ‹_› ‹_›, by rwa [lfpApprox_add_one_bot]⟩
 
   _ = lfpApprox f ⊥ o := by
@@ -163,7 +166,7 @@ theorem kleene_fixed_point :
     _ = ⨆ n : ℕ, lfpApprox f ⊥ n :=
       le_antisymm
         (sSup_le_sSup λ _ ⟨n, _⟩ ↦ ⟨n + 1, by simp_all only [add_one_eq_succ, Set.mem_range, Nat.cast_add, Nat.cast_one]⟩) <|
-        sSup_le_sSup_of_forall_exists_le λ a ⟨n, h⟩ ↦ by
+        sSup_le_sSup_of_isCofinalFor λ a ⟨n, h⟩ ↦ by
           simp_all only [Set.mem_range, add_one_eq_succ, exists_exists_eq_and]
           exact ⟨n, by rw [←h]; apply lfpApprox_monotone; exact Order.le_succ _⟩
 
