@@ -117,7 +117,7 @@ private lemma leq_plus_of_leq : a leq b → c leq d → a + c leq b + d
   a + c leq b + d := by exact leq_plus_of_leq a_leq_b c_leq_d
       _ leq b + d + 2 := leq_plus
       _ = b + 1 + d + 1 := by
-        simp only [Nat.add_eq, add_zero, Nat.succ.injEq]
+        simp only [Nat.succ.injEq]
         ring_nf
 
 private lemma h :
@@ -330,7 +330,7 @@ theorem quot_rem {n d} (h_d_pos : d > 0)
   suffices r₀ < d from ⟨q₀, r₀, this, h_n_eq_d_q₀_r₀⟩
   suffices ¬ r₀ ≥ d by omega
 
-  show r₀ ≥ d → ⊥ from λ _ : r₀ ≥ d ↦
+  show ¬ r₀ ≥ d from λ _ : r₀ ≥ d ↦
     have := calc
       n + d = (d * q₀) + r₀ + d := by rw [h_n_eq_d_q₀_r₀]
           _ = d * (q₀ + 1) + r₀ := by ring
