@@ -14,14 +14,16 @@ lemma biSup_eq_sSup {S : Set α} {f : α → β} [CompleteLattice β] :
 
 instance [inst : CompleteLattice α] : Lean.Order.CCPO α :=
   let {le, le_refl, le_trans, le_antisymm, sSup, le_sSup, sSup_le, ..} := inst
-  { rel := le
+  {
+    rel := le
     rel_refl := le_refl _
     rel_trans := le_trans _ _ _
     rel_antisymm := le_antisymm _ _
-    csup := sSup
-    csup_spec _ :=
-      { mp a _ a_1 := le_trans _ _ _ (le_sSup _ _ a_1) a
-        mpr := sSup_le _ _ } }
+    has_csup {c} _ := ⟨sSup c, λ x ↦ {
+      mp a y a_1 := le_trans y (sSup c) x (le_sSup c y a_1) a,
+      mpr := sSup_le _ _
+    }⟩
+  }
 
 variable
   [CompleteLattice α] {f : α →o α}
@@ -118,7 +120,10 @@ theorem fix_eq_order_lfp :
       -- Successor stage
       (h := λ x (_ : x ≤ lfp f) ↦ f.map_le_lfp ‹_›)
       -- Limit stage
-      (hadm := by aesop (add unsafe sSup_le) (add norm [admissible, CCPO.csup]))
+      (hadm := by
+        aesop
+          (add unsafe forward [CCPO.csup_spec])
+          (add norm [admissible, is_sup, PartialOrder.rel]))
 
   have : lfp f ≤ fix f f.monotone' :=
     -- RHS is a fixed point of f
