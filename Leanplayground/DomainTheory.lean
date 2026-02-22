@@ -173,6 +173,6 @@ theorem kleene_fixed_point :
         (sSup_le_sSup λ _ ⟨n, _⟩ ↦ ⟨n + 1, by simp_all only [add_one_eq_succ, Set.mem_range, Nat.cast_add, Nat.cast_one]⟩) <|
         sSup_le_sSup_of_isCofinalFor λ a ⟨n, h⟩ ↦ by
           simp_all only [Set.mem_range, add_one_eq_succ, exists_exists_eq_and]
-          exact ⟨n, by rw [←h]; apply lfpApprox_monotone; exact Order.le_succ _⟩
+          exact ⟨n, by rw [←h]; exact lfpApprox_monotone _ _ <| Order.le_succ _⟩
 
     _ = lfpApprox f ⊥ ω := by rw [lfpApprox_omega0_eq_sSup_lfpApprox_Nat]
