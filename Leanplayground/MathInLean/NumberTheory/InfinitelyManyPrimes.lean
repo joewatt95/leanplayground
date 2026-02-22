@@ -8,7 +8,7 @@ import Leanplayground.MathInLean.Utils.Tactic
 
 namespace NumberTheory
 
-set_option maxRecDepth 650 in
+set_option maxRecDepth 690 in
 theorem exists_prime_factor {n : ℕ}
   (_ : 2 ≤ n)
   : ∃ p, p.Prime ∧ p ∣ n :=
@@ -87,7 +87,7 @@ private lemma mod_4_eq_3_or {m n : ℕ}
 --   suffices 0 < n ∧ 1 < m by duper [*, Nat.div_dvd_of_dvd, Nat.div_lt_self]
 --   by omega
 
-set_option maxRecDepth 650 in
+set_option maxRecDepth 690 in
 private lemma exists_prime_factor_mod_4_eq_3 {n : ℕ}
   (_ : n % 4 = 3)
   : ∃ p, p.Prime ∧ p ∣ n ∧ p % 4 = 3 :=
