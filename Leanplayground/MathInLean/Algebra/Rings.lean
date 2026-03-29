@@ -145,7 +145,7 @@ theorem crtMap_surj : Function.Surjective <| crtHom I :=
                 (r' : R ⧸ I i) + r
             _ = ⟦r' + r⟧           := rfl
             _ = (1 : R ⧸ I i)     := by congr
-          by simp_all only [zero_add]
+          by grind
 
         have : ∀ j ≠ i, r ∈ I j :=
           λ _ _ ↦ by simp_all only
@@ -170,8 +170,7 @@ theorem crtMap_surj : Function.Surjective <| crtHom I :=
     suffices ∀ i, crtHom _ (r : R ⧸ ⨅ i, I i) i = ‹∀ i, R ⧸ I i› i from
       ⟨r, funext this⟩
 
-    have : ∀ {i}, ∀ j ≠ i, (choiceFn j : R ⧸ I i) * choiceFn' j = 0 := by
-      simp_all only [ne_eq, not_false_eq_true, Ne.symm, mul_zero, implies_true]
+    have : ∀ {i}, ∀ j ≠ i, (choiceFn j : R ⧸ I i) * choiceFn' j = 0 := by grind
 
     λ i ↦ calc
           crtHom _ (r : R ⧸ ⨅ i, I i) i

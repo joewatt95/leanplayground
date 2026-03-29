@@ -12,17 +12,14 @@ lemma biSup_eq_sSup {S : Set α} {f : α → β} [CompleteLattice β] :
   _ = sSup {f x | x ∈ S}      := by
     simp only [←sSup_range, Set.range, Subtype.exists, exists_prop]
 
-instance [inst : CompleteLattice α] : Lean.Order.CCPO α :=
-  let {le, le_refl, le_trans, le_antisymm, sSup, le_sSup, sSup_le, ..} := inst
+instance [inst : CompleteSemilatticeSup α] : Lean.Order.CCPO α :=
+  -- let {le, le_refl, le_trans, le_antisymm, sSup, ..} := inst
   {
-    rel := le
+    rel := (· ≤ ·)
     rel_refl := le_refl _
-    rel_trans := le_trans _ _ _
-    rel_antisymm := le_antisymm _ _
-    has_csup {c} _ := ⟨sSup c, λ x ↦ {
-      mp a y a_1 := le_trans y (sSup c) x (le_sSup c y a_1) a,
-      mpr := sSup_le _ _
-    }⟩
+    rel_trans := by grind
+    rel_antisymm := by grind
+    has_csup _ := ⟨sSup _, λ _ ↦ by aesop⟩
   }
 
 variable
@@ -152,9 +149,8 @@ theorem kleene_fixed_point :
         aesop (add unsafe [Monotone.comp, Nat.mono_cast, lfpApprox_monotone]) }
 
   have : f (⨆ n, lfpApproxNat n) = ⨆ n, f (lfpApproxNat n) := by
-    simp_all only [
-      ωScottContinuous_iff_map_ωSup_of_orderHom, Chain, ωSup, Chain.map,
-      comp_coe, Function.comp_apply]
+    simp_all only [ωScottContinuous_iff_map_ωSup_of_orderHom, Chain, ωSup, Chain.map]
+    apply omega_continuous
 
   lfp_eq_lfpApprox_ord_of_fixed_point <| calc
         f (lfpApprox f ⊥ ω)
@@ -166,13 +162,13 @@ theorem kleene_fixed_point :
 
     _ = ⨆ n : ℕ, lfpApprox f ⊥ (n + 1) :=
       have := @lfpApprox_add_one_bot (f := f)
-      by simp_all only [add_one_eq_succ, lfpApproxNat]
+      by simp_all only [lfpApproxNat]
 
     _ = ⨆ n : ℕ, lfpApprox f ⊥ n :=
       le_antisymm
-        (sSup_le_sSup λ _ ⟨n, _⟩ ↦ ⟨n + 1, by simp_all only [add_one_eq_succ, Set.mem_range, Nat.cast_add, Nat.cast_one]⟩) <|
+        (sSup_le_sSup λ _ ⟨n, _⟩ ↦ ⟨n + 1, by simp_all only [Set.mem_range, Nat.cast_add, Nat.cast_one]⟩) <|
         sSup_le_sSup_of_isCofinalFor λ a ⟨n, h⟩ ↦ by
-          simp_all only [Set.mem_range, add_one_eq_succ, exists_exists_eq_and]
+          simp_all only [Set.mem_range, exists_exists_eq_and]
           exact ⟨n, by rw [←h]; exact lfpApprox_monotone _ _ <| Order.le_succ _⟩
 
     _ = lfpApprox f ⊥ ω := by rw [lfpApprox_omega0_eq_sSup_lfpApprox_Nat]

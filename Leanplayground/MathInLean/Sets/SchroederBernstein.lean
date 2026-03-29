@@ -73,31 +73,27 @@ theorem schroeder_bernstein
     have : F S₀ = S₀ := by simp_all only [map_lfp, F, S₀, S]
     have : g '' (f '' S₀ᶜ)ᶜ = S₀ := this
 
-    let h a := if a ∈ S₀ then invFun g a else f a
+    let h a := if a ∈ S₀ then g.invFun a else f a
 
-    have : LeftInverse (invFun g) g := leftInverse_invFun ‹Injective g›
-    have : invFun g '' S₀ = (f '' S₀ᶜ)ᶜ := by egg [*, this.image_image]
+    have : LeftInverse g.invFun g := leftInverse_invFun ‹Injective g›
+    have := calc
+      g.invFun  '' S₀
+      _ = g.invFun '' (g '' (f '' S₀ᶜ)ᶜ) := by simp_all only
+      _ = (f '' S₀ᶜ)ᶜ := this.image_image _
 
     have : Surjective h :=
-      have : invFun g '' S₀ ∪ f '' S₀ᶜ = univ := by egg [this, compl_union_self]
+      have : g.invFun '' S₀ ∪ f '' S₀ᶜ = univ := by grind
       piecewise_is_surj this
 
     have : Injective h :=
-      have : invFun g '' S₀ ∩ f '' S₀ᶜ = ∅ := by egg [*, compl_inter_self]
+      have : g.invFun '' S₀ ∩ f '' S₀ᶜ = ∅ := by grind
 
       have : InjOn f S₀ᶜ := λ _ _ _ _ _ ↦ f_inj <| by simp_all only
 
-      have : InjOn (invFun g) S₀ :=
-        λ a _ a' _ (_ : invFun g a = invFun g a') ↦
-          have : ∀ {x}, invFun g (g x) = x := ‹LeftInverse _ _›
-
-          have : S₀ ⊆ g '' (f '' S₀ᶜ)ᶜ := Eq.subset <| by egg [*]
-          have : ∀ a ∈ S₀, ∃ b ∈ (f '' S₀ᶜ)ᶜ, g b = a := this
-
-          have ⟨b, _, (_ : g b = a)⟩ := this _ ‹_›
-          have ⟨b', _, (_ : g b' = a')⟩ := this _ ‹_›
-
-          show a = a' by egg [*]
+      have : InjOn (g.invFun) S₀ :=
+        λ a _ a' _ (_ : g.invFun a = g.invFun a') ↦
+          have : S₀ ⊆ g '' (f '' S₀ᶜ)ᶜ := Eq.subset <| by simp_all only
+          show a = a' by grind
 
       show Injective h from piecewise_is_inj ‹_› ‹_› ‹_›
 

@@ -14,7 +14,7 @@ example {m n : ℕ} (_ : m.Coprime n) : m ^ 2 ≠ 2 * n ^ 2 :=
     have ⟨k, (_ : m = 2 * k)⟩ := this
 
     have := calc
-      2 * n ^ 2 = (2 * k) ^ 2 := by egg [*]
+      2 * n ^ 2 = (2 * k) ^ 2 := by duper [*]
               _ = 4 * k ^ 2   := by ring
 
     have : 2 ∣ n ^ 2 := by omega

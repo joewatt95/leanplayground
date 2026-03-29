@@ -116,7 +116,7 @@ instance : CommMonoid₁ ℤ :=
     one := 1
     dia_assoc := Int.mul_assoc _ _ _
     dia_comm := ‹_›
-    one_dia := λ {a} ↦ show 1 * a = a by egg [*] }
+    one_dia := λ {a} ↦ show 1 * a = a by duper [*] }
 
 -- #check (inferInstance : Monoid₁ ℝˣ)
 
