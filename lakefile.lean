@@ -22,6 +22,6 @@ require "nomeata" / calcify @
 require "nomeata" / loogle @
   git "8e80836a86196849b2393e7a752d6100c17b772d"
 
-require "leanprover" / verso @ git "v4.29.0-rc8"
+require "leanprover" / verso @ git "v4.29.0"
 
-require "leanprover-community" / mathlib @ git "v4.29.0-rc8"
+require "leanprover-community" / mathlib @ git "v4.29.0"
