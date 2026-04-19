@@ -9,8 +9,8 @@ lean_lib Leanplayground where
 require "PatrickMassot" / verbose @
   git "3bb939135f3b46f6028408442644766ed9d5ec55"
 
--- require "ufmg-smite" / smt @ git
---   "3bc19f2d3caba4c5fbfe213143c79364c3d9c97a"
+require "ufmg-smite" / smt @
+  git "7d1d8239e78daa5197f9a71948776c4627049f5f"
 
 require "chasenorman" / Canonical @ git "v4.29.0"
 
@@ -24,4 +24,4 @@ require "nomeata" / loogle @
 
 require "leanprover" / verso @ git "v4.29.0"
 
-require "leanprover-community" / mathlib @ git "v4.29.0"
+require "leanprover-community" / mathlib @ git "v4.29.1"

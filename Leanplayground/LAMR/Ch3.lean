@@ -14,11 +14,11 @@ def gcd (m n : ℕ) : ℕ :=
 
 namespace List
 
-lemma map_const_eq_replicate {α β} {xs : List α} {c : β}:
-  xs.map (λ _ ↦ c) = List.replicate xs.length c :=
-  match xs with
-  | [] => rfl
-  | x :: xs => by simp [map_const_eq_replicate (xs := xs)]; rfl
+-- lemma map_const_eq_replicate {α β} {xs : List α} {c : β}:
+--   xs.map (λ _ ↦ c) = List.replicate xs.length c :=
+--   match xs with
+--   | [] => rfl
+--   | x :: xs => by simp [map_const_eq_replicate (xs := xs)]; rfl
 
 lemma sublists_length_eq_2_pow_length {α} {xs : List α} :
   xs.sublists.length = 2 ^ xs.length :=
@@ -26,7 +26,7 @@ lemma sublists_length_eq_2_pow_length {α} {xs : List α} :
   | [] => rfl
   | x :: xs => calc
       (x :: xs).sublists.length
-  _ = xs.sublists.length * 2 := by simp [sublists, map_const_eq_replicate]
+  _ = xs.sublists.length * 2 := by simp [sublists]
   _ = 2 ^ (xs.length + 1) := by
       aesop (add norm sublists_length_eq_2_pow_length)
 
@@ -72,8 +72,7 @@ lemma length_perms_eq_factorial_length {α} {xs : List α} :
       congrArg _ <| map_eq_map_iff.mpr <| by
         aesop (add unsafe length_eq_length_of_mem_perms)
 
-  _ = (xs.length + 1) * xs.perms.length := by
-    simp [map_const_eq_replicate]; ring
+  _ = (xs.length + 1) * xs.perms.length := by simp; ring
 
   _ = (xs.length + 1) * Nat.factorial (xs.length) := by rw [length_perms_eq_factorial_length]
 
