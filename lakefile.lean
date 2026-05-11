@@ -16,6 +16,10 @@ require "chasenorman" / Canonical @ git "v4.29.0"
 
 require "JOSHCLUNE" / Hammer @ git "v4.29.0"
 
+require sos from
+  git "https://github.com/kim-em/sos" @
+  "4a92deb7a187abebda15d2e7f8509cf863811ac1"
+
 require "nomeata" / calcify @
   git "b89b823f26eb35a1d9ed57af2663128d6b3a35c2"
 
