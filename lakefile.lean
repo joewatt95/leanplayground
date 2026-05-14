@@ -18,7 +18,7 @@ require "JOSHCLUNE" / Hammer @ git "v4.29.0"
 
 require sos from
   git "https://github.com/kim-em/sos" @
-  "c1d4d3d03b4bbf3a20e03580c56035a3ea2cd554"
+  "496eb68e14075741b19314a3564b9b0657d5272c"
 
 require "nomeata" / calcify @
   git "b89b823f26eb35a1d9ed57af2663128d6b3a35c2"
