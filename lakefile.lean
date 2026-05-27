@@ -18,7 +18,7 @@ require "JOSHCLUNE" / Hammer @ git "v4.29.0"
 
 require sos from
   git "https://github.com/leanprover/sos" @
-  "fe1648a2103930b6b7df20e90eb4fa6eb0b38677"
+  "1aec12269c9a83e7166fbb533024fc389e0bd91c"
 
 require "nomeata" / calcify @
   git "b89b823f26eb35a1d9ed57af2663128d6b3a35c2"
