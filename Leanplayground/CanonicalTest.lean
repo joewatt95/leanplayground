@@ -1,15 +1,15 @@
 import Canonical
 
-inductive MyNat
+private inductive MyNat
   | zero : MyNat
   | succ : MyNat → MyNat
   deriving Inhabited, Repr
 
-def add (a : MyNat) : MyNat → MyNat
+private def add (a : MyNat) : MyNat → MyNat
   | .zero => a
   | .succ b => add a b |>.succ
 
-theorem add_comm' {a b : MyNat} :
+private theorem my_nat_add_comm {a b : MyNat} :
   add a b = add b a :=
   MyNat.rec (motive := λ t ↦ add t b = add b t)
     (MyNat.rec (motive := λ t ↦ add MyNat.zero t = t) (Eq.refl MyNat.zero)

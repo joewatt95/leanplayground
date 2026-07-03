@@ -82,18 +82,23 @@ theorem schroeder_bernstein
       _ = (f '' S₀ᶜ)ᶜ := this.image_image _
 
     have : Surjective h :=
-      have : g.invFun '' S₀ ∪ f '' S₀ᶜ = univ := by grind
+      have : g.invFun '' S₀ ∪ f '' S₀ᶜ = univ := by simp_all only [compl_union_self]
       piecewise_is_surj this
 
     have : Injective h :=
-      have : g.invFun '' S₀ ∩ f '' S₀ᶜ = ∅ := by grind
+      have : g.invFun '' S₀ ∩ f '' S₀ᶜ = ∅ := by simp_all only [compl_inter_self]
 
       have : InjOn f S₀ᶜ := λ _ _ _ _ _ ↦ f_inj <| by simp_all only
 
       have : InjOn (g.invFun) S₀ :=
         λ a _ a' _ (_ : g.invFun a = g.invFun a') ↦
           have : S₀ ⊆ g '' (f '' S₀ᶜ)ᶜ := Eq.subset <| by simp_all only
-          show a = a' by grind
+          show a = a' by
+            simp_all only [
+              image, mem_compl_iff, mem_setOf_eq, not_exists, not_and,
+              compl_inter_self, subset_refl
+            ]
+            grind
 
       show Injective h from piecewise_is_inj ‹_› ‹_› ‹_›
 

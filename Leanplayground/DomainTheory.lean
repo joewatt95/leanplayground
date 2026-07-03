@@ -31,7 +31,7 @@ example [CompleteLattice β] {f : α → β} :
   Monotone f ↔ Lean.Order.monotone f := .rfl
 
 lemma lfpApprox_add_one_bot {o} : lfpApprox f ⊥ (o + 1) = f (lfpApprox f ⊥ o) :=
-  lfpApprox_add_one _ _ (OrderBot.bot_le _) _
+  lfpApprox_add_one _ (OrderBot.bot_le _) _
 
 lemma lfpApprox_ofNat_eq_Nat_iterate :
   ∀ {n : ℕ}, lfpApprox f ⊥ n = f^[n] ⊥
@@ -55,12 +55,11 @@ lemma lfp_eq_lfpApprox_ord_of_fixed_point
       (o' ≤ o → lfpApprox f ⊥ o = lfpApprox f ⊥ o') ∧
       (o' ≥ o → lfpApprox f ⊥ o' = lfpApprox f ⊥ o) := by
       refine ⟨?_, ?_⟩
-      repeat
+      all_goals
         intro
-        apply lfpApprox_eq_of_mem_fixedPoints
-        . exact OrderBot.bot_le _
-        . assumption
-        . simp_all only [Function.mem_fixedPoints_iff, map_lfp]
+        apply lfpApprox_eq_of_mem_fixedPoints f
+        · assumption
+        · simp_all only [Function.mem_fixedPoints_iff, map_lfp]
     have := le_total o o'
     by aesop
 
@@ -78,7 +77,7 @@ lemma lfpApprox_limit_eq_sup_lfpApprox (_ : Order.IsSuccLimit o) :
           ∃ o'' < o, lfpApprox f ⊥ o' ≤ f (lfpApprox f ⊥ o'') :=
 
           have : lfpApprox f ⊥ o' ≤ lfpApprox f ⊥ (o' + 1) :=
-            lfpApprox_monotone _ _ le_self_add
+            lfpApprox_mono_right _ le_self_add
 
           have := calc
                 lfpApprox f ⊥ o'
@@ -95,7 +94,8 @@ lemma lfpApprox_limit_eq_sup_lfpApprox (_ : Order.IsSuccLimit o) :
 
   _ = lfpApprox f ⊥ o := by
     conv => rhs; unfold lfpApprox
-    simp only [exists_prop, Set.union_singleton, sSup_insert, bot_le, sup_of_le_right]
+    have := biSup_eq_sSup (S := {o' | o' < o}) (f := f ∘ lfpApprox f ⊥)
+    simp_all only [Set.mem_setOf_eq, Function.comp_apply, bot_le, sup_of_le_right]
 
 lemma lfpApprox_omega0_eq_sSup_lfpApprox_Nat :
   lfpApprox f ⊥ ω = ⨆ n : ℕ, lfpApprox f ⊥ n :=
@@ -146,10 +146,10 @@ theorem kleene_fixed_point :
   let lfpApproxNat : Nat →o α :=
     { toFun := lfpApprox f ⊥ ∘ λ n : ℕ ↦ (n : Ordinal)
       monotone' := by
-        aesop (add unsafe [Monotone.comp, Nat.mono_cast, lfpApprox_monotone]) }
+        aesop (add unsafe [Monotone.comp, Nat.mono_cast, lfpApprox_mono_right]) }
 
   have : f (⨆ n, lfpApproxNat n) = ⨆ n, f (lfpApproxNat n) := by
-    simp_all only [ωScottContinuous_iff_map_ωSup_of_orderHom, Chain, ωSup, Chain.map]
+    simp_all only [ωScottContinuous_iff_map_ωSup_of_orderHom, ωSup, Chain.map]
     apply omega_continuous
 
   lfp_eq_lfpApprox_ord_of_fixed_point <| calc
@@ -169,6 +169,6 @@ theorem kleene_fixed_point :
         (sSup_le_sSup λ _ ⟨n, _⟩ ↦ ⟨n + 1, by simp_all only [Set.mem_range, Nat.cast_add, Nat.cast_one]⟩) <|
         sSup_le_sSup_of_isCofinalFor λ a ⟨n, h⟩ ↦ by
           simp_all only [Set.mem_range, exists_exists_eq_and]
-          exact ⟨n, by rw [←h]; exact lfpApprox_monotone _ _ <| Order.le_succ _⟩
+          exact ⟨n, by rw [←h]; exact lfpApprox_mono_right _ <| Order.le_succ _⟩
 
     _ = lfpApprox f ⊥ ω := by rw [lfpApprox_omega0_eq_sSup_lfpApprox_Nat]
