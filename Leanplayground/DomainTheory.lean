@@ -12,15 +12,12 @@ lemma biSup_eq_sSup {S : Set α} {f : α → β} [CompleteLattice β] :
   _ = sSup {f x | x ∈ S}      := by
     simp only [←sSup_range, Set.range, Subtype.exists, exists_prop]
 
-instance [inst : CompleteSemilatticeSup α] : Lean.Order.CCPO α :=
-  -- let {le, le_refl, le_trans, le_antisymm, sSup, ..} := inst
-  {
-    rel := (· ≤ ·)
-    rel_refl := le_refl _
-    rel_trans := by grind
-    rel_antisymm := by grind
-    has_csup _ := ⟨sSup _, λ _ ↦ by aesop⟩
-  }
+instance [inst : CompleteSemilatticeSup α] : Lean.Order.CCPO α where
+  rel := (· ≤ ·)
+  rel_refl := le_refl _
+  rel_trans := by grind only
+  rel_antisymm := by grind only
+  has_csup _ := ⟨sSup _, λ _ ↦ by aesop⟩
 
 variable
   [CompleteLattice α] {f : α →o α}
@@ -60,8 +57,7 @@ lemma lfp_eq_lfpApprox_ord_of_fixed_point
         apply lfpApprox_eq_of_mem_fixedPoints f
         · assumption
         · simp_all only [Function.mem_fixedPoints_iff, map_lfp]
-    have := le_total o o'
-    by aesop
+    by grind only
 
 lemma lfpApprox_limit_eq_sup_lfpApprox (_ : Order.IsSuccLimit o) :
   lfpApprox f ⊥ o = ⨆ o' < o, lfpApprox f ⊥ o' :=
@@ -103,8 +99,7 @@ lemma lfpApprox_omega0_eq_sSup_lfpApprox_Nat :
       lfpApprox f ⊥ ω
   _ = ⨆ o < ω, lfpApprox f ⊥ o := lfpApprox_limit_eq_sup_lfpApprox isSuccLimit_omega0
   _ = sSup {lfpApprox f ⊥ o | o < ω} := biSup_eq_sSup
-  _ = ⨆ n : ℕ, lfpApprox f ⊥ n := by
-    aesop (add unsafe congr) (add norm lt_omega0)
+  _ = ⨆ n : ℕ, lfpApprox f ⊥ n := by aesop (add norm lt_omega0)
 
 theorem fix_eq_order_lfp :
   Lean.Order.fix f f.monotone' = lfp f :=
@@ -149,7 +144,7 @@ theorem kleene_fixed_point :
         aesop (add unsafe [Monotone.comp, Nat.mono_cast, lfpApprox_mono_right]) }
 
   have : f (⨆ n, lfpApproxNat n) = ⨆ n, f (lfpApproxNat n) := by
-    simp_all only [ωScottContinuous_iff_map_ωSup_of_orderHom, ωSup, Chain.map]
+    simp_all only [ωScottContinuous_iff_map_ωSup_of_orderHom]
     apply omega_continuous
 
   lfp_eq_lfpApprox_ord_of_fixed_point <| calc
