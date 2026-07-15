@@ -9,11 +9,10 @@ import Mathlib.Tactic.Ring
 import Auto.Tactic
 import Duper
 import Canonical
--- import Egg
 import Hammer
--- import Smt
--- import Smt.Real
-import SOS
+import Smt
+import Smt.Real
+-- import SOS
 
 import LeanSearchClient
 import Loogle.Find

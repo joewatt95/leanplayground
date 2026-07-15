@@ -28,7 +28,7 @@ def crtHom (I : ι → Ideal R) : (R ⧸ ⨅ i, I i) →+* ∀ i, R ⧸ I i :=
   -- `Pi.ringHom` allows us to use the universal property of Pi types to
   -- construct a ring morphism into a Pi type.
   let f_i : ∀ i, R →+* R ⧸ I i := (. |> I |> Ideal.Quotient.mk)
-  let f : R →+* ∀ i, R ⧸ I i := Pi.ringHom f_i
+  let f : R →+* ∀ i, R ⧸ I i := RingHom.pi f_i
 
   -- Lift the morphism to the quotient ring via the corresponding universal
   -- property.

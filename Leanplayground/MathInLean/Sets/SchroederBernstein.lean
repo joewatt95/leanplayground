@@ -63,8 +63,7 @@ theorem schroeder_bernstein
     let F : Set α →o Set α :=
       { toFun := λ X ↦ g '' (f '' Xᶜ)ᶜ
         monotone' := λ _ _ _ ↦ by simp_all only
-          [ le_eq_subset, image_subset_iff, preimage_image_eq,
-            compl_subset_compl ] }
+          [image_subset_iff, preimage_image_eq, compl_subset_compl] }
 
     let S : Ordinal → Set α := lfpApprox F ∅
     have ⟨O, (_ : S O = lfp F)⟩ := lfp_mem_range_lfpApprox _
