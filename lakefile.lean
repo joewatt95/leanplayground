@@ -6,8 +6,7 @@ package leanplayground where
 @[default_target]
 lean_lib Leanplayground where
 
-require "PatrickMassot" / verbose @
-  git "v4.31.0"
+require "PatrickMassot" / verbose @ git "a2f87b133d5b5e1b0b81d4fd7586b8750c08c5db"
 
 require "chasenorman" / Canonical @ git "65e13dfb3d308177f560ea3347dd7fc94749076e"
 
@@ -25,4 +24,4 @@ require "nomeata" / loogle @
 
 require "leanprover" / verso @ git "v4.32.0"
 
-require "leanprover-community" / mathlib @ git "v4.32.0"
+require "leanprover-community" / mathlib @ git "v4.32.2"
