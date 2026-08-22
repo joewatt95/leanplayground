@@ -94,7 +94,7 @@ theorem schroeder_bernstein
           have : S₀ ⊆ g '' (f '' S₀ᶜ)ᶜ := Eq.subset <| by simp_all only
           show a = a' by
             simp_all only [
-              image, mem_compl_iff, mem_setOf_eq, not_exists, not_and,
+              image, mem_compl_iff, Set.mem_ofPred_eq, not_exists, not_and,
               compl_inter_self, subset_refl
             ]
             grind

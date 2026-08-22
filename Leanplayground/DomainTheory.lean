@@ -91,7 +91,7 @@ lemma lfpApprox_limit_eq_sup_lfpApprox (_ : Order.IsSuccLimit o) :
   _ = lfpApprox f ⊥ o := by
     conv => rhs; unfold lfpApprox
     have := biSup_eq_sSup (S := {o' | o' < o}) (f := f ∘ lfpApprox f ⊥)
-    simp_all only [Set.mem_setOf_eq, Function.comp_apply, bot_le, sup_of_le_right]
+    simp_all only [Set.mem_ofPred_eq, Function.comp_apply, bot_le, sup_of_le_right]
 
 lemma lfpApprox_omega0_eq_sSup_lfpApprox_Nat :
   lfpApprox f ⊥ ω = ⨆ n : ℕ, lfpApprox f ⊥ n :=
