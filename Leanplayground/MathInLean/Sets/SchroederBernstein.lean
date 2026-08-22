@@ -67,7 +67,7 @@ theorem schroeder_bernstein
 
     let h a := if a ∈ S₀ then g.invFun a else f a
 
-    have : LeftInverse g.invFun g := leftInverse_invFun ‹Injective g›
+    have : LeftInverse g.invFun g := leftInverse_invFun ‹_›
 
     have : Surjective h :=
       have : g.invFun '' S₀ ∪ f '' S₀ᶜ = univ := by grind [compl_union_self]
