@@ -43,13 +43,12 @@ end piecewise_inj_surj
 theorem schroeder_bernstein
   {f : α → β} {g : β → α}
   (f_inj : Injective f) (g_inj : Injective g)
-  : ∃ h : α → β, Bijective h := by
+  : ∃ h : α → β, Bijective h :=
   -- set_option trace.profiler true in
   -- We need to consider cases on whether β is empty because Nonempty β is
   -- required for invFun g to be well-defined.
-  if _ : IsEmpty β then exact ⟨f, Bijective.of_isEmpty _⟩
-  else
-    open OrderHom OrdinalApprox in
+  if _ : IsEmpty β then ⟨f, Bijective.of_isEmpty _⟩
+  else by open OrderHom OrdinalApprox in
     have : Nonempty β := by grind [not_isEmpty_iff]
     have : LeftInverse g.invFun g := leftInverse_invFun ‹Injective g›
 
@@ -62,20 +61,19 @@ theorem schroeder_bernstein
     have ⟨O, (_ : S O = F.lfp)⟩ := lfp_mem_range_lfpApprox _
 
     let S₀ := S O
-    have : F S₀ = S₀ := by grind [map_lfp]
-    have : g '' (f '' S₀ᶜ)ᶜ = S₀ := this
+    have : g '' (f '' S₀ᶜ)ᶜ = S₀ := show F S₀ = S₀ by grind [map_lfp]
 
     let h a := if a ∈ S₀ then g.invFun a else f a
     refine ⟨h, ?injective, ?surjective⟩
+
+    case surjective =>
+      have : g.invFun '' S₀ ∪ f '' S₀ᶜ = univ := by grind [compl_union_self]
+      exact surj_of_piecewise this
 
     case injective =>
       have : g.invFun '' S₀ ∩ f '' S₀ᶜ = ∅ := by grind [compl_inter_self]
       have : InjOn f S₀ᶜ := by grind [InjOn]
       have : InjOn g.invFun S₀ := by rw [image] at *; grind [InjOn]
       apply inj_of_piecewise <;> assumption
-
-    case surjective =>
-      have : g.invFun '' S₀ ∪ f '' S₀ᶜ = univ := by grind [compl_union_self]
-      exact surj_of_piecewise this
 
 end Sets
