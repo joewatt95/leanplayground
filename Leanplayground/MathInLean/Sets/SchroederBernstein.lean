@@ -24,7 +24,7 @@ lemma piecewise_is_inj
   : Injective <| h (f := f) (g := g) (X := X) :=
   let h := h (f := f) (g := g) (X := X)
 
-  have {a} {a'} (_ : a ∈ X) (_ : a' ∉ X) : h a ≠ h a' :=
+  have {a a'} (_ : a ∈ X) (_ : a' ∉ X) : h a ≠ h a' :=
     λ _ : h a = h a' ↦
       have : h a ∈ f '' X ∩ g '' Xᶜ := by grind
       show ⊥ by grind
