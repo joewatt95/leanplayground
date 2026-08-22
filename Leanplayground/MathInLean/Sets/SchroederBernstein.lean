@@ -27,21 +27,19 @@ lemma piecewise_is_inj
 
   have : ∀ a ∈ X, ∀ a' ∉ X, h a ≠ h a' :=
     λ a _ a' _ (_ : h a = h a') ↦
-      have : h a ∈ f '' X ∩ g '' Xᶜ := by exact ⟨by aesop, by aesop⟩
-      show ⊥ by simp_all only [dite_eq_ite, ↓reduceIte, mem_empty_iff_false, h]
+      have : h a ∈ f '' X ∩ g '' Xᶜ := by grind
+      show ⊥ by grind
 
   λ a a' (_ : h a = h a') ↦
-    have : (a ∈ X ∧ a' ∈ X) ∨ (a ∉ X ∧ a' ∉ X) := by
-      duper [this, ‹h a = h a'›] {portfolioInstance := 7}
+    have : (a ∈ X ∧ a' ∈ X) ∨ (a ∉ X ∧ a' ∉ X) := by grind
     show a = a' by aesop
 
 lemma piecewise_is_surj
   (f_union_g_eq_univ : f '' X ∪ g '' Xᶜ = univ)
   : Surjective <| h (f := f) (g := g) (X := X) :=
   λ b ↦
-    have : b ∈ f '' X ∪ g '' Xᶜ := by simp_all only [mem_univ]
-    match this with
-    | .inl _ | .inr _ => show ∃ a, h a = b by aesop
+    have : b ∈ f '' X ∪ g '' Xᶜ := by grind
+    show ∃ a, h a = b by grind
 
 end piecewise_inj_surj
 
@@ -61,43 +59,33 @@ theorem schroeder_bernstein
     open OrderHom OrdinalApprox in
 
     let F : Set α →o Set α :=
-      { toFun := λ X ↦ g '' (f '' Xᶜ)ᶜ
-        monotone' := λ _ _ _ ↦ by simp_all only
-          [image_subset_iff, preimage_image_eq, compl_subset_compl] }
+      { toFun X := g '' (f '' Xᶜ)ᶜ
+        monotone' := by grind [Monotone] }
 
     let S : Ordinal → Set α := lfpApprox F ∅
     have ⟨O, (_ : S O = lfp F)⟩ := lfp_mem_range_lfpApprox _
 
     let S₀ := S O
-    have : F S₀ = S₀ := by simp_all only [map_lfp, F, S₀, S]
+    have : F S₀ = S₀ := by grind [map_lfp]
     have : g '' (f '' S₀ᶜ)ᶜ = S₀ := this
 
     let h a := if a ∈ S₀ then g.invFun a else f a
 
     have : LeftInverse g.invFun g := leftInverse_invFun ‹Injective g›
-    have := calc
-      g.invFun  '' S₀
-      _ = g.invFun '' (g '' (f '' S₀ᶜ)ᶜ) := by simp_all only
-      _ = (f '' S₀ᶜ)ᶜ := this.image_image _
+    have : g.invFun  '' S₀ = (f '' S₀ᶜ)ᶜ := by grind
 
     have : Surjective h :=
-      have : g.invFun '' S₀ ∪ f '' S₀ᶜ = univ := by simp_all only [compl_union_self]
+      have : g.invFun '' S₀ ∪ f '' S₀ᶜ = univ := by grind [compl_union_self]
       piecewise_is_surj this
 
     have : Injective h :=
-      have : g.invFun '' S₀ ∩ f '' S₀ᶜ = ∅ := by simp_all only [compl_inter_self]
+      have : g.invFun '' S₀ ∩ f '' S₀ᶜ = ∅ := by grind [compl_inter_self]
 
-      have : InjOn f S₀ᶜ := λ _ _ _ _ _ ↦ f_inj <| by simp_all only
+      have : InjOn f S₀ᶜ := by grind [InjOn]
 
-      have : InjOn (g.invFun) S₀ :=
-        λ a _ a' _ (_ : g.invFun a = g.invFun a') ↦
-          have : S₀ ⊆ g '' (f '' S₀ᶜ)ᶜ := Eq.subset <| by simp_all only
-          show a = a' by
-            simp_all only [
-              image, mem_compl_iff, Set.mem_ofPred_eq, not_exists, not_and,
-              compl_inter_self, subset_refl
-            ]
-            grind
+      have : InjOn g.invFun S₀ := by
+        unfold image at *
+        grind [InjOn]
 
       show Injective h from piecewise_is_inj ‹_› ‹_› ‹_›
 
