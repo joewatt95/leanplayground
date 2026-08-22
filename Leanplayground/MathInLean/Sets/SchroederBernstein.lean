@@ -19,20 +19,17 @@ variable {f g : α → β} {X : Set α}
 private noncomputable abbrev h a := if _ : a ∈ X then f a else g a
 
 lemma piecewise_is_inj
-  (f_inj : InjOn f X)
-  (g_inj : InjOn g Xᶜ)
+  (f_inj : InjOn f X) (g_inj : InjOn g Xᶜ)
   (img_inter_empty : f '' X ∩ g '' Xᶜ = ∅)
   : Injective <| h (f := f) (g := g) (X := X) :=
   let h := h (f := f) (g := g) (X := X)
 
-  have : ∀ a ∈ X, ∀ a' ∉ X, h a ≠ h a' :=
-    λ a _ a' _ (_ : h a = h a') ↦
+  have {a} {a'} (_ : a ∈ X) (_ : a' ∉ X) : h a ≠ h a' :=
+    λ _ : h a = h a' ↦
       have : h a ∈ f '' X ∩ g '' Xᶜ := by grind
       show ⊥ by grind
 
-  λ a a' (_ : h a = h a') ↦
-    have : (a ∈ X ∧ a' ∈ X) ∨ (a ∉ X ∧ a' ∉ X) := by grind
-    show a = a' by aesop
+  show Injective h by grind [Injective, InjOn]
 
 lemma piecewise_is_surj
   (f_union_g_eq_univ : f '' X ∪ g '' Xᶜ = univ)
@@ -63,7 +60,7 @@ theorem schroeder_bernstein
         monotone' := by grind [Monotone] }
 
     let S : Ordinal → Set α := lfpApprox F ∅
-    have ⟨O, (_ : S O = lfp F)⟩ := lfp_mem_range_lfpApprox _
+    have ⟨O, (_ : S O = F.lfp)⟩ := lfp_mem_range_lfpApprox _
 
     let S₀ := S O
     have : F S₀ = S₀ := by grind [map_lfp]
@@ -83,9 +80,7 @@ theorem schroeder_bernstein
 
       have : InjOn f S₀ᶜ := by grind [InjOn]
 
-      have : InjOn g.invFun S₀ := by
-        unfold image at *
-        grind [InjOn]
+      have : InjOn g.invFun S₀ := by rw [image] at *; grind [InjOn]
 
       show Injective h from piecewise_is_inj ‹_› ‹_› ‹_›
 
