@@ -55,9 +55,10 @@ theorem schroeder_bernstein
   | .inr (_ : Nonempty β) =>
     open OrderHom OrdinalApprox in
 
-    let F : Set α →o Set α :=
-      { toFun X := g '' (f '' Xᶜ)ᶜ
-        monotone' := by grind [Monotone] }
+    let F : Set α →o Set α := {
+      toFun X := g '' (f '' Xᶜ)ᶜ
+      monotone' := by grind [Monotone]
+    }
 
     let S : Ordinal → Set α := lfpApprox F ∅
     have ⟨O, (_ : S O = F.lfp)⟩ := lfp_mem_range_lfpApprox _
