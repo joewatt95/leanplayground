@@ -2,7 +2,6 @@ import Mathlib.Data.Set.Lattice
 import Mathlib.Order.FixedPoints
 import Mathlib.SetTheory.Ordinal.FixedPointApproximants
 
-import Leanplayground.MathInLean.Utils.Function
 import Leanplayground.MathInLean.Utils.Tactic
 
 namespace Sets
@@ -18,7 +17,7 @@ variable {f g : α → β} {X : Set α}
 
 private noncomputable abbrev h a := if _ : a ∈ X then f a else g a
 
-lemma piecewise_is_inj
+lemma inj_of_piecewise
   (f_inj : InjOn f X) (g_inj : InjOn g Xᶜ)
   (img_inter_empty : f '' X ∩ g '' Xᶜ = ∅)
   : Injective <| h (f := f) (g := g) (X := X) :=
@@ -31,7 +30,7 @@ lemma piecewise_is_inj
 
   show Injective h by grind [Injective, InjOn]
 
-lemma piecewise_is_surj
+lemma surj_of_piecewise
   (f_union_g_eq_univ : f '' X ∪ g '' Xᶜ = univ)
   : Surjective <| h (f := f) (g := g) (X := X) :=
   λ b ↦
@@ -44,15 +43,16 @@ end piecewise_inj_surj
 theorem schroeder_bernstein
   {f : α → β} {g : β → α}
   (f_inj : Injective f) (g_inj : Injective g)
-  : ∃ h : α → β, Bijective h :=
+  : ∃ h : α → β, Bijective h := by
   -- set_option trace.profiler true in
-  match isEmpty_or_nonempty _ with
   -- We need to consider cases on whether β is empty because Nonempty β is
   -- required for invFun g to be well-defined.
-  | .inl (_ : IsEmpty β) =>
-    ⟨f, ‹Injective f›, show Surjective f from surj_of_isEmpty⟩
+  if _ : IsEmpty β then exact ⟨f, Bijective.of_isEmpty _⟩
+  else
+    open OrderHom OrdinalApprox in
+    have : Nonempty β := by grind [not_isEmpty_iff]
+    have : LeftInverse g.invFun g := leftInverse_invFun ‹Injective g›
 
-  | .inr (_ : Nonempty β) => open OrderHom OrdinalApprox in
     let F : Set α →o Set α := {
       toFun X := g '' (f '' Xᶜ)ᶜ
       monotone' := by grind [Monotone]
@@ -66,19 +66,16 @@ theorem schroeder_bernstein
     have : g '' (f '' S₀ᶜ)ᶜ = S₀ := this
 
     let h a := if a ∈ S₀ then g.invFun a else f a
+    refine ⟨h, ?injective, ?surjective⟩
 
-    have : LeftInverse g.invFun g := leftInverse_invFun ‹Injective g›
-
-    have : Surjective h :=
-      have : g.invFun '' S₀ ∪ f '' S₀ᶜ = univ := by grind [compl_union_self]
-      piecewise_is_surj this
-
-    have : Injective h :=
+    case injective =>
       have : g.invFun '' S₀ ∩ f '' S₀ᶜ = ∅ := by grind [compl_inter_self]
       have : InjOn f S₀ᶜ := by grind [InjOn]
       have : InjOn g.invFun S₀ := by rw [image] at *; grind [InjOn]
-      show Injective h from piecewise_is_inj ‹_› ‹_› ‹_›
+      apply inj_of_piecewise <;> assumption
 
-    ⟨h, ‹Injective h›, ‹Surjective h›⟩
+    case surjective =>
+      have : g.invFun '' S₀ ∪ f '' S₀ᶜ = univ := by grind [compl_union_self]
+      exact surj_of_piecewise this
 
 end Sets
