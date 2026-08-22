@@ -77,11 +77,8 @@ theorem schroeder_bernstein
 
     have : Injective h :=
       have : g.invFun '' S₀ ∩ f '' S₀ᶜ = ∅ := by grind [compl_inter_self]
-
       have : InjOn f S₀ᶜ := by grind [InjOn]
-
       have : InjOn g.invFun S₀ := by rw [image] at *; grind [InjOn]
-
       show Injective h from piecewise_is_inj ‹_› ‹_› ‹_›
 
     ⟨h, ‹Injective h›, ‹Surjective h›⟩
