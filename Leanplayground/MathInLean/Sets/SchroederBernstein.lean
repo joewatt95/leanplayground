@@ -22,7 +22,7 @@ lemma piecewise_is_inj
   (f_inj : InjOn f X) (g_inj : InjOn g Xᶜ)
   (img_inter_empty : f '' X ∩ g '' Xᶜ = ∅)
   : Injective <| h (f := f) (g := g) (X := X) :=
-  let h := h (f := f) (g := g) (X := X)
+  let h := h
 
   have {a a'} (_ : a ∈ X) (_ : a' ∉ X) : h a ≠ h a' :=
     λ _ : h a = h a' ↦
@@ -52,9 +52,7 @@ theorem schroeder_bernstein
   | .inl (_ : IsEmpty β) =>
     ⟨f, ‹Injective f›, show Surjective f from surj_of_isEmpty⟩
 
-  | .inr (_ : Nonempty β) =>
-    open OrderHom OrdinalApprox in
-
+  | .inr (_ : Nonempty β) => open OrderHom OrdinalApprox in
     let F : Set α →o Set α := {
       toFun X := g '' (f '' Xᶜ)ᶜ
       monotone' := by grind [Monotone]
@@ -70,7 +68,6 @@ theorem schroeder_bernstein
     let h a := if a ∈ S₀ then g.invFun a else f a
 
     have : LeftInverse g.invFun g := leftInverse_invFun ‹Injective g›
-    have : g.invFun '' S₀ = (f '' S₀ᶜ)ᶜ := by grind
 
     have : Surjective h :=
       have : g.invFun '' S₀ ∪ f '' S₀ᶜ = univ := by grind [compl_union_self]
