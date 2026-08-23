@@ -144,24 +144,21 @@ theorem kleene_fixed_point :
         aesop (add unsafe [Monotone.comp, Nat.mono_cast, lfpApprox_mono_right]) }
 
   have : f (⨆ n, lfpApproxNat n) = ⨆ n, f (lfpApproxNat n) := by
-    simp_all only [ωScottContinuous_iff_map_ωSup_of_orderHom]
-    apply omega_continuous
+    rw [ωScottContinuous_iff_map_ωSup_of_orderHom] at omega_continuous
+    exact omega_continuous _
 
   lfp_eq_lfpApprox_ord_of_fixed_point <| calc
         f (lfpApprox f ⊥ ω)
 
     _ = f (⨆ n : ℕ, lfpApprox f ⊥ n) := by rw [lfpApprox_omega0_eq_sSup_lfpApprox_Nat]
 
-    _ = ⨆ n : ℕ, f (lfpApprox f ⊥ n) := by
-      simp_all only [coe_mk, Function.comp_apply, lfpApproxNat]
+    _ = ⨆ n : ℕ, f (lfpApprox f ⊥ n) := by simp_all [lfpApproxNat]
 
-    _ = ⨆ n : ℕ, lfpApprox f ⊥ (n + 1) :=
-      have := @lfpApprox_add_one_bot (f := f)
-      by simp_all only [lfpApproxNat]
+    _ = ⨆ n : ℕ, lfpApprox f ⊥ (n + 1) := by simp [lfpApprox_add_one_bot]
 
     _ = ⨆ n : ℕ, lfpApprox f ⊥ n :=
       le_antisymm
-        (sSup_le_sSup λ _ ⟨n, _⟩ ↦ ⟨n + 1, by simp_all only [Set.mem_range, Nat.cast_add, Nat.cast_one]⟩) <|
+        (sSup_le_sSup λ _ ⟨n, _⟩ ↦ ⟨n + 1, by simp_all⟩) <|
         sSup_le_sSup_of_isCofinalFor λ a ⟨n, h⟩ ↦ by
           simp_all only [Set.mem_range, exists_exists_eq_and]
           exact ⟨n, by rw [←h]; exact lfpApprox_mono_right _ <| Order.le_succ _⟩
