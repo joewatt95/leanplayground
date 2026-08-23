@@ -43,12 +43,12 @@ end piecewise_inj_surj
 theorem schroeder_bernstein
   {f : α → β} {g : β → α}
   (f_inj : Injective f) (g_inj : Injective g)
-  : ∃ h : α → β, Bijective h :=
+  : ∃ h : α → β, Bijective h := by
   -- set_option trace.profiler true in
   -- We need to consider cases on whether β is empty because Nonempty β is
   -- required for invFun g to be well-defined.
-  if _ : IsEmpty β then ⟨f, Bijective.of_isEmpty _⟩
-  else by open OrderHom OrdinalApprox in
+  if _ : IsEmpty β then exact ⟨f, Bijective.of_isEmpty _⟩
+  else open OrderHom OrdinalApprox in
     have : Nonempty β := by grind [not_isEmpty_iff]
     have : LeftInverse g.invFun g := leftInverse_invFun ‹Injective g›
 
