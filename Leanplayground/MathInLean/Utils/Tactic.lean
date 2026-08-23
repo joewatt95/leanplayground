@@ -12,7 +12,7 @@ import Canonical
 import Hammer
 import Smt
 import Smt.Real
-import SOS
+import SOS.Mathlib.Tactic
 
 import LeanSearchClient
 import Loogle.Find
