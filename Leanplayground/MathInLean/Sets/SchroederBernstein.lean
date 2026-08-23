@@ -26,7 +26,7 @@ lemma inj_of_piecewise
   have {a a'} (_ : a ∈ X) (_ : a' ∉ X) : h a ≠ h a' :=
     λ _ : h a = h a' ↦
       have : h a ∈ f '' X ∩ g '' Xᶜ := by grind
-      show ⊥ by grind
+      show ⊥ by simp_all
 
   show Injective h by grind [Injective, InjOn]
 
@@ -34,7 +34,7 @@ lemma surj_of_piecewise
   (f_union_g_eq_univ : f '' X ∪ g '' Xᶜ = univ)
   : Surjective <| h (f := f) (g := g) (X := X) :=
   λ b ↦
-    have : b ∈ f '' X ∪ g '' Xᶜ := by grind
+    have : b ∈ f '' X ∪ g '' Xᶜ := by simp_all
     show ∃ a, h a = b by grind
 
 end piecewise_inj_surj
@@ -49,12 +49,12 @@ theorem schroeder_bernstein
   -- required for invFun g to be well-defined.
   if _ : IsEmpty β then exact ⟨f, Bijective.of_isEmpty _⟩
   else open OrderHom OrdinalApprox in
-    have : Nonempty β := by grind [not_isEmpty_iff]
+    have : Nonempty β := by simp_all
     have : LeftInverse g.invFun g := leftInverse_invFun ‹Injective g›
 
     let F : Set α →o Set α := {
       toFun X := g '' (f '' Xᶜ)ᶜ
-      monotone' := by grind [Monotone]
+      monotone' := by simp_all [Monotone]
     }
 
     let S : Ordinal → Set α := lfpApprox F ∅
