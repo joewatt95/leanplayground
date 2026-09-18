@@ -8,7 +8,7 @@ lean_lib Leanplayground where
 
 require "chasenorman" / Canonical @ git "65e13dfb3d308177f560ea3347dd7fc94749076e"
 
-require "JOSHCLUNE" / Hammer @ git "f6d189d1d7cfb34d28d447c1a67a118539ab44f4"
+require "JOSHCLUNE" / Hammer @ git "21886b7ffbdf32017655a9d6e699f98779046533"
 
 require "leanprover"/ sos @ git "fb7ae417609093f04cf0608dc92e9343550c2ae4"
 
