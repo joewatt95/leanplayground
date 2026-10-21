@@ -3,7 +3,7 @@ import Mathlib.Data.Finset.Functor
 import Leanplayground.Prob.Utils.Finset
 import Leanplayground.Prob.Utils.Log
 import Leanplayground.Prob.Utils.PMF
-import Leanplayground.MathInLean.Utils.Tactic
+import Leanplayground.Util.Tactic
 
 namespace CVM
 

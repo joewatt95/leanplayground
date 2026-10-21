@@ -1,7 +1,7 @@
 import Mathlib.Analysis.SpecialFunctions.Log.Base
 import Mathlib.Analysis.SpecialFunctions.Log.ENNRealLog
 
-import Leanplayground.MathInLean.Utils.Tactic
+import Leanplayground.Util.Tactic
 
 namespace Real
 

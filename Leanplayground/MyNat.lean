@@ -67,7 +67,7 @@ private lemma Leq.transitive : (x leq y) → (y leq z) → x leq z
   have ⟨d2, h2⟩ : ∃ d2, y + d2 = z :=
     by simp only [leq_iff_leq'] at y_leq_z ; assumption
   have : ∃ d, x + d = z := ⟨d1 + d2, by ring_nf; rw [h1, h2]⟩
-  show x leq z by rw [←leq_iff_leq'] at this; assumption
+  show x leq z by rwa [←leq_iff_leq'] at this
 
 instance : Trans Leq Leq Leq := ⟨Leq.transitive⟩
 

@@ -1,7 +1,7 @@
 import Mathlib.RingTheory.Ideal.Quotient.Operations
 
-import Leanplayground.MathInLean.Utils.Finite
-import Leanplayground.MathInLean.Utils.Subtype
+import Leanplayground.Util.Finite
+import Leanplayground.Util.Subtype
 
 namespace Rings
 

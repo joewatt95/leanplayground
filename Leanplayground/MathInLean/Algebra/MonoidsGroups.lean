@@ -3,7 +3,7 @@ import Mathlib.GroupTheory.GroupAction.Quotient
 import Mathlib.GroupTheory.Index
 import Mathlib.GroupTheory.QuotientGroup.Finite
 
-import Leanplayground.MathInLean.Utils.Tactic
+import Leanplayground.Util.Tactic
 
 namespace Algebra
 

@@ -1,5 +1,5 @@
 import Mathlib.Probability.ProbabilityMassFunction.Constructions
-import Leanplayground.MathInLean.Utils.Tactic
+import Leanplayground.Util.Tactic
 
 variable {α β : Type}
 

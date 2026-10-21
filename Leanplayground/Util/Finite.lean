@@ -1,6 +1,6 @@
 import Mathlib.Order.CompleteLattice.Finset
 
-import Leanplayground.MathInLean.Utils.Tactic
+import Leanplayground.Util.Tactic
 
 namespace Finite
 

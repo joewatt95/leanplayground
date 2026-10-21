@@ -6,16 +6,19 @@ package leanplayground where
 @[default_target]
 lean_lib Leanplayground where
 
-require "chasenorman" / Canonical @ git "65e13dfb3d308177f560ea3347dd7fc94749076e"
+lean_lib «LeanplaygroundUtil» where
+  globs := #[.andSubmodules `TLogs.Util]
 
-require "JOSHCLUNE" / Hammer @ git "21886b7ffbdf32017655a9d6e699f98779046533"
+require "chasenorman" / Canonical @ git "v4.34.0"
 
-require "leanprover"/ sos @ git "fb7ae417609093f04cf0608dc92e9343550c2ae4"
+require "JOSHCLUNE" / Hammer @ git "v4.34.0"
+
+require "leanprover" / sos @ git "v0.2.4"
 
 require "nomeata" / loogle @ git "9f11169aaebf1ed1e7dcc4077f2aafe0fcf66fd0"
 
 require "PatrickMassot" / verbose @ git "a2f87b133d5b5e1b0b81d4fd7586b8750c08c5db"
 
-require "leanprover" / verso @ git "v4.33.0"
+require "leanprover" / verso @ git "v4.34.0"
 
-require "leanprover-community" / mathlib @ git "v4.33.1"
+require "leanprover-community" / mathlib @ git "v4.34.1"

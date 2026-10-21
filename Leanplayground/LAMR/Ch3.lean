@@ -2,7 +2,7 @@
 import Mathlib.Data.List.Iterate
 import Mathlib.Data.Nat.Factorial.Basic
 
-import Leanplayground.MathInLean.Utils.Tactic
+import Leanplayground.Util.Tactic
 
 -- set_option trace.profiler true
 

@@ -2,7 +2,7 @@ import Mathlib.Data.Set.Lattice
 import Mathlib.Order.FixedPoints
 import Mathlib.SetTheory.Ordinal.FixedPointApproximants
 
-import Leanplayground.MathInLean.Utils.Tactic
+import Leanplayground.Util.Tactic
 
 namespace Sets
 

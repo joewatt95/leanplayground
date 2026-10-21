@@ -1,7 +1,7 @@
 import Mathlib.Topology.Order.ScottTopology
 import Mathlib.SetTheory.Ordinal.FixedPointApproximants
 
-import Leanplayground.MathInLean.Utils.Tactic
+import Leanplayground.Util.Tactic
 
 open Ordinal OrdinalApprox OmegaCompletePartialOrder OrderHom
 

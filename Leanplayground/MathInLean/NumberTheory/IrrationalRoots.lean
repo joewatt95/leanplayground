@@ -1,6 +1,6 @@
 import Mathlib.Data.Nat.Factorization.Basic
 
-import Leanplayground.MathInLean.Utils.Tactic
+import Leanplayground.Util.Tactic
 
 namespace NumberTheory
 

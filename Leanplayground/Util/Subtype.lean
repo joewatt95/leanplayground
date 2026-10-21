@@ -1,6 +1,6 @@
 import Lean
 
-import Leanplayground.MathInLean.Utils.Tactic
+import Leanplayground.Util.Tactic
 
 namespace Subtype
 
