@@ -65,7 +65,7 @@
    "type": "git",
    "subDir": null,
    "scope": "chasenorman",
-   "rev": "335a50ec1ff9b7e0db27fae435f1c3a3cb08fdc0",
+   "rev": "f51f82abb4192e7fdd249b489eb5a682fc2be364",
    "name": "Canonical",
    "manifestFile": "lake-manifest.json",
    "inputRev": "v4.35.0",

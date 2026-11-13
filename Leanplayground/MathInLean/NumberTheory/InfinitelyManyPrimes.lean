@@ -58,7 +58,7 @@ theorem primes_infinite' {S : Finset ℕ}
     let S_primes_prod := ∏ n ∈ S_primes, n
 
     have : 2 ≤ S_primes_prod := by
-      duper [*, Finset.single_le_prod', Nat.Prime.one_le, Nat.prime_two]
+      duper [*, Finset.single_le_prod, Nat.Prime.one_le, Nat.prime_two]
         {portfolioInstance := 1}
 
     have ⟨p, (_ : p.Prime), (_ : p ∣ S_primes_prod + 1)⟩ :=
